@@ -117,7 +117,7 @@ Aliases:
 
 Required: False
 Position: 1
-Default value: (get-date -format MMMM)
+Default value: current month
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
@@ -132,8 +132,8 @@ Parameter Sets: month
 Aliases:
 
 Required: False
-Position: Named
-Default value: (Get-Date).Year
+Position: 2
+Default value: Current year
 Accept pipeline input: False
 Accept wildcard characters: False
 ```

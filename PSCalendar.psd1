@@ -7,7 +7,7 @@
 RootModule = 'PSCalendar.psm1'
 
 # Version number of this module.
-ModuleVersion = '1.1.0'
+ModuleVersion = '1.2.0'
 
 # Supported PSEditions
 # CompatiblePSEditions = @()
@@ -90,7 +90,7 @@ PrivateData = @{
     PSData = @{
 
         # Tags applied to this module. These help with module discovery in online galleries.
-        Tags = @('calendar')
+        Tags = @('calendar','reminder')
 
         # A URL to the license for this module.
         LicenseUri = 'https://github.com/jdhitsolutions/PSCalendar/blob/master/license.txt'
@@ -102,7 +102,7 @@ PrivateData = @{
         # IconUri = ''
 
         # ReleaseNotes of this module
-        # ReleaseNotes = ''
+        ReleaseNotes = 'https://github.com/jdhitsolutions/PSCalendar/blob/master/README.md'
 
     } # End of PSData hashtable
 

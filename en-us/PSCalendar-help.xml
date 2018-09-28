@@ -25,9 +25,9 @@
             <maml:name>String</maml:name>
             <maml:uri />
           </dev:type>
-          <dev:defaultValue>(get-date -format MMMM)</dev:defaultValue>
+          <dev:defaultValue>current month</dev:defaultValue>
         </command:parameter>
-        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="2" aliases="none">
           <maml:name>Year</maml:name>
           <maml:Description>
             <maml:para>Select a year for the specified month.</maml:para>
@@ -37,7 +37,7 @@
             <maml:name>Int32</maml:name>
             <maml:uri />
           </dev:type>
-          <dev:defaultValue>(Get-Date).Year</dev:defaultValue>
+          <dev:defaultValue>Current year</dev:defaultValue>
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>HighlightDate</maml:name>
@@ -103,9 +103,9 @@
           <maml:name>String</maml:name>
           <maml:uri />
         </dev:type>
-        <dev:defaultValue>(get-date -format MMMM)</dev:defaultValue>
+        <dev:defaultValue>current month</dev:defaultValue>
       </command:parameter>
-      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="2" aliases="none">
         <maml:name>Year</maml:name>
         <maml:Description>
           <maml:para>Select a year for the specified month.</maml:para>
@@ -115,7 +115,7 @@
           <maml:name>Int32</maml:name>
           <maml:uri />
         </dev:type>
-        <dev:defaultValue>(Get-Date).Year</dev:defaultValue>
+        <dev:defaultValue>Current year</dev:defaultValue>
       </command:parameter>
       <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>Start</maml:name>
@@ -281,9 +281,9 @@ Sun  Mon  Tue  Wed  Thu  Fri  Sat
             <maml:name>String</maml:name>
             <maml:uri />
           </dev:type>
-          <dev:defaultValue>(get-date -format MMMM)</dev:defaultValue>
+          <dev:defaultValue>Current month</dev:defaultValue>
         </command:parameter>
-        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="2" aliases="none">
           <maml:name>Year</maml:name>
           <maml:Description>
             <maml:para>Select a year for the specified month.</maml:para>
@@ -293,7 +293,7 @@ Sun  Mon  Tue  Wed  Thu  Fri  Sat
             <maml:name>Int32</maml:name>
             <maml:uri />
           </dev:type>
-          <dev:defaultValue>(Get-Date).Year</dev:defaultValue>
+          <dev:defaultValue>current year</dev:defaultValue>
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>HighlightDate</maml:name>
@@ -350,9 +350,9 @@ Sun  Mon  Tue  Wed  Thu  Fri  Sat
           <maml:name>String</maml:name>
           <maml:uri />
         </dev:type>
-        <dev:defaultValue>(get-date -format MMMM)</dev:defaultValue>
+        <dev:defaultValue>Current month</dev:defaultValue>
       </command:parameter>
-      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="2" aliases="none">
         <maml:name>Year</maml:name>
         <maml:Description>
           <maml:para>Select a year for the specified month.</maml:para>
@@ -362,7 +362,7 @@ Sun  Mon  Tue  Wed  Thu  Fri  Sat
           <maml:name>Int32</maml:name>
           <maml:uri />
         </dev:type>
-        <dev:defaultValue>(Get-Date).Year</dev:defaultValue>
+        <dev:defaultValue>current year</dev:defaultValue>
       </command:parameter>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>HighlightDate</maml:name>

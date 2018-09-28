@@ -8,11 +8,22 @@ Function Get-Calendar {
     [Alias("cal")]
 
     Param(
-        [Parameter(Position = 0, ParameterSetName = "month")]
+        [Parameter(Position = 1,ParameterSetName = "month")]
         [ValidateNotNullorEmpty()]
-        [string]$Month = (get-date -format MMMM),
+        [ValidateScript( {
+                $names = Get-MonthsByCulture
+                # ((Get-Culture).DateTimeFormat.MonthNames).Where( {$_ -match "\w+"})
+                if ($names -contains $_) {
+                    $True
+                }
+                else {
+                    Throw "You entered an invalid month. Valid choices are $($names -join ',')"
+                    $False
+                }
+            })]
+        [string]$Month = (Get-Date -format MMMM),
 
-        [Parameter(ParameterSetName = "month")]
+        [Parameter(Position = 2, ParameterSetName = "month")]
         [ValidatePattern('^\d{4}$')]
         [int]$Year = (Get-Date).Year,
 
@@ -28,14 +39,15 @@ Function Get-Calendar {
     )
 
     Begin {
-        Write-verbose "Starting $($myinvocation.MyCommand)"
+        Write-Verbose "Starting $($myinvocation.MyCommand)"
     }
     Process {
-        Write-Verbose "Using parameter set $($pscmdlet.ParameterSetName)"
+        Write-Verbose "Using parameter set: $($pscmdlet.ParameterSetName)"
+        Write-Verbose "Using culture $((Get-Culture).name)"
 
         if ($pscmdlet.ParameterSetName -eq "month") {
             [datetime]$start = Get-Date "1 $month,$year"
-            [datetime]$end = $start.date #.Adddays(30)
+            [datetime]$end = $start.date
         }
         else {
             #Figure out the first day of the start and end months
@@ -45,9 +57,10 @@ Function Get-Calendar {
         Write-Verbose "Starting at $start"
         Write-Verbose "Ending at $End"
         #Convert the highlight dates into real dates
-        [DateTime[]]$highlightDate = [DateTime[]]$highlightDate
+        #using the .NET Class to parse because this works better for culture-specific datetime strings
+        [DateTime[]]$highlightDates = [datetime]::parse($highlightDate)
 
-        #Retrieve the DateTimeFormat information so that we can  manipulate the calendar
+        #Retrieve the DateTimeFormat information so that we can manipulate the calendar
         $dateTimeFormat = (Get-Culture).DateTimeFormat
         $firstDayOfWeek = $dateTimeFormat.FirstDayOfWeek
 
@@ -57,7 +70,7 @@ Function Get-Calendar {
 
         Write-Verbose "Go through the requested months"
         while ($start -le $end) {
-            #We may need to back-pedal a bit if the first day of the month
+            #We may need to backpedal a bit if the first day of the month
             #falls in the middle of the week
             while ($currentDay.DayOfWeek -ne $dateTimeFormat.FirstDayOfWeek) {
                 $currentDay = $currentDay.AddDays(-1)
@@ -83,20 +96,13 @@ Function Get-Calendar {
                 $displayDay = " {0,2} " -f $currentDay.Day
 
                 #See if we should highlight a specific date
-                if ($highlightDate) {
+                if ($highlightDates) {
                     $compareDate = New-Object DateTime $currentDay.Year,
                     $currentDay.Month, $currentDay.Day
-                    if ($highlightDate -contains $compareDate) {
+                    if ($highlightDates -contains $compareDate) {
                         $displayDay = "*" + ("{0,2}" -f $currentDay.Day) + "*"
                     }
                 }
-                <#
-#Otherwise, highlight as part of a date range
-if ($highlightDay -and ($highlightDay[0] -eq $currentDay.Day)) {
-    $displayDay = "[" + ("{0,2}" -f $currentDay.Day) + "]"
-    $null, $highlightDay = $highlightDay
-}
-#>
 
                 #Add in the day of week and day number as note properties.
                 $currentWeek | Add-Member NoteProperty $dayName $displayDay
@@ -134,7 +140,7 @@ if ($highlightDay -and ($highlightDay[0] -eq $currentDay.Day)) {
     End {
         Write-verbose "Ending $($myinvocation.MyCommand)"
     }
-} #end function
+} #end Get-Calendar
 
 
 #display a colorized calendar in the console
@@ -145,11 +151,22 @@ Function Show-Calendar {
     [Alias("scal")]
     Param(
 
-        [Parameter(Position = 0, ParameterSetName = "month")]
+        [Parameter(Position = 1, ParameterSetName = "month")]
         [ValidateNotNullorEmpty()]
-        [string]$Month = (get-date -format MMMM),
+        [ValidateScript( {
+                $names = Get-MonthsByCulture
+                #((Get-Culture).DateTimeFormat.MonthNames).Where( {$_ -match "\w+"})
+                if ($names -contains $_) {
+                    $True
+                }
+                else {
+                    Throw "You entered an invalid month. Valid choices are $($names -join ',')"
+                    $False
+                }
+            })]
+        [string]$Month = (Get-Date -format MMMM),
 
-        [Parameter(ParameterSetName = "month")]
+        [Parameter(Position = 2,ParameterSetName = "month")]
         [ValidatePattern('^\d{4}$')]
         [int]$Year = (Get-Date).Year,
 
@@ -163,7 +180,7 @@ Function Show-Calendar {
     $params = "Month", "Year", "HighlightDate"
     foreach ($param in $params) {
         if (-not $PSBoundParameters.ContainsKey($param)) {
-            $PSBoundParameters.Add($param, $( (get-variable -Name $param).value))
+            $PSBoundParameters.Add($param, $((get-variable -Name $param).value))
         }
     }
 
@@ -177,20 +194,22 @@ Function Show-Calendar {
     $calarray = $cal.split("`n")
 
     # a regular expression pattern to match on highlighted days
-
     [regex]$m = "(\*)?[\s|\*]\d{1,2}(\*)?"
-    foreach ($line in $calarray) {
 
+    #go through each line and write it back to the console using Write-Host
+    foreach ($line in $calarray) {
         if ($line -match "\d{4}") {
+            #write the line with the month and year
             write-Host $line -ForegroundColor Yellow
         }
         elseif ($line -match "\w{3}|-{3}") {
+            #write the day names and underlines
             Write-Host $line -ForegroundColor cyan
         }
         elseif ($line -match "\*") {
-            #write-host $line -foregroundcolor Magenta
+            #break apart lines with asterisks
             $week = $line
-            #write-host "x" -NoNewline
+
             $m.Matches($week).Value| foreach-object {
 
                 $day = "$_"
@@ -207,6 +226,13 @@ Function Show-Calendar {
         else {
             Write-host $line
         }
-    }
-}
+    } #foreach line in calarray
+} #end Show-Calendar
 
+#a helper function to retrieve names
+function Get-MonthsbyCulture {
+    [cmdletbinding()]
+    Param([string]$Culture = ([system.threading.thread]::currentThread).CurrentCulture)
+    Write-Verbose "Getting months for culture $Culture"
+    [cultureinfo]::GetCultureInfo($culture).DateTimeFormat.Monthnames
+}
