@@ -1,0 +1,441 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<helpItems schema="maml" xmlns="http://msh">
+  <command:command xmlns:maml="http://schemas.microsoft.com/maml/2004/10" xmlns:command="http://schemas.microsoft.com/maml/dev/command/2004/10" xmlns:dev="http://schemas.microsoft.com/maml/dev/2004/10" xmlns:MSHelp="http://msdn.microsoft.com/mshelp">
+    <command:details>
+      <command:name>Get-Calendar</command:name>
+      <command:verb>Get</command:verb>
+      <command:noun>Calendar</command:noun>
+      <maml:description>
+        <maml:para>Displays a visual representation of a calendar.</maml:para>
+      </maml:description>
+    </command:details>
+    <maml:description>
+      <maml:para>This command displays a visual representation of a calendar. It supports multiple months, as well as the ability to highlight a specific date or dates.</maml:para>
+    </maml:description>
+    <command:syntax>
+      <command:syntaxItem>
+        <maml:name>Get-Calendar</maml:name>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="none">
+          <maml:name>Month</maml:name>
+          <maml:Description>
+            <maml:para>Select a month to display. The command will default to the current year unless otherwise specified.</maml:para>
+          </maml:Description>
+          <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+          <dev:type>
+            <maml:name>String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>(get-date -format MMMM)</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Year</maml:name>
+          <maml:Description>
+            <maml:para>Select a year for the specified month.</maml:para>
+          </maml:Description>
+          <command:parameterValue required="true" variableLength="false">Int32</command:parameterValue>
+          <dev:type>
+            <maml:name>Int32</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>(Get-Date).Year</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>HighlightDate</maml:name>
+          <maml:Description>
+            <maml:para>Specific days (named) to highlight. These dates are surrounded by asterisk characters.</maml:para>
+          </maml:Description>
+          <command:parameterValue required="true" variableLength="false">String[]</command:parameterValue>
+          <dev:type>
+            <maml:name>String[]</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>(Get-Date).date.toString()</dev:defaultValue>
+        </command:parameter>
+      </command:syntaxItem>
+      <command:syntaxItem>
+        <maml:name>Get-Calendar</maml:name>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Start</maml:name>
+          <maml:Description>
+            <maml:para>The first month to display.</maml:para>
+          </maml:Description>
+          <command:parameterValue required="true" variableLength="false">DateTime</command:parameterValue>
+          <dev:type>
+            <maml:name>DateTime</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>End</maml:name>
+          <maml:Description>
+            <maml:para>The last month to display.</maml:para>
+          </maml:Description>
+          <command:parameterValue required="true" variableLength="false">DateTime</command:parameterValue>
+          <dev:type>
+            <maml:name>DateTime</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>HighlightDate</maml:name>
+          <maml:Description>
+            <maml:para>Specific days (named) to highlight. These dates are surrounded by asterisk characters.</maml:para>
+          </maml:Description>
+          <command:parameterValue required="true" variableLength="false">String[]</command:parameterValue>
+          <dev:type>
+            <maml:name>String[]</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>(Get-Date).date.toString()</dev:defaultValue>
+        </command:parameter>
+      </command:syntaxItem>
+    </command:syntax>
+    <command:parameters>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="none">
+        <maml:name>Month</maml:name>
+        <maml:Description>
+          <maml:para>Select a month to display. The command will default to the current year unless otherwise specified.</maml:para>
+        </maml:Description>
+        <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+        <dev:type>
+          <maml:name>String</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>(get-date -format MMMM)</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>Year</maml:name>
+        <maml:Description>
+          <maml:para>Select a year for the specified month.</maml:para>
+        </maml:Description>
+        <command:parameterValue required="true" variableLength="false">Int32</command:parameterValue>
+        <dev:type>
+          <maml:name>Int32</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>(Get-Date).Year</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>Start</maml:name>
+        <maml:Description>
+          <maml:para>The first month to display.</maml:para>
+        </maml:Description>
+        <command:parameterValue required="true" variableLength="false">DateTime</command:parameterValue>
+        <dev:type>
+          <maml:name>DateTime</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>End</maml:name>
+        <maml:Description>
+          <maml:para>The last month to display.</maml:para>
+        </maml:Description>
+        <command:parameterValue required="true" variableLength="false">DateTime</command:parameterValue>
+        <dev:type>
+          <maml:name>DateTime</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>HighlightDate</maml:name>
+        <maml:Description>
+          <maml:para>Specific days (named) to highlight. These dates are surrounded by asterisk characters.</maml:para>
+        </maml:Description>
+        <command:parameterValue required="true" variableLength="false">String[]</command:parameterValue>
+        <dev:type>
+          <maml:name>String[]</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>(Get-Date).date.toString()</dev:defaultValue>
+      </command:parameter>
+    </command:parameters>
+    <command:inputTypes />
+    <command:returnValues>
+      <command:returnValue>
+        <dev:type>
+          <maml:name>System.String</maml:name>
+        </dev:type>
+        <maml:description>
+          <maml:para></maml:para>
+        </maml:description>
+      </command:returnValue>
+    </command:returnValues>
+    <maml:alertSet>
+      <maml:alert>
+        <maml:para>This command should have an alias of cal. The majority of this function was written by Lee Holmes at http://www.leeholmes.com/blog/2008/12/03/showing-calendars-in-your-oof-messages/</maml:para>
+        <maml:para>Learn more about PowerShell: http://jdhitsolutions.com/blog/essential-powershell-resources/</maml:para>
+      </maml:alert>
+    </maml:alertSet>
+    <command:examples>
+      <command:example>
+        <maml:title>-------------------------- EXAMPLE 1 --------------------------</maml:title>
+        <dev:code>PS C:\&gt; Get-Calendar
+
+          September 2018
+
+Sun  Mon  Tue  Wed  Thu  Fri  Sat
+---  ---  ---  ---  ---  ---  ---
+ 26   27   28   29   30   31    1
+  2    3    4    5    6    7    8
+  9   10   11   12   13   14   15
+ 16   17   18   19   20   21   22
+ 23   24   25  *26*  27   28   29
+ 30    1    2    3    4    5    6</dev:code>
+        <dev:remarks>
+          <maml:para>how the current calendar and highlight today. The month name will be centered in your output.</maml:para>
+        </dev:remarks>
+      </command:example>
+      <command:example>
+        <maml:title>-------------------------- EXAMPLE 2 --------------------------</maml:title>
+        <dev:code>PS C:\&gt; Get-Calendar -start "3/1/2019" -end "5/1/2019"
+
+            March 2019
+
+Sun  Mon  Tue  Wed  Thu  Fri  Sat
+---  ---  ---  ---  ---  ---  ---
+ 24   25   26   27   28    1    2
+  3    4    5    6    7    8    9
+ 10   11   12   13   14   15   16
+ 17   18   19   20   21   22   23
+ 24   25   26   27   28   29   30
+ 31    1    2    3    4    5    6
+
+            April 2019
+
+Sun  Mon  Tue  Wed  Thu  Fri  Sat
+---  ---  ---  ---  ---  ---  ---
+  7    8    9   10   11   12   13
+ 14   15   16   17   18   19   20
+ 21   22   23   24   25   26   27
+ 28   29   30    1    2    3    4
+
+            May 2019
+
+Sun  Mon  Tue  Wed  Thu  Fri  Sat
+---  ---  ---  ---  ---  ---  ---
+  5    6    7    8    9   10   11
+ 12   13   14   15   16   17   18
+ 19   20   21   22   23   24   25
+ 26   27   28   29   30   31    1</dev:code>
+        <dev:remarks>
+          <maml:para></maml:para>
+        </dev:remarks>
+      </command:example>
+      <command:example>
+        <maml:title>-------------------------- EXAMPLE 3 --------------------------</maml:title>
+        <dev:code>PS C:\&gt; Get-Calendar -Start 12/1/2018 -end 12/1/2018  -HighlightDate 12/25/2018
+
+          December 2018
+
+Sun  Mon  Tue  Wed  Thu  Fri  Sat
+---  ---  ---  ---  ---  ---  ---
+ 25   26   27   28   29   30    1
+  2    3    4    5    6    7    8
+  9   10   11   12   13   14   15
+ 16   17   18   19   20   21   22
+ 23   24  *25*  26   27   28   29
+ 30   31    1    2    3    4    5</dev:code>
+        <dev:remarks>
+          <maml:para>Display a month and highlight a specific date.</maml:para>
+        </dev:remarks>
+      </command:example>
+    </command:examples>
+    <command:relatedLinks>
+      <maml:navigationLink>
+        <maml:linkText>Get-Date</maml:linkText>
+        <maml:uri></maml:uri>
+      </maml:navigationLink>
+      <maml:navigationLink>
+        <maml:linkText>Show-Calendar</maml:linkText>
+        <maml:uri></maml:uri>
+      </maml:navigationLink>
+    </command:relatedLinks>
+  </command:command>
+  <command:command xmlns:maml="http://schemas.microsoft.com/maml/2004/10" xmlns:command="http://schemas.microsoft.com/maml/dev/command/2004/10" xmlns:dev="http://schemas.microsoft.com/maml/dev/2004/10" xmlns:MSHelp="http://msdn.microsoft.com/mshelp">
+    <command:details>
+      <command:name>Show-Calendar</command:name>
+      <command:verb>Show</command:verb>
+      <command:noun>Calendar</command:noun>
+      <maml:description>
+        <maml:para>Display a colorized calendar month in the console.</maml:para>
+      </maml:description>
+    </command:details>
+    <maml:description>
+      <maml:para>This command is a wrapper for Get-Calendar that will display the specified month in a colorized format. The command uses Write-Host so it does not write anything to the pipeline.</maml:para>
+    </maml:description>
+    <command:syntax>
+      <command:syntaxItem>
+        <maml:name>Show-Calendar</maml:name>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="none">
+          <maml:name>Month</maml:name>
+          <maml:Description>
+            <maml:para>Select a month to display. The command will default to the current year unless otherwise specified.</maml:para>
+          </maml:Description>
+          <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+          <dev:type>
+            <maml:name>String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>(get-date -format MMMM)</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Year</maml:name>
+          <maml:Description>
+            <maml:para>Select a year for the specified month.</maml:para>
+          </maml:Description>
+          <command:parameterValue required="true" variableLength="false">Int32</command:parameterValue>
+          <dev:type>
+            <maml:name>Int32</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>(Get-Date).Year</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>HighlightDate</maml:name>
+          <maml:Description>
+            <maml:para>Specific days (named) to highlight. These dates are surrounded by asterisk characters.</maml:para>
+          </maml:Description>
+          <command:parameterValue required="true" variableLength="false">String[]</command:parameterValue>
+          <dev:type>
+            <maml:name>String[]</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>(Get-Date).date.toString()</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>HighlightColor</maml:name>
+          <maml:Description>
+            <maml:para>Specify a console color to use for the highlighted dates.</maml:para>
+          </maml:Description>
+          <command:parameterValueGroup>
+            <command:parameterValue required="false" command:variableLength="false">Black</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">DarkBlue</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">DarkGreen</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">DarkCyan</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">DarkRed</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">DarkMagenta</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">DarkYellow</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">Gray</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">DarkGray</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">Blue</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">Green</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">Cyan</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">Red</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">Magenta</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">Yellow</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">White</command:parameterValue>
+          </command:parameterValueGroup>
+          <command:parameterValue required="true" variableLength="false">ConsoleColor</command:parameterValue>
+          <dev:type>
+            <maml:name>ConsoleColor</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>Green</dev:defaultValue>
+        </command:parameter>
+      </command:syntaxItem>
+    </command:syntax>
+    <command:parameters>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="none">
+        <maml:name>Month</maml:name>
+        <maml:Description>
+          <maml:para>Select a month to display. The command will default to the current year unless otherwise specified.</maml:para>
+        </maml:Description>
+        <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+        <dev:type>
+          <maml:name>String</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>(get-date -format MMMM)</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>Year</maml:name>
+        <maml:Description>
+          <maml:para>Select a year for the specified month.</maml:para>
+        </maml:Description>
+        <command:parameterValue required="true" variableLength="false">Int32</command:parameterValue>
+        <dev:type>
+          <maml:name>Int32</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>(Get-Date).Year</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>HighlightDate</maml:name>
+        <maml:Description>
+          <maml:para>Specific days (named) to highlight. These dates are surrounded by asterisk characters.</maml:para>
+        </maml:Description>
+        <command:parameterValue required="true" variableLength="false">String[]</command:parameterValue>
+        <dev:type>
+          <maml:name>String[]</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>(Get-Date).date.toString()</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>HighlightColor</maml:name>
+        <maml:Description>
+          <maml:para>Specify a console color to use for the highlighted dates.</maml:para>
+        </maml:Description>
+        <command:parameterValue required="true" variableLength="false">ConsoleColor</command:parameterValue>
+        <dev:type>
+          <maml:name>ConsoleColor</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>Green</dev:defaultValue>
+      </command:parameter>
+    </command:parameters>
+    <command:inputTypes>
+      <command:inputType>
+        <dev:type>
+          <maml:name>None</maml:name>
+        </dev:type>
+        <maml:description>
+          <maml:para></maml:para>
+        </maml:description>
+      </command:inputType>
+    </command:inputTypes>
+    <command:returnValues>
+      <command:returnValue>
+        <dev:type>
+          <maml:name>None</maml:name>
+        </dev:type>
+        <maml:description>
+          <maml:para></maml:para>
+        </maml:description>
+      </command:returnValue>
+    </command:returnValues>
+    <maml:alertSet>
+      <maml:alert>
+        <maml:para>This command should have an alias of scal.</maml:para>
+        <maml:para>Learn more about PowerShell: http://jdhitsolutions.com/blog/essential-powershell-resources/</maml:para>
+      </maml:alert>
+    </maml:alertSet>
+    <command:examples>
+      <command:example>
+        <maml:title>-------------------------- EXAMPLE 1 --------------------------</maml:title>
+        <dev:code>PS C:\&gt; Show-Calendar</dev:code>
+        <dev:remarks>
+          <maml:para>Display a colorized version of the current month. The current day will also be colorized.</maml:para>
+        </dev:remarks>
+      </command:example>
+      <command:example>
+        <maml:title>-------------------------- EXAMPLE 2 --------------------------</maml:title>
+        <dev:code>PS C:\&gt; Show-Calendar -Month February -Year 2019 -HighlightDate 2/22/19 -HighlightColor red</dev:code>
+        <dev:remarks>
+          <maml:para>Display February 2019 and highlight the 22nd in red.</maml:para>
+        </dev:remarks>
+      </command:example>
+    </command:examples>
+    <command:relatedLinks>
+      <maml:navigationLink>
+        <maml:linkText>Get-Calendar</maml:linkText>
+        <maml:uri></maml:uri>
+      </maml:navigationLink>
+    </command:relatedLinks>
+  </command:command>
+</helpItems>
