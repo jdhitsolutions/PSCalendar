@@ -3,7 +3,7 @@
 #region main code
 
 #dot source the calendar functions
-. .\calendar-functions.ps1
+. $PSScriptRoot\calendar-functions.ps1
 
 #define an auto completer for the Month parameter
 Register-ArgumentCompleter -CommandName Get-Calendar, Show-Calendar -ParameterName Month -ScriptBlock {

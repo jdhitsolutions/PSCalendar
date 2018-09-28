@@ -9,6 +9,8 @@ You can install this module from the PowerShell Gallery.
 Install-Module PSCalendar
 ```
 
+It has been tested on PowerShell Core both under Windows and Linux and there is no reason these commands should not work.
+
 ## Get-Calendar
 
 The commands in this module have been updated to take advantage of new features in Windows PowerShell. The main function, [Get-Calendar](), will display the current month in the console, highlighting the current date with asterisks.
