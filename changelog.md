@@ -1,5 +1,12 @@
 # Change Log for PSCalendar
 
+## v1.3.0
+
++ Added WPF calendar function `Show-GuiCalendar` (Issue #3)
++ Added alias `gcal` for `Show-GuiCalendar`
++ Added parameter validation to `-End` to make sure it is after `-Start`
++ Updated `README.md`
+
 ## v1.2.0
 
 + Added validation for `-Month` (Issue #1)

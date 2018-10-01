@@ -41,4 +41,16 @@ This command is in essence a "wrapper" function for `Get-Calendar`.
 
 ![show calendar with highlights](assets/show-calendar-2.png)
 
- *last updated 9/28/2018*
+## Show-GUICalendar
+
+Finally, you can display a graphical calendar using a WPF-based script. The function runs the calendar-related code in a runspace so it does not block your prompt. You can display up to 3 months and specify dates to highlight.
+
+```powershell
+PS C:\> Show-GuiCalendar 12/2018 2/2019 -highlight 12/24/18,12/25/18,12/31/18,1/1/19,1/18/19,2/14/19,2/22/19
+```
+
+![show-guicalendar](assets/show-guicalendar.png)
+
+The calendar form is transparent. But you should be able to click on it to drag it around your screen. You can also use the + and - keys to increase or decrease the calendar's opacity.
+
+ *last updated 1 October 2018*

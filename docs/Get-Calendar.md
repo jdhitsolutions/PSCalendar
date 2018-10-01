@@ -209,3 +209,4 @@ Learn more about PowerShell: http://jdhitsolutions.com/blog/essential-powershell
 
 [Show-Calendar]()
 
+[Show-GuiCalendar]()
