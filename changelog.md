@@ -2,7 +2,8 @@
 
 ## v1.3.1
 
-+ Help documentation updates for clarity
++ Help documentation updates for clarity (Issue #5)
++ Fixed HighLightDay parsing bug (Issue #6)
 
 ## v1.3.0
 

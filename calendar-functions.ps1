@@ -67,8 +67,9 @@ Function Get-Calendar {
         Write-Verbose "Ending at $End"
         #Convert the highlight dates into real dates
         #using the .NET Class to parse because this works better for culture-specific datetime strings
-        [DateTime[]]$highlightDates = [datetime]::parse($highlightDate)
-
+        [DateTime[]]$highlightDates = foreach ($item in $highlightDate) {
+            [datetime]::parse($item)
+        }
         #Retrieve the DateTimeFormat information so that we can manipulate the calendar
         $dateTimeFormat = (Get-Culture).DateTimeFormat
         $firstDayOfWeek = $dateTimeFormat.FirstDayOfWeek
