@@ -457,6 +457,7 @@ Sun  Mon  Tue  Wed  Thu  Fri  Sat
     </command:details>
     <maml:description>
       <maml:para>If you are running Windows PowerShell, you can display a graphical calendar. You can specify up to 3 months. There are also parameters to fine tune the calendar style. The calendar form is transparent. But you should be able to click on it to drag it around your screen. You can also use the + and - keys to increase or decrease the calendar's opacity. You may have to click on a calendar before making any adjustments.</maml:para>
+      <maml:para>This command launches the calendar in a separate runspace so that it doesn't block your prompt. However, if you close the PowerShell session that launched a graphical calendar, the calender will also automatically close.</maml:para>
     </maml:description>
     <command:syntax>
       <command:syntaxItem>
@@ -649,6 +650,7 @@ Sun  Mon  Tue  Wed  Thu  Fri  Sat
     </command:returnValues>
     <maml:alertSet>
       <maml:alert>
+        <maml:para>This command should have an alias of gcal.</maml:para>
         <maml:para>Learn more about PowerShell: http://jdhitsolutions.com/blog/essential-powershell-resources/</maml:para>
       </maml:alert>
     </maml:alertSet>

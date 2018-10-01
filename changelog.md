@@ -1,5 +1,9 @@
 # Change Log for PSCalendar
 
+## v1.3.1
+
++ Help documentation updates for clarity
+
 ## v1.3.0
 
 + Added WPF calendar function `Show-GuiCalendar` (Issue #3)
