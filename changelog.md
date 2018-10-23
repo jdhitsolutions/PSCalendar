@@ -1,5 +1,14 @@
 # Change Log for PSCalendar
 
+## v1.4.0
+
++ Added parameters to `Show-Calendar` to let user specify colors. (Issue #4)
++ Fixed highlight display bug in `Get-Calendar` (Issue #8)
++ Fixed DisplayMode bug in `Show-GuiCalendar`
++ Modified `Show-GuiCalendar` to not display in the taskbar
++ Added Pester tests to the module
++ Updated documentation
+
 ## v1.3.1
 
 + Help documentation updates for clarity (Issue #5)

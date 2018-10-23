@@ -12,7 +12,6 @@ Function Get-Calendar {
         [ValidateNotNullorEmpty()]
         [ValidateScript( {
                 $names = Get-MonthsByCulture
-                # ((Get-Culture).DateTimeFormat.MonthNames).Where( {$_ -match "\w+"})
                 if ($names -contains $_) {
                     $True
                 }
@@ -44,6 +43,7 @@ Function Get-Calendar {
         })]
         [DateTime]$End,
 
+        [ValidateNotNullorEmpty()]
         [string[]]$HighlightDate = (Get-Date).date.toString()
     )
 
@@ -63,6 +63,7 @@ Function Get-Calendar {
             $start = New-Object DateTime $start.Year, $start.Month, 1
             $end = New-Object DateTime $end.Year, $end.Month, 1
         }
+
         Write-Verbose "Starting at $start"
         Write-Verbose "Ending at $End"
         #Convert the highlight dates into real dates
@@ -105,14 +106,17 @@ Function Get-Calendar {
                 #Pad the day number for display, highlighting if necessary
                 $displayDay = " {0,2} " -f $currentDay.Day
 
-                #See if we should highlight a specific date
-                if ($highlightDates) {
-                    $compareDate = New-Object DateTime $currentDay.Year,
-                    $currentDay.Month, $currentDay.Day
-                    if ($highlightDates -contains $compareDate) {
-                        $displayDay = "*" + ("{0,2}" -f $currentDay.Day) + "*"
-                    }
+                #highlight a specific date
+                if ($highlightDates -ne (Get-Date).date.toString() ) {
+                    $highlightDates+= (Get-Date).date.toString()
                 }
+
+                $compareDate = New-Object DateTime $currentDay.Year,
+                $currentDay.Month, $currentDay.Day
+                if ($highlightDates -contains $compareDate) {
+                    $displayDay = "*" + ("{0,2}" -f $currentDay.Day) + "*"
+                }
+
 
                 #Add in the day of week and day number as note properties.
                 $currentWeek | Add-Member NoteProperty $dayName $displayDay
@@ -165,7 +169,6 @@ Function Show-Calendar {
         [ValidateNotNullorEmpty()]
         [ValidateScript( {
                 $names = Get-MonthsByCulture
-                #((Get-Culture).DateTimeFormat.MonthNames).Where( {$_ -match "\w+"})
                 if ($names -contains $_) {
                     $True
                 }
@@ -182,8 +185,17 @@ Function Show-Calendar {
 
         [string[]]$HighlightDate = (Get-Date).date.toString(),
 
+        [Parameter(HelpMessage = "Specify a color for the highlighted days.")]
         [ValidateNotNullOrEmpty()]
-        [consolecolor]$HighlightColor = "Green"
+        [consolecolor]$HighlightColor = "Green",
+
+        [Parameter(HelpMessage = "Specify a color for the days of the month heading.")]
+        [ValidateNotNullOrEmpty()]
+        [consolecolor]$TitleColor = "Yellow",
+
+        [Parameter(HelpMessage = "Specify a color for the days of the week heading.")]
+        [ValidateNotNullOrEmpty()]
+        [consolecolor]$DayColor = "Cyan"
     )
 
     Write-Verbose "Starting $($myinvocation.mycommand)"
@@ -196,10 +208,13 @@ Function Show-Calendar {
         }
     }
 
-    #remove color parameter if specified
-    if ($PSBoundParameters.Containskey("HighlightColor")) {
-        $PSBoundParameters.Remove("HighlightColor")
-    }
+    #remove color parameters if specified
+    "HighlightColor","TitleColor","DayColor" | foreach-object {
+        if ($PSBoundParameters.Containskey($_)) {
+            $PSBoundParameters.Remove($_) | Out-Null
+        }
+    } #foreach color parameter
+
     $cal = Get-Calendar @PSBoundParameters
 
     #turn the calendar into an array of strings
@@ -212,11 +227,11 @@ Function Show-Calendar {
     foreach ($line in $calarray) {
         if ($line -match "\d{4}") {
             #write the line with the month and year
-            write-Host $line -ForegroundColor Yellow
+            write-Host $line -ForegroundColor $TitleColor
         }
         elseif ($line -match "\w{3}|-{3}") {
             #write the day names and underlines
-            Write-Host $line -ForegroundColor cyan
+            Write-Host $line -ForegroundColor $DayColor
         }
         elseif ($line -match "\*") {
             #break apart lines with asterisks
@@ -364,6 +379,11 @@ Function Show-GuiCalendar {
         #color is set for development purposes. It won't be seen normally.
         $form.Background.Color = "green"
         $form.background.Opacity = 0
+        $form.ShowInTaskbar = $False
+        $form.Add_Loaded({
+            $form.Topmost = $True
+            $form.Activate()
+        })
 
         $form.Add_MouseLeftButtonDown( {$form.DragMove()})
 
@@ -401,7 +421,7 @@ Function Show-GuiCalendar {
         $myCals = @()
         foreach ($month in $months) {
             $cal = New-Object System.Windows.Controls.Calendar
-            $cal.DisplayMode = "Calendar"
+            $cal.DisplayMode = "Month"
 
             $cal.Opacity = 1
             $cal.FontFamily = $font
@@ -419,7 +439,6 @@ Function Show-GuiCalendar {
                 foreach ($d in $HighlightDate) {
                     if ($d.month -eq $month.Month) {
                         $cal.SelectedDates.add($d)
-
                     }
                 }
             }
@@ -461,10 +480,10 @@ Function Show-GuiCalendar {
     $psCmd.Runspace = $newRunspace
     Write-Verbose "Invoking calendar runspace"
     $psCmd.BeginInvoke() | Out-Null
+
     Write-Verbose "Ending $($myinvocation.mycommand)"
 
 } #close Show-GuiCalendar
-
 
 #a helper function to retrieve names
 function Get-MonthsbyCulture {
