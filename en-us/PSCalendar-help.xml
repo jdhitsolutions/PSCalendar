@@ -341,6 +341,42 @@ Sun  Mon  Tue  Wed  Thu  Fri  Sat
           </dev:type>
           <dev:defaultValue>Green</dev:defaultValue>
         </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>DayColor</maml:name>
+          <maml:Description>
+            <maml:para>Specify a color for the days of the week heading.</maml:para>
+          </maml:Description>
+          <command:parameterValue required="true" variableLength="false">ConsoleColor</command:parameterValue>
+          <dev:type>
+            <maml:name>ConsoleColor</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Position</maml:name>
+          <maml:Description>
+            <maml:para>Enter a System.Management.Automation.Host.Coordinates object to specify a location for the calendar. This may not work properly in all hosts and you might need some trial and error to figure out a position that works for you.</maml:para>
+          </maml:Description>
+          <command:parameterValue required="true" variableLength="false">Coordinates</command:parameterValue>
+          <dev:type>
+            <maml:name>Coordinates</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>TitleColor</maml:name>
+          <maml:Description>
+            <maml:para>Specify a color for the days of the month heading.</maml:para>
+          </maml:Description>
+          <command:parameterValue required="true" variableLength="false">ConsoleColor</command:parameterValue>
+          <dev:type>
+            <maml:name>ConsoleColor</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
       </command:syntaxItem>
     </command:syntax>
     <command:parameters>
@@ -392,6 +428,42 @@ Sun  Mon  Tue  Wed  Thu  Fri  Sat
         </dev:type>
         <dev:defaultValue>Green</dev:defaultValue>
       </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>DayColor</maml:name>
+        <maml:Description>
+          <maml:para>Specify a color for the days of the week heading.</maml:para>
+        </maml:Description>
+        <command:parameterValue required="true" variableLength="false">ConsoleColor</command:parameterValue>
+        <dev:type>
+          <maml:name>ConsoleColor</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>Position</maml:name>
+        <maml:Description>
+          <maml:para>Enter a System.Management.Automation.Host.Coordinates object to specify a location for the calendar. This may not work properly in all hosts and you might need some trial and error to figure out a position that works for you.</maml:para>
+        </maml:Description>
+        <command:parameterValue required="true" variableLength="false">Coordinates</command:parameterValue>
+        <dev:type>
+          <maml:name>Coordinates</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>TitleColor</maml:name>
+        <maml:Description>
+          <maml:para>Specify a color for the days of the month heading.</maml:para>
+        </maml:Description>
+        <command:parameterValue required="true" variableLength="false">ConsoleColor</command:parameterValue>
+        <dev:type>
+          <maml:name>ConsoleColor</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
     </command:parameters>
     <command:inputTypes>
       <command:inputType>
@@ -406,7 +478,7 @@ Sun  Mon  Tue  Wed  Thu  Fri  Sat
     <command:returnValues>
       <command:returnValue>
         <dev:type>
-          <maml:name>None</maml:name>
+          <maml:name>None. This command writes to the PowerShell hosting application.</maml:name>
         </dev:type>
         <maml:description>
           <maml:para></maml:para>
@@ -434,6 +506,13 @@ Sun  Mon  Tue  Wed  Thu  Fri  Sat
           <maml:para>Display February 2019 and highlight the 22nd in red.</maml:para>
         </dev:remarks>
       </command:example>
+      <command:example>
+        <maml:title>-------------------------- Example 3 --------------------------</maml:title>
+        <dev:code>PS C:\&gt; Show-Calendar  -Position ([system.management.automation.host.coordinates]::new(75,1))</dev:code>
+        <dev:remarks>
+          <maml:para>Display the calendar at a specified X,Y position in the console. This parameter will probably not work in the PowerShell ISE.</maml:para>
+        </dev:remarks>
+      </command:example>
     </command:examples>
     <command:relatedLinks>
       <maml:navigationLink>
@@ -457,7 +536,7 @@ Sun  Mon  Tue  Wed  Thu  Fri  Sat
     </command:details>
     <maml:description>
       <maml:para>If you are running Windows PowerShell, you can display a graphical calendar. You can specify up to 3 months. There are also parameters to fine tune the calendar style. The calendar form is transparent. But you should be able to click on it to drag it around your screen. You can also use the + and - keys to increase or decrease the calendar's opacity. You may have to click on a calendar before making any adjustments.</maml:para>
-      <maml:para>This command launches the calendar in a separate runspace so that it doesn't block your prompt. However, if you close the PowerShell session that launched a graphical calendar, the calender will also automatically close.</maml:para>
+      <maml:para>This command launches the calendar in a separate runspace so that it doesn't block your prompt. However, if you close the PowerShell session that launched a graphical calendar, the calendar will also automatically close.</maml:para>
     </maml:description>
     <command:syntax>
       <command:syntaxItem>

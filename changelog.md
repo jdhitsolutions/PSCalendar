@@ -1,5 +1,12 @@
 # Change Log for PSCalendar
 
+## v1.5.0
+
++ Modified `Show-Calendar` to allow you to specify a position in the console.
++ Help updates
++ Updated `README.md`
++ Minor changes to the Pester test
+
 ## v1.4.0
 
 + Added parameters to `Show-Calendar` to let user specify colors. (Issue #4)

@@ -22,7 +22,7 @@ Show-GuiCalendar [[-Start] <DateTime>] [[-End] <DateTime>] [-HighlightDate <Date
 
 If you are running Windows PowerShell, you can display a graphical calendar. You can specify up to 3 months. There are also parameters to fine tune the calendar style. The calendar form is transparent. But you should be able to click on it to drag it around your screen. You can also use the + and - keys to increase or decrease the calendar's opacity. You may have to click on a calendar before making any adjustments.
 
-This command launches the calendar in a separate runspace so that it doesn't block your prompt. However, if you close the PowerShell session that launched a graphical calendar, the calender will also automatically close.
+This command launches the calendar in a separate runspace so that it doesn't block your prompt. However, if you close the PowerShell session that launched a graphical calendar, the calendar will also automatically close.
 
 ## EXAMPLES
 

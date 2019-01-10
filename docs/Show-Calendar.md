@@ -14,8 +14,9 @@ Display a colorized calendar month in the console.
 ## SYNTAX
 
 ```yaml
-Show-Calendar [[-Month] <String>] [-Year <Int32>] [-HighlightDate <String[]>] [-HighlightColor <ConsoleColor>]
- [<CommonParameters>]
+Show-Calendar [[-Month] <String>] [[-Year] <Int32>] [-HighlightDate <String[]>]
+ [-HighlightColor <ConsoleColor>] [-TitleColor <ConsoleColor>] [-DayColor <ConsoleColor>]
+ [-Position <Coordinates>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -39,6 +40,14 @@ PS C:\> Show-Calendar -Month February -Year 2019 -HighlightDate 2/22/19 -Highlig
 ```
 
 Display February 2019 and highlight the 22nd in red.
+
+### Example 3
+
+```powershell
+PS C:\> Show-Calendar  -Position ([system.management.automation.host.coordinates]::new(75,1))
+```
+
+Display the calendar at a specified X,Y position in the console. This parameter will probably not work in the PowerShell ISE.
 
 ## PARAMETERS
 
@@ -107,10 +116,57 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
+### -DayColor
+
+Specify a color for the days of the week heading.
+
+```yaml
+Type: ConsoleColor
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Position
+
+Enter a System.Management.Automation.Host.Coordinates object to specify a location for the calendar. This may not work properly in all hosts and you might need some trial and error to figure out a position that works for you.
+
+```yaml
+Type: Coordinates
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -TitleColor
+
+Specify a color for the days of the month heading.
+
+```yaml
+Type: ConsoleColor
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
 ### CommonParameters
 
-This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable.
-For more information, see about_CommonParameters (http://go.microsoft.com/fwlink/?LinkID=113216).
+This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable. For more information, see about_CommonParameters (http://go.microsoft.com/fwlink/?LinkID=113216).
 
 ## INPUTS
 
@@ -118,7 +174,7 @@ For more information, see about_CommonParameters (http://go.microsoft.com/fwlink
 
 ## OUTPUTS
 
-### None
+### None. This command writes to the PowerShell hosting application.
 
 ## NOTES
 

@@ -32,15 +32,15 @@ Function Get-Calendar {
 
         [Parameter(Mandatory, HelpMessage = "Enter an ending date for the month like 2/1/2019", ParameterSetName = "span")]
         [ValidateNotNullOrEmpty()]
-        [ValidateScript({
-            if ($_ -ge $Start) {
-                $True
-            }
-            else {
-                Throw "The end date ($_) must be later than the start date ($start)"
-                $False
-            }
-        })]
+        [ValidateScript( {
+                if ($_ -ge $Start) {
+                    $True
+                }
+                else {
+                    Throw "The end date ($_) must be later than the start date ($start)"
+                    $False
+                }
+            })]
         [DateTime]$End,
 
         [ValidateNotNullorEmpty()]
@@ -108,7 +108,7 @@ Function Get-Calendar {
 
                 #highlight a specific date
                 if ($highlightDates -ne (Get-Date).date.toString() ) {
-                    $highlightDates+= (Get-Date).date.toString()
+                    $highlightDates += (Get-Date).date.toString()
                 }
 
                 $compareDate = New-Object DateTime $currentDay.Year,
@@ -195,10 +195,17 @@ Function Show-Calendar {
 
         [Parameter(HelpMessage = "Specify a color for the days of the week heading.")]
         [ValidateNotNullOrEmpty()]
-        [consolecolor]$DayColor = "Cyan"
+        [consolecolor]$DayColor = "Cyan",
+        [System.Management.Automation.Host.Coordinates]$Position
     )
 
     Write-Verbose "Starting $($myinvocation.mycommand)"
+
+    if ($position) {
+        #save current cursor location
+        $here = $host.ui.RawUI.CursorPosition
+        $PSBoundParameters.remove("Position") | out-Null
+    }
 
     #add default values if not bound
     $params = "Month", "Year", "HighlightDate"
@@ -209,7 +216,7 @@ Function Show-Calendar {
     }
 
     #remove color parameters if specified
-    "HighlightColor","TitleColor","DayColor" | foreach-object {
+    "HighlightColor", "TitleColor", "DayColor" | foreach-object {
         if ($PSBoundParameters.Containskey($_)) {
             $PSBoundParameters.Remove($_) | Out-Null
         }
@@ -227,20 +234,29 @@ Function Show-Calendar {
     foreach ($line in $calarray) {
         if ($line -match "\d{4}") {
             #write the line with the month and year
+            if ($position) {
+                $host.ui.RawUI.CursorPosition = $Position
+            }
             write-Host $line -ForegroundColor $TitleColor
         }
         elseif ($line -match "\w{3}|-{3}") {
             #write the day names and underlines
+            if ($Position) {
+                $Position.y++
+                $host.ui.RawUI.CursorPosition = $Position
+            }
             Write-Host $line -ForegroundColor $DayColor
         }
         elseif ($line -match "\*") {
             #break apart lines with asterisks
             $week = $line
-
-            $m.Matches($week).Value| foreach-object {
+            if ($position) {
+                $Position.y++
+                $host.ui.RawUI.CursorPosition = $Position
+            }
+            $m.Matches($week).Value | foreach-object {
 
                 $day = "$_"
-
                 if ($day -match "\*") {
                     write-host "$($day.replace('*','').padleft(3," "))  " -NoNewline -ForegroundColor $HighlightColor
                 }
@@ -248,12 +264,23 @@ Function Show-Calendar {
                     write-host "$($day.PadLeft(3," "))  " -nonewline
                 }
             }
+
             write-host ""
         }
         else {
+            if ($Position) {
+                $Position.y++
+                $host.ui.RawUI.CursorPosition = $Position
+            }
             Write-host $line
         }
     } #foreach line in calarray
+
+    if ($Position) {
+        #set cursor position back
+        $here.y++
+        $host.ui.RawUI.CursorPosition = $here
+    }
 
     Write-Verbose "Ending $($myinvocation.mycommand)"
 
@@ -272,15 +299,15 @@ Function Show-GuiCalendar {
 
         [Parameter(Position = 2, HelpMessage = "Enter the last month to display by date, like 3/1/2019. You cannot display more than 3 months.")]
         [ValidateNotNullOrEmpty()]
-        [ValidateScript({
-            if ($_ -ge $Start) {
-                $True
-            }
-            else {
-                Throw "The end date ($_) must be later than the start date ($start)"
-                $False
-            }
-        })]
+        [ValidateScript( {
+                if ($_ -ge $Start) {
+                    $True
+                }
+                else {
+                    Throw "The end date ($_) must be later than the start date ($start)"
+                    $False
+                }
+            })]
         [datetime]$End = [datetime]::new([datetime]::now.year, [datetime]::now.month, 1),
 
         [Parameter(HelpMessage = "Enter an array of dates to highlight like 12/25/2019.")]
@@ -325,21 +352,21 @@ Function Show-GuiCalendar {
         Add-Type -AssemblyName PresentationFramework -ErrorAction Stop
         Add-Type –assemblyName PresentationCore -ErrorAction Stop
         Add-Type –assemblyName WindowsBase -ErrorAction Stop
-        }
+    }
     Catch {
-            Write-Warning "Failed to load a required type library. $($_.exception.message)"
-            #bail out
-            Return
-        }
+        Write-Warning "Failed to load a required type library. $($_.exception.message)"
+        #bail out
+        Return
+    }
 
-    $myParams=@{
-        Months = $months
-        Height = (200 * $months.count)
-        Title = "My Calendar"
+    $myParams = @{
+        Months        = $months
+        Height        = (200 * $months.count)
+        Title         = "My Calendar"
         HighlightDate = $HighlightDate
-        Font = $Font
-        FontStyle = $FontStyle
-        FontWeight = $FontWeight
+        Font          = $Font
+        FontStyle     = $FontStyle
+        FontWeight    = $FontWeight
     }
 
     Write-Verbose "Using these parameters"
@@ -353,126 +380,126 @@ Function Show-GuiCalendar {
     Write-Verbose "Defining runspace script"
     $psCmd = [PowerShell]::Create().AddScript( {
 
-        Param (
-            [datetime[]]$HighlightDate,
-            [string]$Font,
-            [string]$FontStyle,
-            [string]$FontWeight,
-            [int]$Height,
-            [string]$Title,
-            [datetime[]]$Months
-        )
+            Param (
+                [datetime[]]$HighlightDate,
+                [string]$Font,
+                [string]$FontStyle,
+                [string]$FontWeight,
+                [int]$Height,
+                [string]$Title,
+                [datetime[]]$Months
+            )
 
-        #create a window form.
-        $form = New-Object System.Windows.Window
+            #create a window form.
+            $form = New-Object System.Windows.Window
 
-        $form.AllowsTransparency = $True
-        $form.WindowStyle = "none"
-        #the title won't be shown when window style is set to none
-        $form.Title = $Title
-        $form.Height = $height
-        $form.Width = 200
+            $form.AllowsTransparency = $True
+            $form.WindowStyle = "none"
+            #the title won't be shown when window style is set to none
+            $form.Title = $Title
+            $form.Height = $height
+            $form.Width = 200
 
-        $bg = new-object System.Windows.Media.SolidColorBrush
+            $bg = new-object System.Windows.Media.SolidColorBrush
 
-        $form.Background = $bg
-        #color is set for development purposes. It won't be seen normally.
-        $form.Background.Color = "green"
-        $form.background.Opacity = 0
-        $form.ShowInTaskbar = $False
-        $form.Add_Loaded({
-            $form.Topmost = $True
-            $form.Activate()
-        })
+            $form.Background = $bg
+            #color is set for development purposes. It won't be seen normally.
+            $form.Background.Color = "green"
+            $form.background.Opacity = 0
+            $form.ShowInTaskbar = $False
+            $form.Add_Loaded( {
+                    $form.Topmost = $True
+                    $form.Activate()
+                })
 
-        $form.Add_MouseLeftButtonDown( {$form.DragMove()})
+            $form.Add_MouseLeftButtonDown( {$form.DragMove()})
 
-        #add event handlers to adjust opacity by using the +/- keys
-        $form.add_KeyDown( {
+            #add event handlers to adjust opacity by using the +/- keys
+            $form.add_KeyDown( {
 
-                switch ($_.key) {
-                    {'Add', 'OemPlus' -contains $_} {
-                        foreach ($cal in $myCals) {
-                        If ($cal.Opacity -lt 1) {
-                            $cal.Opacity = $cal.opacity + .1
-                            $cal.UpdateLayout()
+                    switch ($_.key) {
+                        {'Add', 'OemPlus' -contains $_} {
+                            foreach ($cal in $myCals) {
+                                If ($cal.Opacity -lt 1) {
+                                    $cal.Opacity = $cal.opacity + .1
+                                    $cal.UpdateLayout()
+                                }
+                            }
                         }
-                    }
-                    }
-                    {'Subtract', 'OemMinus' -contains $_} {
-                        foreach ($cal in $myCals) {
-                        If ($cal.Opacity -gt .2) {
-                            $cal.Opacity = $cal.Opacity - .1
-                            $cal.UpdateLayout()
-                        }
-                      }
-                    }
-                }
-            })
-
-        $stack = $stack = New-object System.Windows.Controls.StackPanel
-        $stack.Width = $form.Width
-        $stack.Height = $form.Height
-        $stack.HorizontalAlignment = "center"
-        $stack.VerticalAlignment = "top"
-
-        #create an array to store calendars so that opacity can be
-        #set for multiple calendars in unison
-        $myCals = @()
-        foreach ($month in $months) {
-            $cal = New-Object System.Windows.Controls.Calendar
-            $cal.DisplayMode = "Month"
-
-            $cal.Opacity = 1
-            $cal.FontFamily = $font
-            $cal.FontSize = 24
-            $cal.FontWeight = $FontWeight
-            $cal.FontStyle = $fontStyle
-
-            $cal.DisplayDateStart = $month
-
-            $cal.HorizontalAlignment = "center"
-            $cal.VerticalAlignment = "top"
-
-            $cal.SelectionMode = "multipleRange"
-            if ($highlightdate) {
-                foreach ($d in $HighlightDate) {
-                    if ($d.month -eq $month.Month) {
-                        $cal.SelectedDates.add($d)
-                    }
-                }
-            }
-
-            $cal.add_DisplayDateChanged( {
-                    # add the selected days for the currently displayed month
-                    $cal | out-string | write-host
-                    [datetime]$month = $cal.Displaydate
-                    if ($highlightdate) {
-                        foreach ($d in $HighlightDate) {
-                            if ($d.month -eq $month.Month) {
-                                $cal.SelectedDates.add($d)
+                        {'Subtract', 'OemMinus' -contains $_} {
+                            foreach ($cal in $myCals) {
+                                If ($cal.Opacity -gt .2) {
+                                    $cal.Opacity = $cal.Opacity - .1
+                                    $cal.UpdateLayout()
+                                }
                             }
                         }
                     }
-                    $cal.UpdateLayout()
                 })
 
-            $stack.addchild($cal)
-            $myCals+=$cal
-        }
+            $stack = $stack = New-object System.Windows.Controls.StackPanel
+            $stack.Width = $form.Width
+            $stack.Height = $form.Height
+            $stack.HorizontalAlignment = "center"
+            $stack.VerticalAlignment = "top"
 
-        $btn = New-Object System.Windows.Controls.Button
-        $btn.Content = "_Close"
-        $btn.Width = 75
-        $btn.VerticalAlignment = "Bottom"
-        $btn.HorizontalAlignment = "Center"
-        $btn.Opacity = 1
-        $btn.Add_click( {$form.close()})
+            #create an array to store calendars so that opacity can be
+            #set for multiple calendars in unison
+            $myCals = @()
+            foreach ($month in $months) {
+                $cal = New-Object System.Windows.Controls.Calendar
+                $cal.DisplayMode = "Month"
 
-        $stack.AddChild($btn)
+                $cal.Opacity = 1
+                $cal.FontFamily = $font
+                $cal.FontSize = 24
+                $cal.FontWeight = $FontWeight
+                $cal.FontStyle = $fontStyle
 
-        $form.AddChild($stack)
-        $form.ShowDialog() | out-null
+                $cal.DisplayDateStart = $month
+
+                $cal.HorizontalAlignment = "center"
+                $cal.VerticalAlignment = "top"
+
+                $cal.SelectionMode = "multipleRange"
+                if ($highlightdate) {
+                    foreach ($d in $HighlightDate) {
+                        if ($d.month -eq $month.Month) {
+                            $cal.SelectedDates.add($d)
+                        }
+                    }
+                }
+
+                $cal.add_DisplayDateChanged( {
+                        # add the selected days for the currently displayed month
+                        $cal | out-string | write-host
+                        [datetime]$month = $cal.Displaydate
+                        if ($highlightdate) {
+                            foreach ($d in $HighlightDate) {
+                                if ($d.month -eq $month.Month) {
+                                    $cal.SelectedDates.add($d)
+                                }
+                            }
+                        }
+                        $cal.UpdateLayout()
+                    })
+
+                $stack.addchild($cal)
+                $myCals += $cal
+            }
+
+            $btn = New-Object System.Windows.Controls.Button
+            $btn.Content = "_Close"
+            $btn.Width = 75
+            $btn.VerticalAlignment = "Bottom"
+            $btn.HorizontalAlignment = "Center"
+            $btn.Opacity = 1
+            $btn.Add_click( {$form.close()})
+
+            $stack.AddChild($btn)
+
+            $form.AddChild($stack)
+            $form.ShowDialog() | out-null
         })
 
 

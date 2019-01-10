@@ -1,10 +1,14 @@
 #these tests are acceptance tests and validate that the module has the
 #settings I intend and that the commands work as expected.
 
+#remove any existing versions of the module
 $moduleName = (Get-Item -path $PSScriptRoot).Parent.Name
 $ModuleManifestName = "$modulename.psd1"
 $ModuleManifestPath = "$PSScriptRoot\..\$ModuleManifestName"
 
+If (Get-Module $moduleName) {
+    remove-module $moduleName
+}
 import-module $ModuleManifestPath -Force
 
 Describe $ModuleName {
@@ -127,15 +131,15 @@ InModuleScope $moduleName {
         $ModuleManifestPath = "$PSScriptRoot\..\$ModuleManifestName"
         #use a runspace to avoid displaying the Write-Host output
         $ps = [powershell]::Create()
-        $ps.AddScript({
-            param([string]$Name)
+        $ps.AddScript( {
+                param([string]$Name)
 
-            Import-Module -Name $Name
-            Show-Calendar
+                Import-Module -Name $Name
+                Show-Calendar
 
-            },$True) | out-null
+            }, $True) | out-null
 
-            $ps.AddParameter("Name",$ModuleManifestPath) | Out-Null
+        $ps.AddParameter("Name", $ModuleManifestPath) | Out-Null
 
         $r = $ps.Invoke()
 
@@ -151,19 +155,19 @@ InModuleScope $moduleName {
 
         #test with a new set of values
         $ps = [powershell]::Create()
-        $ps.AddScript({
-            param([string]$Name)
+        $ps.AddScript( {
+                param([string]$Name)
 
-            Import-Module -Name $Name
-            Show-Calendar
+                Import-Module -Name $Name
+                Show-Calendar
 
-            },$True) | out-null
+            }, $True) | out-null
 
         $h = @{
-            Name = $mod
+            Name  = $mod
             Month = "foo"
-           }
-           $ps.AddParameters($h)
+        }
+        $ps.AddParameters($h)
         $r = $ps.Invoke()
         It "Should fail with a bad month name" {
             $ps.streams.error | Should Not BeNullOrEmpty
@@ -186,3 +190,5 @@ InModuleScope $moduleName {
         }
     } -tag command
 }
+
+Write-Host "You will need to manually kill and graphical calendars that were spawned from the test." -ForegroundColor yellow
