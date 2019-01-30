@@ -164,7 +164,6 @@ Function Show-Calendar {
     [cmdletbinding()]
     [Alias("scal")]
     Param(
-
         [Parameter(Position = 1, ParameterSetName = "month")]
         [ValidateNotNullorEmpty()]
         [ValidateScript( {
@@ -196,6 +195,10 @@ Function Show-Calendar {
         [Parameter(HelpMessage = "Specify a color for the days of the week heading.")]
         [ValidateNotNullOrEmpty()]
         [consolecolor]$DayColor = "Cyan",
+
+        [Parameter(HelpMessage = "Specify a color to mark today")]
+        [ValidateNotNullOrEmpty()]
+        [consolecolor]$TodayColor = "Red",
         [System.Management.Automation.Host.Coordinates]$Position
     )
 
@@ -216,7 +219,7 @@ Function Show-Calendar {
     }
 
     #remove color parameters if specified
-    "HighlightColor", "TitleColor", "DayColor" | foreach-object {
+    "HighlightColor", "TitleColor", "DayColor","TodayColor" | foreach-object {
         if ($PSBoundParameters.Containskey($_)) {
             $PSBoundParameters.Remove($_) | Out-Null
         }
@@ -237,7 +240,7 @@ Function Show-Calendar {
             if ($position) {
                 $host.ui.RawUI.CursorPosition = $Position
             }
-            write-Host $line -ForegroundColor $TitleColor
+            Write-Host $line -ForegroundColor $TitleColor
         }
         elseif ($line -match "\w{3}|-{3}") {
             #write the day names and underlines
@@ -254,25 +257,28 @@ Function Show-Calendar {
                 $Position.y++
                 $host.ui.RawUI.CursorPosition = $Position
             }
-            $m.Matches($week).Value | foreach-object {
+            $m.Matches($week).Value | ForEach-Object {
 
                 $day = "$_"
-                if ($day -match "\*") {
-                    write-host "$($day.replace('*','').padleft(3," "))  " -NoNewline -ForegroundColor $HighlightColor
+                if ($day -match "\*$((Get-Date).day)\*" ) {
+                    Write-Host "$($day.replace('*','').padleft(3," "))  " -NoNewline -ForegroundColor $TodayColor
+                }
+                elseif ($day -match "\*") {
+                    Write-Host "$($day.replace('*','').padleft(3," "))  " -NoNewline -ForegroundColor $HighlightColor
                 }
                 else {
-                    write-host "$($day.PadLeft(3," "))  " -nonewline
+                    Write-Host "$($day.PadLeft(3," "))  " -nonewline
                 }
             }
 
-            write-host ""
+            Write-Host ""
         }
         else {
             if ($Position) {
                 $Position.y++
                 $host.ui.RawUI.CursorPosition = $Position
             }
-            Write-host $line
+            Write-Host $line
         }
     } #foreach line in calarray
 
@@ -472,7 +478,7 @@ Function Show-GuiCalendar {
 
                 $cal.add_DisplayDateChanged( {
                         # add the selected days for the currently displayed month
-                        $cal | out-string | write-host
+                        $cal | out-string | Write-Host
                         [datetime]$month = $cal.Displaydate
                         if ($highlightdate) {
                             foreach ($d in $HighlightDate) {

@@ -1,5 +1,11 @@
 # Change Log for PSCalendar
 
+## v1.5.1
+
++ Modified `Show-Calendar` to use a different highlight color for today.
++ Updated help
++ Updated `README.md`
+
 ## v1.5.0
 
 + Modified `Show-Calendar` to allow you to specify a position in the console.

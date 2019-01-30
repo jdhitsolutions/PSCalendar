@@ -191,4 +191,4 @@ InModuleScope $moduleName {
     } -tag command
 }
 
-Write-Host "You will need to manually kill and graphical calendars that were spawned from the test." -ForegroundColor yellow
+Write-Host "You will need to manually kill any graphical calendars that were spawned from the test." -ForegroundColor yellow

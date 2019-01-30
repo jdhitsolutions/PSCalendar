@@ -48,7 +48,7 @@ Sun  Mon  Tue  Wed  Thu  Fri  Sat
  30    1    2    3    4    5    6
 ```
 
- how the current calendar and highlight today. The month name will be centered in your output.
+Show the current calendar and highlight today. The month name will be centered in your output.
 
 ### EXAMPLE 2
 
@@ -102,7 +102,7 @@ Sun  Mon  Tue  Wed  Thu  Fri  Sat
  30   31    1    2    3    4    5
 ```
 
- Display a month and highlight a specific date.
+Display a month and highlight a specific date.
 
 ## PARAMETERS
 

@@ -7,10 +7,10 @@
 RootModule = 'PSCalendar.psm1'
 
 # Version number of this module.
-ModuleVersion = '1.5.0'
+ModuleVersion = '1.5.1'
 
 # Supported PSEditions
-# CompatiblePSEditions = @()
+CompatiblePSEditions = @("Desktop","Core")
 
 # ID used to uniquely identify this module
 GUID = '222beda0-cdb5-464d-bf49-7ab701da86c9'
@@ -22,7 +22,7 @@ Author = 'Jeff Hicks'
 CompanyName = 'JDH Information Technology Solutions, Inc.'
 
 # Copyright statement for this module
-Copyright = '(c) 2018 Jeff Hicks. All rights reserved.'
+Copyright = '(c) 2018-19 Jeff Hicks. All rights reserved.'
 
 # Description of the functionality provided by this module
 Description = 'A PowerShell module to display a calendar in the console.'

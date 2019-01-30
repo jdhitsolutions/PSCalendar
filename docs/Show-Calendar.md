@@ -14,9 +14,10 @@ Display a colorized calendar month in the console.
 ## SYNTAX
 
 ```yaml
+
 Show-Calendar [[-Month] <String>] [[-Year] <Int32>] [-HighlightDate <String[]>]
  [-HighlightColor <ConsoleColor>] [-TitleColor <ConsoleColor>] [-DayColor <ConsoleColor>]
- [-Position <Coordinates>] [<CommonParameters>]
+ [-TodayColor <ConsoleColor>] [-Position <Coordinates>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -127,7 +128,7 @@ Aliases:
 
 Required: False
 Position: Named
-Default value: None
+Default value: Cyan
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
@@ -159,7 +160,23 @@ Aliases:
 
 Required: False
 Position: Named
-Default value: None
+Default value: Yellow
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -TodayColor
+
+Specify a color to mark today.
+
+```yaml
+Type: ConsoleColor
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: Red
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
@@ -174,11 +191,11 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## OUTPUTS
 
-### None. This command writes to the PowerShell hosting application.
+### None
 
 ## NOTES
 
-This command should have an alias of scal.
+This command should have an alias of scal. It writes to the PowerShell hosting application not to the PowerShell pipeline.
 
 Learn more about PowerShell: http://jdhitsolutions.com/blog/essential-powershell-resources/
 

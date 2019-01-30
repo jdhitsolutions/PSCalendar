@@ -6,14 +6,14 @@ This module contains a few functions for displaying a calendar in the PowerShell
 You can install this module from the PowerShell Gallery.
 
 ```powershell
-Install-Module PSCalendar
+Install-Module PSCalendar [-scope currentuser]
 ```
 
-It has been tested on PowerShell Core both under Windows and Linux and there is no reason these commands should not work.
+It has been tested on PowerShell Core both under Windows and Linux and there is no reason these commands should not work, except for [Show-GuiCalendar](docs/Show-GuiCalendar.md).
 
-## Get-Calendar
+## [Get-Calendar](docs/Get-Calendar.md)
 
-The commands in this module have been updated to take advantage of new features in Windows PowerShell. The main function, [Get-Calendar](), will display the current month in the console, highlighting the current date with asterisks.
+The commands in this module have been updated to take advantage of new features in Windows PowerShell. The main function, [Get-Calendar](docs/Get-Calendar.md), will display the current month in the console, highlighting the current date with asterisks.
 
 ![get-calendar](assets/get-calendar.png)
 
@@ -31,7 +31,7 @@ The function should be culturally aware. The commands in this module that have a
 
 There is a similar autocompletion for `-Year` that begins with the current year and then the next 5 years. Although nothing prevents you from entering any year you want.
 
-## Show-Calendar
+## [Show-Calendar](docs/Show-Calendar.md)
 
 The module also contains a command to write a colorized version of the calendar to the console host. Whereas `Get-Calendar` writes a string to the pipeline, `Show-Calendar` writes directly to the host using `Write-Host`.
 
@@ -41,7 +41,9 @@ This command is in essence a "wrapper" function for `Get-Calendar`.
 
 ![show calendar with highlights](assets/show-calendar-2.png)
 
-## Show-GUICalendar
+*Note: Starting with version 1.5.1, the current day will be highlighted in Red, although you can modify that via the TodayColor parameter. I did not update the screen shots.*
+
+## [Show-GUICalendar](docs/Show-GuiCalendar)
 
 Finally, you can display a graphical calendar using a WPF-based script. The function runs the calendar-related code in a runspace so it does not block your prompt. You can display up to 3 months and specify dates to highlight.
 
@@ -51,6 +53,6 @@ PS C:\> Show-GuiCalendar 12/2018 2/2019 -highlight 12/24/18,12/25/18,12/31/18,1/
 
 ![show-guicalendar](assets/show-guicalendar.png)
 
-The calendar form is transparent. But you should be able to click on it to drag it around your screen. You can also use the + and - keys to increase or decrease the calendar's opacity. Be aware that if you close the PowerShell session that launched the calendar, the calendar too will close.
+The calendar form is transparent. But you should be able to click on it to drag it around your screen. You can also use the + and - keys to increase or decrease the calendar's opacity. Be aware that if you close the PowerShell session that launched the calendar, the calendar too will close. This function requires Windows PowerShell.
 
- *last updated 10 January 2019*
+ *last updated 30 January 2019*
