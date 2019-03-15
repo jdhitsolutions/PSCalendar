@@ -1,5 +1,11 @@
 # Change Log for PSCalendar
 
+## v1.6.0
+
++ Fixing date parsing bug for different cultures (Issue #9)
++ Manifest updates to better accommodate PowerShell Core and Windows PowerShell
++ Updated `README.md`
+
 ## v1.5.1
 
 + Modified `Show-Calendar` to use a different highlight color for today.

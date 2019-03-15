@@ -69,7 +69,9 @@ Function Get-Calendar {
         #Convert the highlight dates into real dates
         #using the .NET Class to parse because this works better for culture-specific datetime strings
         [DateTime[]]$highlightDates = foreach ($item in $highlightDate) {
-            [datetime]::parse($item)
+            #parse datetime using current culture
+            $cult = Get-Culture
+            [datetime]::parse($item,$cult)
         }
         #Retrieve the DateTimeFormat information so that we can manipulate the calendar
         $dateTimeFormat = (Get-Culture).DateTimeFormat
@@ -116,7 +118,6 @@ Function Get-Calendar {
                 if ($highlightDates -contains $compareDate) {
                     $displayDay = "*" + ("{0,2}" -f $currentDay.Day) + "*"
                 }
-
 
                 #Add in the day of week and day number as note properties.
                 $currentWeek | Add-Member NoteProperty $dayName $displayDay
