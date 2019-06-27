@@ -7,7 +7,7 @@
 RootModule = 'PSCalendar.psm1'
 
 # Version number of this module.
-ModuleVersion = '1.6'
+ModuleVersion = '1.7.0'
 
 # Supported PSEditions
 CompatiblePSEditions = @("Desktop","Core")

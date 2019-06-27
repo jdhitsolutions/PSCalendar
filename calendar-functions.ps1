@@ -8,11 +8,10 @@ Function Get-Calendar {
     [Alias("cal")]
 
     Param(
-        [Parameter(Position = 1,ParameterSetName = "month")]
+        [Parameter(Position = 1, ParameterSetName = "month")]
         [ValidateNotNullorEmpty()]
         [ValidateScript( {
                 $names = Get-MonthsByCulture
-                # ((Get-Culture).DateTimeFormat.MonthNames).Where( {$_ -match "\w+"})
                 if ($names -contains $_) {
                     $True
                 }
@@ -40,28 +39,52 @@ Function Get-Calendar {
 
     Begin {
         Write-Verbose "Starting $($myinvocation.MyCommand)"
+        Write-Verbose "Using PowerShell version $($psversiontable.PSVersion)"
+        #Call .NET for better results when testing this command in different cultures
+        $currCulture = [system.threading.thread]::CurrentThread.CurrentCulture
     }
     Process {
         Write-Verbose "Using parameter set: $($pscmdlet.ParameterSetName)"
-        Write-Verbose "Using culture $((Get-Culture).name)"
+        Write-Verbose "Using culture $($currCulture.name)"
+        Write-Verbose "Using PSBoundParameters"
+        Write-Verbose ($PSBoundParameters | Out-String).trim()
 
         if ($pscmdlet.ParameterSetName -eq "month") {
-            [datetime]$start = Get-Date "1 $month,$year"
-            [datetime]$end = $start.date
+            Write-Verbose "Using month $month and year $year"
+            Write-Verbose "Getting start date using pattern $($currCulture.DateTimeFormat.ShortDatePattern)"
+
+            #get month number
+            $monthint = [datetime]::parse("1 $month $year").month
+            $start = [datetime]::new($year, $monthint, 1)
+
+            $end = $start.date
         }
         else {
             #Figure out the first day of the start and end months
-            $start = New-Object DateTime $start.Year, $start.Month, 1
-            $end = New-Object DateTime $end.Year, $end.Month, 1
+            $start = [datetime]::new($start.year, $start.Month, 1)
+
+            $end = [datetime]::new($end.year, $end.month, 1)
+
         }
         Write-Verbose "Starting at $start"
         Write-Verbose "Ending at $End"
+
         #Convert the highlight dates into real dates
         #using the .NET Class to parse because this works better for culture-specific datetime strings
-        [DateTime[]]$highlightDates = [datetime]::parse($highlightDate)
+        [DateTime[]]$highlightDates = @()
+        foreach ($item in $highlightDate) {
+            Write-Verbose "Parsing $(($item | Out-String).trim()) to [datetime]"
+            $highlightDates += [datetime]::parse($item)
+        }
 
+        #re-add today if not one of the highlighted dates
+        if ($highlightDates -notcontains ([datetime]::now).date) {
+            Write-Verbose "Re-adding today to highlighted dates"
+            $highlightDates += ([datetime]::now).date
+        }
+        write-verbose "Highlighting: $($highlightDates -join ',')"
         #Retrieve the DateTimeFormat information so that we can manipulate the calendar
-        $dateTimeFormat = (Get-Culture).DateTimeFormat
+        $dateTimeFormat = $currCulture.DateTimeFormat
         $firstDayOfWeek = $dateTimeFormat.FirstDayOfWeek
 
         Write-Verbose "First day of the week is $firstDayofWeek"
@@ -77,6 +100,7 @@ Function Get-Calendar {
             }
 
             #Prepare to store information about this date range
+            Write-Verbose "Initializing currentweek"
             $currentWeek = New-Object PsObject
             $dayNames = @()
             $weeks = @()
@@ -97,8 +121,7 @@ Function Get-Calendar {
 
                 #See if we should highlight a specific date
                 if ($highlightDates) {
-                    $compareDate = New-Object DateTime $currentDay.Year,
-                    $currentDay.Month, $currentDay.Day
+                    $compareDate = New-Object DateTime $currentDay.Year, $currentDay.Month, $currentDay.Day
                     if ($highlightDates -contains $compareDate) {
                         $displayDay = "*" + ("{0,2}" -f $currentDay.Day) + "*"
                     }
@@ -107,7 +130,7 @@ Function Get-Calendar {
                 #Add in the day of week and day number as note properties.
                 $currentWeek | Add-Member NoteProperty $dayName $displayDay
 
-                Write-Verbose "Move to the next day in the month"
+              #  Write-Verbose "Move to the next day in the month"
                 $currentDay = $currentDay.AddDays(1)
 
                 #If we've reached the next week, store the current week
@@ -231,189 +254,190 @@ Function Show-Calendar {
 
 Function Show-GuiCalendar {
     [cmdletbinding()]
-Param(
-[ValidateNotNullOrEmpty()]
-[datetime]$Start = [datetime]::new([datetime]::now.year,[datetime]::now.month,1),
-[ValidateNotNullOrEmpty()]
-[datetime]$End = $start,
-[datetime[]]$HighlightDate,
-[ValidateSet("Segoi UI","QuickType","Tahoma","Lucida Console","Century Gothic")]
-[string]$Font = "Segoi UI",
-[ValidateSet("Normal","Italic","Oblique")]
-[string]$FontStyle = "Normal",
-[ValidateSet("Normal","DemiBold","Light","Bold")]
-[string]$FontWeight = "Normal"
-)
+    [alias("gcal")]
+    Param(
+        [ValidateNotNullOrEmpty()]
+        [datetime]$Start = [datetime]::new([datetime]::now.year, [datetime]::now.month, 1),
+        [ValidateNotNullOrEmpty()]
+        [datetime]$End = $start,
+        [datetime[]]$HighlightDate,
+        [ValidateSet("Segoi UI", "QuickType", "Tahoma", "Lucida Console", "Century Gothic")]
+        [string]$Font = "Segoi UI",
+        [ValidateSet("Normal", "Italic", "Oblique")]
+        [string]$FontStyle = "Normal",
+        [ValidateSet("Normal", "DemiBold", "Light", "Bold")]
+        [string]$FontWeight = "Normal"
+    )
 
-if ($psedition -eq 'Core') {
-    Write-Warning "This function requires Windows PowerShell."
-    #bail out
-    Return
-}
-
-$months = do {
- $start
- $start = $start.AddMonths(1)
- } while ($start -le $end)
-
-if ($months.count -gt 3) {
-    Write-Warning "You can't display more than 3 months at a time with this command."
-    #bail out
-    Return
-}
-
-
-(($myinvocation.MyCommand.ParameterSets).where({$_.name -eq $pscmdlet.ParameterSetName})).parameters |
-Select-Object Name,@{Name="Value";Expression={$pscmdlet.GetVariableValue($_.name)}} |
-Where-Object Value | foreach-object -begin {$myParams = @{}} -process {
-  $myparams.Add($_.name,$_.value)
-}
-
-$myparams.add("Months",$months)
-$myparams.Add("Height",(200 * $months.count))
-$myparams.Add("Title","MyCalendar")
-
-Write-Verbose "Using these parameters"
-$myparams | Out-String | Write-Verbose
-
-$newRunspace = [RunspaceFactory]::CreateRunspace()
-$newRunspace.ApartmentState = "STA"
-$newRunspace.ThreadOptions = "ReuseThread"
-$newRunspace.Open()
-
-$psCmd = [PowerShell]::Create().AddScript({
-
-Param (
-[datetime]$Start,
-[datetime]$End,
-[datetime[]]$HighlightDate,
-[string]$Font,
-[string]$FontStyle,
-[string]$FontWeight,
-[int]$Height,
-[string]$Title,
-[datetime[]]$Months
-)
-
-#add the necessary type library and bail out if there are errors
-#which probably means you are running PowerShell Core
-Try {
-
-
-#create a window form. If this fails, bail out.
-$form = New-Object System.Windows.Window
-
-}
-Catch {
-    Write-Warning "Failed to load a required type library. $($_.exception.message)"
-    #bail out
-    Return
-}
-
-$form.AllowsTransparency = $True
-$form.WindowStyle = "none"
-#the title won't be shown when window style is set to none
-$form.Title = $Title
-$form.Height =  $height
-$form.Width = 200
-
-$bg = new-object System.Windows.Media.SolidColorBrush
-
-$form.Background = $bg
-
-$form.Background.Color = "green"
-$form.background.Opacity = 0
-
-$form.Add_MouseLeftButtonDown({$form.DragMove()})
-
-$form.add_KeyDown({
-$_.key | out-string | write-host
-switch ($_.key) {
- {'Add','OemPlus' -contains $_} {
-    If ($cal.Opacity -lt 1) {
-        $cal.Opacity = $cal.opacity + .1
-        $cal.UpdateLayout()
-        }
+    if ($psedition -eq 'Core') {
+        Write-Warning "This function requires Windows PowerShell."
+        #bail out
+        Return
     }
-{'Subtract','OemMinus' -contains $_} {
-    If ($cal.Opacity -gt .2) {
-        $cal.Opacity = $cal.Opacity - .1
-        $cal.UpdateLayout()
-        }
-        write-host $cal.Opacity
+
+    $months = do {
+        $start
+        $start = $start.AddMonths(1)
+    } while ($start -le $end)
+
+    if ($months.count -gt 3) {
+        Write-Warning "You can't display more than 3 months at a time with this command."
+        #bail out
+        Return
     }
-}
-})
 
 
-$stack = $stack = New-object System.Windows.Controls.StackPanel
-$stack.Width = $form.Width
-$stack.Height = $form.Height
-$stack.HorizontalAlignment = "center"
-$stack.VerticalAlignment = "top"
-
-foreach ($month in $months) {
-$cal = New-Object System.Windows.Controls.Calendar
-$cal.DisplayMode = "Calendar"
-
-$cal.Opacity = 1
-$cal.FontFamily = $font
-$cal.FontSize = 24
-$cal.FontWeight = $FontWeight
-$cal.FontStyle= $fontStyle
-
-$cal.DisplayDateStart = $month
-
-$cal.HorizontalAlignment = "center"
-$cal.VerticalAlignment = "top"
-
-#$cal.SelectedDate = "9/13/2018"
-$cal.SelectionMode = "multipleRange"
-if ($highlightdate) {
-  foreach ($d in $HighlightDate) {
-    if ($d.month -eq $month.Month) {
-        $cal.SelectedDates.add($d)
-
+    (($myinvocation.MyCommand.ParameterSets).where( { $_.name -eq $pscmdlet.ParameterSetName })).parameters |
+    Select-Object Name, @{Name = "Value"; Expression = { $pscmdlet.GetVariableValue($_.name) } } |
+    Where-Object Value | foreach-object -begin { $myParams = @{ } } -process {
+        $myparams.Add($_.name, $_.value)
     }
-  }
-}
 
-$cal.add_DisplayDateChanged({
-# add the selected days for the currently displayed month
-$cal | out-string | write-host
-[datetime]$month = $cal.Displaydate
-if ($highlightdate) {
-  foreach ($d in $HighlightDate) {
-    if ($d.month -eq $month.Month) {
-        $cal.SelectedDates.add($d)
-    }
-  }
-}
-$cal.UpdateLayout()
-})
+    $myparams.add("Months", $months)
+    $myparams.Add("Height", (200 * $months.count))
+    $myparams.Add("Title", "MyCalendar")
 
-$stack.addchild($cal)
-}
+    Write-Verbose "Using these parameters"
+    $myparams | Out-String | Write-Verbose
 
+    $newRunspace = [RunspaceFactory]::CreateRunspace()
+    $newRunspace.ApartmentState = "STA"
+    $newRunspace.ThreadOptions = "ReuseThread"
+    $newRunspace.Open()
 
-$btn = New-Object System.Windows.Controls.Button
-$btn.Content = "_Close"
-$btn.Width = 75
-$btn.VerticalAlignment = "Bottom"
-$btn.HorizontalAlignment = "Center"
-$btn.Opacity = 1
-$btn.Add_click({$form.close()})
+    $psCmd = [PowerShell]::Create().AddScript( {
 
-$stack.AddChild($btn)
+            Param (
+                [datetime]$Start,
+                [datetime]$End,
+                [datetime[]]$HighlightDate,
+                [string]$Font,
+                [string]$FontStyle,
+                [string]$FontWeight,
+                [int]$Height,
+                [string]$Title,
+                [datetime[]]$Months
+            )
 
-$form.AddChild($stack)
-$form.ShowDialog() | out-null
-})
+            #add the necessary type library and bail out if there are errors
+            #which probably means you are running PowerShell Core
+            Try {
 
 
-$pscmd.AddParameters($myparams) | Out-Null
-$psCmd.Runspace = $newRunspace
-$psCmd.BeginInvoke() | Out-Null
+                #create a window form. If this fails, bail out.
+                $form = New-Object System.Windows.Window
+
+            }
+            Catch {
+                Write-Warning "Failed to load a required type library. $($_.exception.message)"
+                #bail out
+                Return
+            }
+
+            $form.AllowsTransparency = $True
+            $form.WindowStyle = "none"
+            #the title won't be shown when window style is set to none
+            $form.Title = $Title
+            $form.Height = $height
+            $form.Width = 200
+
+            $bg = new-object System.Windows.Media.SolidColorBrush
+
+            $form.Background = $bg
+
+            $form.Background.Color = "green"
+            $form.background.Opacity = 0
+
+            $form.Add_MouseLeftButtonDown( { $form.DragMove() })
+
+            $form.add_KeyDown( {
+                    $_.key | out-string | write-host
+                    switch ($_.key) {
+                        { 'Add', 'OemPlus' -contains $_ } {
+                            If ($cal.Opacity -lt 1) {
+                                $cal.Opacity = $cal.opacity + .1
+                                $cal.UpdateLayout()
+                            }
+                        }
+                        { 'Subtract', 'OemMinus' -contains $_ } {
+                            If ($cal.Opacity -gt .2) {
+                                $cal.Opacity = $cal.Opacity - .1
+                                $cal.UpdateLayout()
+                            }
+                            write-host $cal.Opacity
+                        }
+                    }
+                })
+
+
+            $stack = $stack = New-object System.Windows.Controls.StackPanel
+            $stack.Width = $form.Width
+            $stack.Height = $form.Height
+            $stack.HorizontalAlignment = "center"
+            $stack.VerticalAlignment = "top"
+
+            foreach ($month in $months) {
+                $cal = New-Object System.Windows.Controls.Calendar
+                $cal.DisplayMode = "Calendar"
+
+                $cal.Opacity = 1
+                $cal.FontFamily = $font
+                $cal.FontSize = 24
+                $cal.FontWeight = $FontWeight
+                $cal.FontStyle = $fontStyle
+
+                $cal.DisplayDateStart = $month
+
+                $cal.HorizontalAlignment = "center"
+                $cal.VerticalAlignment = "top"
+
+                #$cal.SelectedDate = "9/13/2018"
+                $cal.SelectionMode = "multipleRange"
+                if ($highlightdate) {
+                    foreach ($d in $HighlightDate) {
+                        if ($d.month -eq $month.Month) {
+                            $cal.SelectedDates.add($d)
+
+                        }
+                    }
+                }
+
+                $cal.add_DisplayDateChanged( {
+                        # add the selected days for the currently displayed month
+                        $cal | out-string | write-host
+                        [datetime]$month = $cal.Displaydate
+                        if ($highlightdate) {
+                            foreach ($d in $HighlightDate) {
+                                if ($d.month -eq $month.Month) {
+                                    $cal.SelectedDates.add($d)
+                                }
+                            }
+                        }
+                        $cal.UpdateLayout()
+                    })
+
+                $stack.addchild($cal)
+            }
+
+
+            $btn = New-Object System.Windows.Controls.Button
+            $btn.Content = "_Close"
+            $btn.Width = 75
+            $btn.VerticalAlignment = "Bottom"
+            $btn.HorizontalAlignment = "Center"
+            $btn.Opacity = 1
+            $btn.Add_click( { $form.close() })
+
+            $stack.AddChild($btn)
+
+            $form.AddChild($stack)
+            $form.ShowDialog() | out-null
+        })
+
+
+    $pscmd.AddParameters($myparams) | Out-Null
+    $psCmd.Runspace = $newRunspace
+    $psCmd.BeginInvoke() | Out-Null
 
 }
 

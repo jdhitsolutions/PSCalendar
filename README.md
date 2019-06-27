@@ -57,4 +57,8 @@ PS C:\> Show-GuiCalendar 12/2018 2/2019 -highlight 12/24/18,12/25/18,12/31/18,1/
 
 The calendar form is transparent. But you should be able to click on it to drag it around your screen. You can also use the + and - keys to increase or decrease the calendar's opacity. Be aware that if you close the PowerShell session that launched the calendar, the calendar too will close. This function requires Windows PowerShell.
 
-_last updated 15 March 2019_
+## Potential Issues
+
+I have tried to make this module culture aware. Testing across cultures is not an easy process. If you encounter a problem and are not running PowerShell under the EN-US culture, run the command you are trying to use with -Verbose and post the results in a new issue.
+
+_last 2019-06-27 16:29:23Z UTC_

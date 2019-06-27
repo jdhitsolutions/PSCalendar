@@ -1,5 +1,13 @@
 # Change Log for PSCalendar
 
+## v1.7.0
+
++ More changes to better handle culture in `Get-Calendar` (Issue #9)
++ Added more verbose messages to `Get-Calendar`
++ Added missing `gcal` alias for `Show-GuiCalendar`
++ Revised Pester tests
++ Updated `README.md`
+
 ## v1.6.0
 
 + Fixing date parsing bug for different cultures (Issue #9)

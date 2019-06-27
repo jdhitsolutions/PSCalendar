@@ -7,9 +7,9 @@ $ModuleManifestName = "$modulename.psd1"
 $ModuleManifestPath = "$PSScriptRoot\..\$ModuleManifestName"
 
 If (Get-Module $moduleName) {
-    remove-module $moduleName
+    Remove-Module $moduleName
 }
-import-module $ModuleManifestPath -Force
+Import-Module $ModuleManifestPath -Force
 
 Describe $ModuleName {
     $myModule = Test-ModuleManifest -Path $ModuleManifestPath
@@ -59,7 +59,7 @@ Describe $ModuleName {
         It "Should have an alias of scal" {
             (Get-Alias -Name scal).ResolvedCommandName | Should be "Show-Calendar"
         }
-        It "Should have an alias of cal" {
+        It "Should have an alias of gcal" {
             (Get-Alias -Name gcal).ResolvedCommandName | Should be "Show-GuiCalendar"
         }
     }
