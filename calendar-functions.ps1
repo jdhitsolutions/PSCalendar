@@ -11,7 +11,7 @@ Function Get-Calendar {
         [Parameter(Position = 1, ParameterSetName = "month")]
         [ValidateNotNullorEmpty()]
         [ValidateScript( {
-                $names = Get-MonthsByCulture
+                $names = _getMonthsByCulture
                 if ($names -contains $_) {
                     $True
                 }
@@ -49,32 +49,55 @@ Function Get-Calendar {
 
     Begin {
         Write-Verbose "Starting $($myinvocation.MyCommand)"
+        Write-Verbose "Using PowerShell version $($psversiontable.PSVersion)"
+        #Call .NET for better results when testing this command in different cultures
+        $currCulture = [system.globalization.cultureinfo]::CurrentCulture
+        #[system.threading.thread]::CurrentThread.CurrentCulture
     }
     Process {
         Write-Verbose "Using parameter set: $($pscmdlet.ParameterSetName)"
-        Write-Verbose "Using culture $((Get-Culture).name)"
+        Write-Verbose "Using culture $($currCulture.name)"
+        Write-Verbose "Using PSBoundParameters"
+        Write-Verbose ($PSBoundParameters | Out-String).trim()
 
         if ($pscmdlet.ParameterSetName -eq "month") {
-            [datetime]$start = Get-Date "1 $month,$year"
-            [datetime]$end = $start.date
+            Write-Verbose "Using month $month and year $year"
+            Write-Verbose "Getting start date using pattern $($currCulture.DateTimeFormat.ShortDatePattern)"
+
+            #get month number
+            $monthint = [datetime]::parse("1 $month $year").month
+            $start = [datetime]::new($year, $monthint, 1)
+
+            $end = $start.date
         }
         else {
             #Figure out the first day of the start and end months
-            $start = New-Object DateTime $start.Year, $start.Month, 1
-            $end = New-Object DateTime $end.Year, $end.Month, 1
-        }
+            $start = [datetime]::new($start.year, $start.Month, 1)
 
+            $end = [datetime]::new($end.year, $end.month, 1)
+
+        }
         Write-Verbose "Starting at $start"
         Write-Verbose "Ending at $End"
+
         #Convert the highlight dates into real dates
         #using the .NET Class to parse because this works better for culture-specific datetime strings
-        [DateTime[]]$highlightDates = foreach ($item in $highlightDate) {
-            #parse datetime using current culture
-            $cult = Get-Culture
-            [datetime]::parse($item,$cult)
+        [DateTime[]]$highlightDates = @()
+        foreach ($item in $highlightDate) {
+            Write-Verbose "Parsing $(($item | Out-String).trim()) to [datetime]"
+            $item | out-string | write-verbose
+            $highlightDates += $item -as [datetime]
+            #[datetime]::parse($item)
         }
+
+        #re-add today if not one of the highlighted dates
+        if ($highlightDates -notcontains ([datetime]::now).date) {
+            Write-Verbose "Re-adding today to highlighted dates"
+            $highlightDates += ([datetime]::now).date
+        }
+        write-verbose "Highlighting: $($highlightDates -join ',')"
         #Retrieve the DateTimeFormat information so that we can manipulate the calendar
-        $dateTimeFormat = (Get-Culture).DateTimeFormat
+        $dateTimeFormat = $currCulture.DateTimeFormat
         $firstDayOfWeek = $dateTimeFormat.FirstDayOfWeek
 
         Write-Verbose "First day of the week is $firstDayofWeek"
@@ -90,6 +113,7 @@ Function Get-Calendar {
             }
 
             #Prepare to store information about this date range
+            Write-Verbose "Initializing currentweek"
             $currentWeek = New-Object PsObject
             $dayNames = @()
             $weeks = @()
@@ -108,21 +132,18 @@ Function Get-Calendar {
                 #Pad the day number for display, highlighting if necessary
                 $displayDay = " {0,2} " -f $currentDay.Day
 
-                #highlight a specific date
-                if ($highlightDates -ne (Get-Date).date.toString() ) {
-                    $highlightDates += (Get-Date).date.toString()
-                }
-
-                $compareDate = New-Object DateTime $currentDay.Year,
-                $currentDay.Month, $currentDay.Day
-                if ($highlightDates -contains $compareDate) {
-                    $displayDay = "*" + ("{0,2}" -f $currentDay.Day) + "*"
+                #See if we should highlight a specific date
+                if ($highlightDates) {
+                    $compareDate = New-Object DateTime $currentDay.Year, $currentDay.Month, $currentDay.Day
+                    if ($highlightDates -contains $compareDate) {
+                        $displayDay = "*" + ("{0,2}" -f $currentDay.Day) + "*"
+                    }
                 }
 
                 #Add in the day of week and day number as note properties.
                 $currentWeek | Add-Member NoteProperty $dayName $displayDay
 
-                Write-Verbose "Move to the next day in the month"
+                #  Write-Verbose "Move to the next day in the month"
                 $currentDay = $currentDay.AddDays(1)
 
                 #If we've reached the next week, store the current week
@@ -164,11 +185,13 @@ Function Show-Calendar {
 
     [cmdletbinding()]
     [Alias("scal")]
+    [OutputType("None")]
+
     Param(
         [Parameter(Position = 1, ParameterSetName = "month")]
         [ValidateNotNullorEmpty()]
         [ValidateScript( {
-                $names = Get-MonthsByCulture
+                $names = _getMonthsByCulture
                 if ($names -contains $_) {
                     $True
                 }
@@ -208,21 +231,21 @@ Function Show-Calendar {
     if ($position) {
         #save current cursor location
         $here = $host.ui.RawUI.CursorPosition
-        $PSBoundParameters.remove("Position") | out-Null
+        [void]$PSBoundParameters.remove("Position")
     }
 
     #add default values if not bound
     $params = "Month", "Year", "HighlightDate"
     foreach ($param in $params) {
         if (-not $PSBoundParameters.ContainsKey($param)) {
-            $PSBoundParameters.Add($param, $((get-variable -Name $param).value))
+            $PSBoundParameters.Add($param, $((Get-Variable -Name $param).value))
         }
     }
 
     #remove color parameters if specified
-    "HighlightColor", "TitleColor", "DayColor","TodayColor" | foreach-object {
+    "HighlightColor", "TitleColor", "DayColor", "TodayColor" | ForEach-Object {
         if ($PSBoundParameters.Containskey($_)) {
-            $PSBoundParameters.Remove($_) | Out-Null
+            [void]$PSBoundParameters.Remove($_)
         }
     } #foreach color parameter
 
@@ -407,7 +430,7 @@ Function Show-GuiCalendar {
             $form.Height = $height
             $form.Width = 200
 
-            $bg = new-object System.Windows.Media.SolidColorBrush
+            $bg = New-Object System.Windows.Media.SolidColorBrush
 
             $form.Background = $bg
             #color is set for development purposes. It won't be seen normally.
@@ -444,7 +467,7 @@ Function Show-GuiCalendar {
                     }
                 })
 
-            $stack = $stack = New-object System.Windows.Controls.StackPanel
+            $stack = $stack = New-Object System.Windows.Controls.StackPanel
             $stack.Width = $form.Width
             $stack.Height = $form.Height
             $stack.HorizontalAlignment = "center"
@@ -464,6 +487,9 @@ Function Show-GuiCalendar {
                 $cal.FontStyle = $fontStyle
 
                 $cal.DisplayDateStart = $month
+                #added to allow display of past months
+                $totaldays = [datetime]::DaysInMonth($month.year, $month.Month)
+                $cal.DisplayDateEnd = $month.AddDays($totaldays - 1)
 
                 $cal.HorizontalAlignment = "center"
                 $cal.VerticalAlignment = "top"
@@ -479,7 +505,7 @@ Function Show-GuiCalendar {
 
                 $cal.add_DisplayDateChanged( {
                         # add the selected days for the currently displayed month
-                        $cal | out-string | Write-Host
+
                         [datetime]$month = $cal.Displaydate
                         if ($highlightdate) {
                             foreach ($d in $HighlightDate) {
@@ -501,28 +527,35 @@ Function Show-GuiCalendar {
             $btn.VerticalAlignment = "Bottom"
             $btn.HorizontalAlignment = "Center"
             $btn.Opacity = 1
-            $btn.Add_click( {$form.close()})
+            $btn.Add_click({$form.close()})
 
             $stack.AddChild($btn)
 
             $form.AddChild($stack)
-            $form.ShowDialog() | out-null
+            [void]$form.ShowDialog()
         })
 
 
-    $pscmd.AddParameters($myparams) | Out-Null
+    [void]$pscmd.AddParameters($myparams)
     $psCmd.Runspace = $newRunspace
     Write-Verbose "Invoking calendar runspace"
-    $psCmd.BeginInvoke() | Out-Null
+    [void]$psCmd.BeginInvoke()
 
     Write-Verbose "Ending $($myinvocation.mycommand)"
 
 } #close Show-GuiCalendar
 
 #a helper function to retrieve names
-function Get-MonthsbyCulture {
+function _getMonthsByCulture {
     [cmdletbinding()]
     Param([string]$Culture = ([system.threading.thread]::currentThread).CurrentCulture)
     Write-Verbose "Getting months for culture $Culture"
     [cultureinfo]::GetCultureInfo($culture).DateTimeFormat.Monthnames
+}
+
+function _getMonthNumber {
+    [cmdletbinding()]
+    Param([string]$MonthName)
+
+    _getMonthsByCulture | ForEach-Object -begin { $i = 0} -process { $i++; if ($_ -eq $MonthName) {return $i}}
 }

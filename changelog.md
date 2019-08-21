@@ -1,5 +1,14 @@
 # Change Log for PSCalendar
 
+## v1.8.0
+
++ Modified commands to begin on correct day of the week. (Issue #10)
++ Switched to using .NET culture classes directly instead of `Get-Culture` for better international results
++ Corrected license file for GitHub
++ Code cleanup to replace `Out-Null` with `[void]`
++ Updated `Show-GuiCalendar` to fix a bug that prevented dates in the past from being properly displayed.
++ Updated help with online `bit.ly` links
+
 ## v1.7.0
 
 + More changes to better handle culture in `Get-Calendar` (Issue #9)

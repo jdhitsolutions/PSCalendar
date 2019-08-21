@@ -1,7 +1,7 @@
 ---
 external help file: PSCalendar-help.xml
 Module Name: PSCalendar
-online version:
+online version: http://bit.ly/2KLup3R
 schema: 2.0.0
 ---
 
@@ -22,7 +22,7 @@ Show-GuiCalendar [[-Start] <DateTime>] [[-End] <DateTime>] [-HighlightDate <Date
 
 If you are running Windows PowerShell, you can display a graphical calendar. You can specify up to 3 months. There are also parameters to fine tune the calendar style. The calendar form is transparent. But you should be able to click on it to drag it around your screen. You can also use the + and - keys to increase or decrease the calendar's opacity. You may have to click on a calendar before making any adjustments.
 
-This command launches the calendar in a separate runspace so that it doesn't block your prompt. However, if you close the PowerShell session that launched a graphical calendar, the calendar will also automatically close.
+This command launches the calendar in a separate runspace so that it doesn't block your prompt. However, if you close the PowerShell session that launched the calendar, the calendar will also automatically close.
 
 ## EXAMPLES
 
@@ -37,7 +37,7 @@ Display the current month as a graphical calendar.
 ### Example 2
 
 ```powershell
-PS C:\> Show-GuiCalendar 12/2018 2/2019 -highlight 12/24/18,12/25/18,12/31/18,1/1/19,2/14/19 -font 'Century Gothic' -FontStyle italic
+PS C:\> Show-GuiCalendar -start 12/2018 -end 2/2019 -highlight 12/24/18,12/25/18,12/31/18,1/1/19,2/14/19 -font 'Century Gothic' -FontStyle italic
 ```
 
 Display 3 months with selected dates highlighted and style the calendar to font settings.

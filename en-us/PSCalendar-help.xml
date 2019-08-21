@@ -187,7 +187,7 @@ Sun  Mon  Tue  Wed  Thu  Fri  Sat
  23   24   25  *26*  27   28   29
  30    1    2    3    4    5    6</dev:code>
         <dev:remarks>
-          <maml:para>how the current calendar and highlight today. The month name will be centered in your output.</maml:para>
+          <maml:para>Show the current calendar and highlight today. The month name will be centered in your output.</maml:para>
         </dev:remarks>
       </command:example>
       <command:example>
@@ -246,6 +246,10 @@ Sun  Mon  Tue  Wed  Thu  Fri  Sat
       </command:example>
     </command:examples>
     <command:relatedLinks>
+      <maml:navigationLink>
+        <maml:linkText>Online Version:</maml:linkText>
+        <maml:uri>http://bit.ly/31TNoP8</maml:uri>
+      </maml:navigationLink>
       <maml:navigationLink>
         <maml:linkText>Get-Date</maml:linkText>
         <maml:uri></maml:uri>
@@ -351,12 +355,12 @@ Sun  Mon  Tue  Wed  Thu  Fri  Sat
             <maml:name>ConsoleColor</maml:name>
             <maml:uri />
           </dev:type>
-          <dev:defaultValue>None</dev:defaultValue>
+          <dev:defaultValue>Cyan</dev:defaultValue>
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>Position</maml:name>
           <maml:Description>
-            <maml:para>Enter a System.Management.Automation.Host.Coordinates object to specify a location for the calendar. This may not work properly in all hosts and you might need some trial and error to figure out a position that works for you.</maml:para>
+            <maml:para>Enter a System.Management.Automation.Host.Coordinates object to specify a location for the calendar. This may not work properly in all hosts or PowerShell versions and you might need some trial and error to figure out a position that works for you.</maml:para>
           </maml:Description>
           <command:parameterValue required="true" variableLength="false">Coordinates</command:parameterValue>
           <dev:type>
@@ -375,7 +379,19 @@ Sun  Mon  Tue  Wed  Thu  Fri  Sat
             <maml:name>ConsoleColor</maml:name>
             <maml:uri />
           </dev:type>
-          <dev:defaultValue>None</dev:defaultValue>
+          <dev:defaultValue>Yellow</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>TodayColor</maml:name>
+          <maml:Description>
+            <maml:para>Specify a color to mark today.</maml:para>
+          </maml:Description>
+          <command:parameterValue required="true" variableLength="false">ConsoleColor</command:parameterValue>
+          <dev:type>
+            <maml:name>ConsoleColor</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>Red</dev:defaultValue>
         </command:parameter>
       </command:syntaxItem>
     </command:syntax>
@@ -438,12 +454,12 @@ Sun  Mon  Tue  Wed  Thu  Fri  Sat
           <maml:name>ConsoleColor</maml:name>
           <maml:uri />
         </dev:type>
-        <dev:defaultValue>None</dev:defaultValue>
+        <dev:defaultValue>Cyan</dev:defaultValue>
       </command:parameter>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>Position</maml:name>
         <maml:Description>
-          <maml:para>Enter a System.Management.Automation.Host.Coordinates object to specify a location for the calendar. This may not work properly in all hosts and you might need some trial and error to figure out a position that works for you.</maml:para>
+          <maml:para>Enter a System.Management.Automation.Host.Coordinates object to specify a location for the calendar. This may not work properly in all hosts or PowerShell versions and you might need some trial and error to figure out a position that works for you.</maml:para>
         </maml:Description>
         <command:parameterValue required="true" variableLength="false">Coordinates</command:parameterValue>
         <dev:type>
@@ -462,7 +478,19 @@ Sun  Mon  Tue  Wed  Thu  Fri  Sat
           <maml:name>ConsoleColor</maml:name>
           <maml:uri />
         </dev:type>
-        <dev:defaultValue>None</dev:defaultValue>
+        <dev:defaultValue>Yellow</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>TodayColor</maml:name>
+        <maml:Description>
+          <maml:para>Specify a color to mark today.</maml:para>
+        </maml:Description>
+        <command:parameterValue required="true" variableLength="false">ConsoleColor</command:parameterValue>
+        <dev:type>
+          <maml:name>ConsoleColor</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>Red</dev:defaultValue>
       </command:parameter>
     </command:parameters>
     <command:inputTypes>
@@ -478,7 +506,7 @@ Sun  Mon  Tue  Wed  Thu  Fri  Sat
     <command:returnValues>
       <command:returnValue>
         <dev:type>
-          <maml:name>None. This command writes to the PowerShell hosting application.</maml:name>
+          <maml:name>None</maml:name>
         </dev:type>
         <maml:description>
           <maml:para></maml:para>
@@ -487,7 +515,7 @@ Sun  Mon  Tue  Wed  Thu  Fri  Sat
     </command:returnValues>
     <maml:alertSet>
       <maml:alert>
-        <maml:para>This command should have an alias of scal.</maml:para>
+        <maml:para>This command should have an alias of scal. It writes to the PowerShell hosting application not to the PowerShell pipeline.</maml:para>
         <maml:para>Learn more about PowerShell: http://jdhitsolutions.com/blog/essential-powershell-resources/</maml:para>
       </maml:alert>
     </maml:alertSet>
@@ -516,6 +544,10 @@ Sun  Mon  Tue  Wed  Thu  Fri  Sat
     </command:examples>
     <command:relatedLinks>
       <maml:navigationLink>
+        <maml:linkText>Online Version:</maml:linkText>
+        <maml:uri>http://bit.ly/2KKKgzK</maml:uri>
+      </maml:navigationLink>
+      <maml:navigationLink>
         <maml:linkText>Get-Calendar</maml:linkText>
         <maml:uri></maml:uri>
       </maml:navigationLink>
@@ -536,7 +568,7 @@ Sun  Mon  Tue  Wed  Thu  Fri  Sat
     </command:details>
     <maml:description>
       <maml:para>If you are running Windows PowerShell, you can display a graphical calendar. You can specify up to 3 months. There are also parameters to fine tune the calendar style. The calendar form is transparent. But you should be able to click on it to drag it around your screen. You can also use the + and - keys to increase or decrease the calendar's opacity. You may have to click on a calendar before making any adjustments.</maml:para>
-      <maml:para>This command launches the calendar in a separate runspace so that it doesn't block your prompt. However, if you close the PowerShell session that launched a graphical calendar, the calendar will also automatically close.</maml:para>
+      <maml:para>This command launches the calendar in a separate runspace so that it doesn't block your prompt. However, if you close the PowerShell session that launched the calendar, the calendar will also automatically close.</maml:para>
     </maml:description>
     <command:syntax>
       <command:syntaxItem>
@@ -743,13 +775,17 @@ Sun  Mon  Tue  Wed  Thu  Fri  Sat
       </command:example>
       <command:example>
         <maml:title>-------------------------- Example 2 --------------------------</maml:title>
-        <dev:code>PS C:\&gt; Show-GuiCalendar 12/2018 2/2019 -highlight 12/24/18,12/25/18,12/31/18,1/1/19,2/14/19 -font 'Century Gothic' -FontStyle italic</dev:code>
+        <dev:code>PS C:\&gt; Show-GuiCalendar -start 12/2018 -end 2/2019 -highlight 12/24/18,12/25/18,12/31/18,1/1/19,2/14/19 -font 'Century Gothic' -FontStyle italic</dev:code>
         <dev:remarks>
           <maml:para>Display 3 months with selected dates highlighted and style the calendar to font settings.</maml:para>
         </dev:remarks>
       </command:example>
     </command:examples>
     <command:relatedLinks>
+      <maml:navigationLink>
+        <maml:linkText>Online Version:</maml:linkText>
+        <maml:uri>http://bit.ly/2KLup3R</maml:uri>
+      </maml:navigationLink>
       <maml:navigationLink>
         <maml:linkText>Show-Calendar</maml:linkText>
         <maml:uri></maml:uri>

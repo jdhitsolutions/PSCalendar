@@ -1,7 +1,7 @@
 ---
 external help file: PSCalendar-help.xml
 Module Name: PSCalendar
-online version:
+online version: http://bit.ly/2KKKgzK
 schema: 2.0.0
 ---
 
@@ -14,7 +14,6 @@ Display a colorized calendar month in the console.
 ## SYNTAX
 
 ```yaml
-
 Show-Calendar [[-Month] <String>] [[-Year] <Int32>] [-HighlightDate <String[]>]
  [-HighlightColor <ConsoleColor>] [-TitleColor <ConsoleColor>] [-DayColor <ConsoleColor>]
  [-TodayColor <ConsoleColor>] [-Position <Coordinates>] [<CommonParameters>]
@@ -135,7 +134,7 @@ Accept wildcard characters: False
 
 ### -Position
 
-Enter a System.Management.Automation.Host.Coordinates object to specify a location for the calendar. This may not work properly in all hosts and you might need some trial and error to figure out a position that works for you.
+Enter a System.Management.Automation.Host.Coordinates object to specify a location for the calendar. This may not work properly in all hosts or PowerShell versions and you might need some trial and error to figure out a position that works for you.
 
 ```yaml
 Type: Coordinates

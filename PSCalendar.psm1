@@ -10,9 +10,7 @@ Register-ArgumentCompleter -CommandName Get-Calendar, Show-Calendar -ParameterNa
     param($commandName, $parameterName, $wordToComplete, $commandAst, $fakeBoundParameter)
 
     #get month names, filtering out blanks
-    #(Get-Culture).DateTimeFormat.MonthNames
-    $Culture = ([system.threading.thread]::currentThread).CurrentCulture
-    [cultureinfo]::GetCultureInfo($culture).DateTimeFormat.Monthnames | Where-object {$_ -match "\w+" -and $_ -match "$WordToComplete"} |
+    [system.globalization.cultureinfo]::CurrentCulture.dateTimeFormat.monthnames | Where-object {$_ -match "\w+" -and $_ -match "$WordToComplete"} |
         ForEach-Object {
         [System.Management.Automation.CompletionResult]::new($_.Trim(), $_.Trim(), 'ParameterValue', $_)
     }
