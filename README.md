@@ -47,7 +47,7 @@ This command is in essence a "wrapper" function for `Get-Calendar`.
 
 ## [Show-GUICalendar](docs/Show-GuiCalendar)
 
-Finally, you can display a graphical calendar using a WPF-based script. The function runs the calendar-related code in a runspace so it does not block your prompt. You can display up to 3 months and specify dates to highlight.
+Finally, you can display a graphical calendar using a Windows Presentation Foundation (WPF) based script. The function runs the calendar-related code in a runspace so it does not block your prompt. You can display up to 3 months and specify dates to highlight.
 
 ```powershell
 PS C:\> Show-GuiCalendar 12/2018 2/2019 -highlight 12/24/18,12/25/18,12/31/18,1/1/19,1/18/19,2/14/19,2/22/19
@@ -55,10 +55,12 @@ PS C:\> Show-GuiCalendar 12/2018 2/2019 -highlight 12/24/18,12/25/18,12/31/18,1/
 
 ![show-guicalendar](assets/show-guicalendar.png)
 
-The calendar form is transparent. But you should be able to click on it to drag it around your screen. You can also use the + and - keys to increase or decrease the calendar's opacity. Be aware that if you close the PowerShell session that launched the calendar, the calendar too will close. This function requires Windows PowerShell.
+The calendar form is transparent. But you should be able to click on it to drag it around your screen. You can also use the + and - keys to increase or decrease the calendar's opacity. Be aware that if you close the PowerShell session that launched the calendar, the calendar too will close.
+
+This function requires the WPF-related assemblies. It should work in Windows PowerShell. For PowerShell Core and later it might or might not work depending on your platform. You will receive a warning if any incompatibility is detected.
 
 ## Potential Issues
 
 I have tried to make this module culture aware. Testing across cultures is not an easy process. If you encounter a problem and are not running PowerShell under the EN-US culture, run the command you are trying to use with -Verbose and post the results in a new issue.
 
-last updated 2019-08-21 14:31:25Z UTC
+last updated 2019-11-08 19:17:27Z UTC

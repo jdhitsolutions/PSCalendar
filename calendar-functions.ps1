@@ -52,7 +52,6 @@ Function Get-Calendar {
         Write-Verbose "Using PowerShell version $($psversiontable.PSVersion)"
         #Call .NET for better results when testing this command in different cultures
         $currCulture = [system.globalization.cultureinfo]::CurrentCulture
-        #[system.threading.thread]::CurrentThread.CurrentCulture
     }
     Process {
         Write-Verbose "Using parameter set: $($pscmdlet.ParameterSetName)"
@@ -85,9 +84,8 @@ Function Get-Calendar {
         [DateTime[]]$highlightDates = @()
         foreach ($item in $highlightDate) {
             Write-Verbose "Parsing $(($item | Out-String).trim()) to [datetime]"
-            $item | out-string | write-verbose
+            $item | Out-String | Write-Verbose
             $highlightDates += $item -as [datetime]
-            #[datetime]::parse($item)
         }
 
         #re-add today if not one of the highlighted dates
@@ -95,7 +93,7 @@ Function Get-Calendar {
             Write-Verbose "Re-adding today to highlighted dates"
             $highlightDates += ([datetime]::now).date
         }
-        write-verbose "Highlighting: $($highlightDates -join ',')"
+        Write-Verbose "Highlighting: $($highlightDates -join ',')"
         #Retrieve the DateTimeFormat information so that we can manipulate the calendar
         $dateTimeFormat = $currCulture.DateTimeFormat
         $firstDayOfWeek = $dateTimeFormat.FirstDayOfWeek
@@ -114,7 +112,7 @@ Function Get-Calendar {
 
             #Prepare to store information about this date range
             Write-Verbose "Initializing currentweek"
-            $currentWeek = New-Object PsObject
+            $currentWeek = New-Object -typename PsObject
             $dayNames = @()
             $weeks = @()
 
@@ -124,19 +122,25 @@ Function Get-Calendar {
             while (($currentDay -lt $start.AddMonths(1)) -or
                 ($currentDay.DayOfWeek -ne $dateTimeFormat.FirstDayOfWeek)) {
                 #Figure out the day names we'll be using to label the columns
-                $dayName = "{0:ddd}" -f $currentDay
+                $dowlen = $dateTimeFormat.FirstDayOfWeek.length + 3
+                $dayName = ("{0:ddd}" -f $currentDay).padleft($dowlen, ' ')
                 if ($dayNames -notcontains $dayName) {
+                    Write-Verbose "Adding $dayname"
                     $dayNames += $dayName
                 }
 
                 #Pad the day number for display, highlighting if necessary
-                $displayDay = " {0,2} " -f $currentDay.Day
+                #get the length of the abbreviated weekday to know how much to pad
+                $daypad = $daynames[0].length
+
+                Write-Verbose "Padding $daypad"
+                $displayDay = "{0,$daypad} " -f $currentDay.Day
 
                 #See if we should highlight a specific date
                 if ($highlightDates) {
                     $compareDate = New-Object DateTime $currentDay.Year, $currentDay.Month, $currentDay.Day
                     if ($highlightDates -contains $compareDate) {
-                        $displayDay = "*" + ("{0,2}" -f $currentDay.Day) + "*"
+                        $displayDay = "*" + ("{0,$($daypad-1)}" -f $currentDay.Day) + "*"
                     }
                 }
 
@@ -150,18 +154,22 @@ Function Get-Calendar {
                 #in the week list and continue on.
                 if ($currentDay.DayOfWeek -eq $dateTimeFormat.FirstDayOfWeek) {
                     $weeks += $currentWeek
-                    $currentWeek = New-Object PsObject
+                    $currentWeek = New-Object -typename PsObject
                 }
             }
 
             Write-Verbose "Format our weeks into a table"
-            $calendar = $weeks | Format-Table $dayNames -auto | Out-String
+            Write-Verbose ($weeks | Out-String)
+            $calendar = $weeks | Format-Table -property $dayNames | Out-String
 
             Write-Verbose "Add a centered header"
             $width = ($calendar.Split("`n") | Measure-Object -Max Length).Maximum
             $header = "{0:MMMM yyyy}" -f $start
+            Write-Verbose $header
             $padding = " " * (($width - $header.Length) / 2)
             #use this line to insert a blank line before the calendar
+            Write-Verbose "Adding calendar"
+            Write-Verbose $calendar
             $displayCalendar = " `n" + $padding + $header + "`n " + $calendar
 
             #use this line to not insert a blank line before the calendar
@@ -174,7 +182,7 @@ Function Get-Calendar {
     } #process
 
     End {
-        Write-verbose "Ending $($myinvocation.MyCommand)"
+        Write-Verbose "Ending $($myinvocation.MyCommand)"
     }
 } #end Get-Calendar
 
@@ -228,6 +236,8 @@ Function Show-Calendar {
 
     Write-Verbose "Starting $($myinvocation.mycommand)"
 
+    #get culture to see how long the first day of week is
+    $currCulture = [system.globalization.cultureinfo]::CurrentCulture
     if ($position) {
         #save current cursor location
         $here = $host.ui.RawUI.CursorPosition
@@ -266,7 +276,7 @@ Function Show-Calendar {
             }
             Write-Host $line -ForegroundColor $TitleColor
         }
-        elseif ($line -match "\w{3}|-{3}") {
+        elseif ($line -match "[a-zA-z]{2,3}| -") {
             #write the day names and underlines
             if ($Position) {
                 $Position.y++
@@ -284,14 +294,30 @@ Function Show-Calendar {
             $m.Matches($week).Value | ForEach-Object {
 
                 $day = "$_"
-                if ($day -match "\*$((Get-Date).day)\*" ) {
-                    Write-Host "$($day.replace('*','').padleft(3," "))  " -NoNewline -ForegroundColor $TodayColor
+                #pad based on the length of the day of week string
+                $l = $currCulture.DateTimeFormat.AbbreviatedDayNames[0].length
+
+                $spacer = "  "
+                if ($l -eq 2) {
+                    $l += 2
+                }
+                elseif ($l -eq 3) {
+                    $l++
+                }
+
+                if ($day.replace('*', '').trim() -eq (Get-Date).day) {
+
+                    Write-Host "$($day.replace('*','').padleft($l," "))$spacer" -NoNewline -ForegroundColor $TodayColor
+
                 }
                 elseif ($day -match "\*") {
-                    Write-Host "$($day.replace('*','').padleft(3," "))  " -NoNewline -ForegroundColor $HighlightColor
+
+                    Write-Host "$($day.replace('*','').padleft($l," "))$spacer" -NoNewline -ForegroundColor $HighlightColor
+
                 }
                 else {
-                    Write-Host "$($day.PadLeft(3," "))  " -nonewline
+                    Write-Host "$(($day).PadLeft($l," "))$spacer" -nonewline
+
                 }
             }
 
@@ -359,9 +385,16 @@ Function Show-GuiCalendar {
 
     Write-Verbose "Starting $($myinvocation.mycommand)"
 
-    if ($psedition -eq 'Core') {
-        Write-Warning "This function requires Windows PowerShell."
-        #bail out
+    #add the necessary type library and bail out if there are errors which means the
+    #platform lacks support for WPF
+
+    Try {
+        Add-Type -AssemblyName PresentationFramework -ErrorAction Stop
+        Add-Type –AssemblyName PresentationCore -ErrorAction Stop
+    }
+    Catch {
+        Write-Warning "Failed to load a required type library. Your version of PowerShell and or platform may not support WPF. $($_.exception.message)"
+        #bail out of the command
         Return
     }
 
@@ -376,19 +409,7 @@ Function Show-GuiCalendar {
         Return
     }
 
-    #add the necessary type library and bail out if there are errors
-
-    Try {
-        Add-Type -AssemblyName PresentationFramework -ErrorAction Stop
-        Add-Type –assemblyName PresentationCore -ErrorAction Stop
-        Add-Type –assemblyName WindowsBase -ErrorAction Stop
-    }
-    Catch {
-        Write-Warning "Failed to load a required type library. $($_.exception.message)"
-        #bail out
-        Return
-    }
-
+    #the title won't normally be seen but is set for development and test purposes
     $myParams = @{
         Months        = $months
         Height        = (200 * $months.count)
@@ -403,11 +424,23 @@ Function Show-GuiCalendar {
     $myparams | Out-String | Write-Verbose
 
     $newRunspace = [RunspaceFactory]::CreateRunspace()
-    $newRunspace.ApartmentState = "STA"
+    if ($newRunspace.ApartmentState) {
+        $newRunspace.ApartmentState = "STA"
+    }
+    else {
+        #This command probably won't run if the ApartmentState can't be set to STA
+        #clean up
+        $newRunspace.dispose()
+
+        Write-Warning "Incompatible runspace detected. This command will most likely fail on this platform with this version of PowerShell."
+        #bail out of the command
+        return
+    }
     $newRunspace.ThreadOptions = "ReuseThread"
     $newRunspace.Open()
 
     Write-Verbose "Defining runspace script"
+
     $psCmd = [PowerShell]::Create().AddScript( {
 
             Param (
@@ -434,21 +467,20 @@ Function Show-GuiCalendar {
 
             $form.Background = $bg
             #color is set for development purposes. It won't be seen normally.
-            $form.Background.Color = "green"
-            $form.background.Opacity = 0
+            # $form.Background.Color = "green"
+            # $form.background.Opacity = 0
             $form.ShowInTaskbar = $False
             $form.Add_Loaded( {
                     $form.Topmost = $True
                     $form.Activate()
                 })
 
-            $form.Add_MouseLeftButtonDown( {$form.DragMove()})
+            $form.Add_MouseLeftButtonDown( { $form.DragMove() })
 
             #add event handlers to adjust opacity by using the +/- keys
             $form.add_KeyDown( {
-
                     switch ($_.key) {
-                        {'Add', 'OemPlus' -contains $_} {
+                        { 'Add', 'OemPlus' -contains $_ } {
                             foreach ($cal in $myCals) {
                                 If ($cal.Opacity -lt 1) {
                                     $cal.Opacity = $cal.opacity + .1
@@ -456,7 +488,7 @@ Function Show-GuiCalendar {
                                 }
                             }
                         }
-                        {'Subtract', 'OemMinus' -contains $_} {
+                        { 'Subtract', 'OemMinus' -contains $_ } {
                             foreach ($cal in $myCals) {
                                 If ($cal.Opacity -gt .2) {
                                     $cal.Opacity = $cal.Opacity - .1
@@ -478,8 +510,20 @@ Function Show-GuiCalendar {
             $myCals = @()
             foreach ($month in $months) {
                 $cal = New-Object System.Windows.Controls.Calendar
+
                 $cal.DisplayMode = "Month"
 
+                <#
+                notes for future development
+                $calbg = new-object System.Windows.Media.ImageBrush
+                $calbg.Opacity = "0.3"
+                $calbg.ImageSource = "c:\scripts\zazu.gif"
+                $cal.Background = $calbg
+
+                $calbg = [System.Windows.Media.Brushes]::Aquamarine
+                $cal.Background =$calbg
+
+                #>
                 $cal.Opacity = 1
                 $cal.FontFamily = $font
                 $cal.FontSize = 24
@@ -505,12 +549,12 @@ Function Show-GuiCalendar {
 
                 $cal.add_DisplayDateChanged( {
                         # add the selected days for the currently displayed month
-
                         [datetime]$month = $cal.Displaydate
                         if ($highlightdate) {
                             foreach ($d in $HighlightDate) {
                                 if ($d.month -eq $month.Month) {
                                     $cal.SelectedDates.add($d)
+
                                 }
                             }
                         }
@@ -519,7 +563,7 @@ Function Show-GuiCalendar {
 
                 $stack.addchild($cal)
                 $myCals += $cal
-            }
+            } #foreach month
 
             $btn = New-Object System.Windows.Controls.Button
             $btn.Content = "_Close"
@@ -527,23 +571,30 @@ Function Show-GuiCalendar {
             $btn.VerticalAlignment = "Bottom"
             $btn.HorizontalAlignment = "Center"
             $btn.Opacity = 1
-            $btn.Add_click({$form.close()})
+            $btn.Add_click( {
+                    $form.close()
+                })
 
             $stack.AddChild($btn)
 
             $form.AddChild($stack)
             [void]$form.ShowDialog()
-        })
+        }) #addScript
 
-
-    [void]$pscmd.AddParameters($myparams)
+    [void]$psCmd.AddParameters($myparams)
     $psCmd.Runspace = $newRunspace
     Write-Verbose "Invoking calendar runspace"
-    [void]$psCmd.BeginInvoke()
+    $handle = $psCmd.BeginInvoke()
 
+    Write-Verbose "Creating ThreadJob"
+    #calling a private, helper function which will clean up the runspace after the calendar is closed.
+    $job = New-RunspaceCleanupJob -Handle $handle -PowerShell $pscmd -SleepInterval 30 -Passthru
+    Write-Verbose "...Job Id $($job.id)"
     Write-Verbose "Ending $($myinvocation.mycommand)"
 
 } #close Show-GuiCalendar
+
+#region private functions
 
 #a helper function to retrieve names
 function _getMonthsByCulture {
@@ -557,5 +608,64 @@ function _getMonthNumber {
     [cmdletbinding()]
     Param([string]$MonthName)
 
-    _getMonthsByCulture | ForEach-Object -begin { $i = 0} -process { $i++; if ($_ -eq $MonthName) {return $i}}
+    _getMonthsByCulture | ForEach-Object -begin { $i = 0 } -process { $i++; if ($_ -eq $MonthName) { return $i } }
 }
+
+Function New-RunspaceCleanupJob {
+    <#
+    You use this function like this:
+    $newrunspace = <code>
+    $pscmd = [powershell]::create()
+
+    add commands to $pscmd
+    $pscmd.runspace = $newrunspace
+    $handle = $pscmd.beginInvoke()
+
+    Start a thread job to test if runspace is being used and close it if it is finished
+    New-RunspaceCleanUpJob -handle $handle -powershell $pscmd -sleepinterval 30
+    #>
+    [cmdletbinding()]
+    [OutputType("None", "ThreadJob")]
+    Param(
+        [Parameter(Mandatory, HelpMessage = "This should be the System.Management.Automation.Runspaces.AsyncResult object from the BeginInvoke() method.")]
+        [ValidateNotNullorEmpty()]
+        [object]$Handle,
+        [Parameter(Mandatory)]
+        [ValidateNotNullorEmpty()]
+        [System.Management.Automation.PowerShell]$PowerShell,
+        [Parameter(HelpMessage = "Specify a sleep interval in seconds")]
+        [ValidateRange(5, 600)]
+        [int32]$SleepInterval = 10,
+        [Parameter(HelpMessage = "Pass the thread job object to the pipeline")]
+        [switch]$Passthru
+    )
+
+    $job = Start-ThreadJob -ScriptBlock {
+        param($handle, $ps, $sleep)
+        #the Write-Host lines are so that if you look at the results of  the thread job
+        #you'll see something you can use for debugging or troubleshooting.
+        Write-Host "[$(Get-Date)] Sleeping in $sleep second loops"
+        Write-Host "Watching this runspace"
+        Write-Host ($ps.runspace | Select-Object -property * | Out-String)
+        #loop until the handle shows as completed, sleeping the the specified
+        #number of seconds
+        do {
+            Start-Sleep -Seconds $sleep
+        } Until ($handle.IsCompleted)
+        Write-Host "[$(Get-Date)] Closing runspace"
+
+        $ps.runspace.close()
+        Write-Host "[$(Get-Date)] Disposing runspace"
+        $ps.runspace.Dispose()
+        Write-Host "[$(Get-Date)] Disposing PowerShell"
+        $ps.dispose()
+        Write-Host "[$(Get-Date)] Ending job"
+    } -ArgumentList $Handle, $PowerShell, $SleepInterval
+
+    if ($passthru) {
+        #Write the ThreadJob object to the pipeline
+        $job
+    }
+}
+
+#endregion

@@ -1,5 +1,13 @@
 # Change Log for PSCalendar
 
+## v1.9.0
+
++ Modified manifest to export all public functions and aliases
++ Modified `Show-GuiCalendar` to attempt to load WPF libraries and display a warning if it can't. (Issue #13)
++ Added a private helper function, `New-RunspaceCleanUpJob` to cleanup runspaces when using `Show-GuiCalendar`. Thanks to @oising for leading me down the right path. (Issue #12)
++ Modified `Get-Calendar` and `Show-Calendar` to display better under different cultures. (Issue #11)
++ Updated Pester tests
+
 ## v1.8.0
 
 + Modified commands to begin on correct day of the week. (Issue #10)

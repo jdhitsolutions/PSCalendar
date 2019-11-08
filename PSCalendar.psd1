@@ -7,7 +7,7 @@
     RootModule           = 'PSCalendar.psm1'
 
     # Version number of this module.
-    ModuleVersion        = '1.8.0'
+    ModuleVersion        = '1.9.0'
 
     # Supported PSEditions
     CompatiblePSEditions = @("Desktop", "Core")
@@ -64,12 +64,7 @@
     # NestedModules = @()
 
     # Functions to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no functions to export.
-    FunctionsToExport    = If ($PSedition -eq 'Core') {
-        'Get-Calendar', 'Show-Calendar'
-    }
-    else {
-        'Get-Calendar', 'Show-Calendar', 'Show-GuiCalendar'
-    }
+    FunctionsToExport    = 'Get-Calendar', 'Show-Calendar', 'Show-GuiCalendar'
 
     # Cmdlets to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no cmdlets to export.
     CmdletsToExport      = @()
@@ -78,12 +73,7 @@
     VariablesToExport    = @()
 
     # Aliases to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no aliases to export.
-    AliasesToExport      = if ($PSEdition -eq 'Core') {
-        'cal', 'scal'
-    }
-    else {
-        'cal', 'scal', 'gcal'
-    }
+    AliasesToExport      = 'cal', 'scal', 'gcal'
 
     # DSC resources to export from this module
     # DscResourcesToExport = @()

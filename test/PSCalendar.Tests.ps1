@@ -114,8 +114,8 @@ InModuleScope $moduleName {
             {Get-Calendar -year 20200} | Should Throw
         }
         It "Should let you higlight a date" {
-            $c = Get-Calendar -month January -Year 2020 -HighlightDate 1/15/2020
-            $c -match "\*15\*" | Should Be $True
+            $c = Get-Calendar -month January -Year 2020 -HighlightDate 1/1/2020
+            $c -match "\*  1\*" | Should Be $True
         }
         It "Should let you specify a start month and end month" {
             $c = Get-Calendar -Start "1/1/2020" -end "2/1/2020"
@@ -182,7 +182,7 @@ InModuleScope $moduleName {
             Show-GuiCalendar -end (Get-Date).AddMonths(2) -font "Century Gothic" -FontStyle Italic -FontWeight demibold
         }
         It "Should fail with a bad month" {
-            {Show-GuiCalendar -start "13/1/2020" } | Should Throw
+            {Show-GuiCalendar -start "99/1/2020" } | Should Throw
         }
         It "Should display a warning when specifying more than 3 months" {
             Show-GuiCalendar -start 1/1/2020 -end 6/1/2020 -WarningAction SilentlyContinue -WarningVariable w
@@ -191,4 +191,4 @@ InModuleScope $moduleName {
     } -tag command
 }
 
-Write-Host "You will need to manually kill any graphical calendars that were spawned from the test." -ForegroundColor yellow
+Write-Host "You will need to manually kill any graphical calendars that were spawned from the test. You may also see errors if running this test under a non-North American culture with differing datetime formats." -ForegroundColor yellow
