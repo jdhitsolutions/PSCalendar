@@ -2,8 +2,7 @@
 
 [![PSGallery Version](https://img.shields.io/powershellgallery/v/PSCalendar.png?style=for-the-badge&logo=powershell&label=PowerShell%20Gallery)](https://www.powershellgallery.com/packages/PSCalendar/) [![PSGallery Downloads](https://img.shields.io/powershellgallery/dt/PSCalendar.png?style=for-the-badge&label=Downloads)](https://www.powershellgallery.com/packages/PSCalendar/)
 
-This module contains a few functions for displaying a calendar in the PowerShell console. The primary function is based on code originally published by Lee Holmes at [http://www.leeholmes.com/blog/2008/12/03/showing-calendars-in-your-oof-messages/](http://www.leeholmes.com/blog/2008/12/03/showing-calendars-in-your-oof-messages/)
-.
+This module contains a few functions for displaying a calendar in the PowerShell console. The primary function is based on code originally published by Lee Holmes at [http://www.leeholmes.com/blog/2008/12/03/showing-calendars-in-your-oof-messages/](http://www.leeholmes.com/blog/2008/12/03/showing-calendars-in-your-oof-messages/).
 
 You can install this module from the PowerShell Gallery.
 
@@ -57,10 +56,43 @@ PS C:\> Show-GuiCalendar 12/2018 2/2019 -highlight 12/24/18,12/25/18,12/31/18,1/
 
 The calendar form is transparent. But you should be able to click on it to drag it around your screen. You can also use the + and - keys to increase or decrease the calendar's opacity. Be aware that if you close the PowerShell session that launched the calendar, the calendar too will close.
 
-This function requires the WPF-related assemblies. It should work in Windows PowerShell. For PowerShell Core and later it might or might not work depending on your platform. You will receive a warning if any incompatibility is detected.
+This function requires the WPF-related assemblies. It should work in Windows PowerShell and PowerShell 7. You will receive a warning if any incompatibility is detected.
+
+## A Console Calendar Prompt
+
+One way you might want to use this is in your PowerShell console. You can use prompt function like this:
+
+```powershell
+
+Function prompt {
+
+  #define a buffercell fill
+  $fill = [system.management.automation.host.buffercell]::new(" ",$host.ui.RawUI.BackgroundColor,$host.ui.RawUI.BackgroundColor,"complete")
+
+  #define a rectangle with an upper left corner at 100,0
+  $r = [System.Management.Automation.Host.Rectangle]::new(100,0,$host.ui.rawui.windowsize.width,15)
+
+  #clear the area for the calendar display
+  $host.ui.rawui.SetBufferContents($r,$fill)
+
+  #show the calendar in the upper right corner of the console
+  Show-Calendar -Position ([system.management.automation.host.coordinates]::new($host.ui.RawUI.WindowSize.width - 42,0))
+
+  "PS $($executionContext.SessionState.Path.CurrentLocation)$('>' * ($nestedPromptLevel + 1)) ";
+
+# .Link
+# https://go.microsoft.com/fwlink/?LinkID=225750
+# .ExternalHelp System.Management.Automation.dll-help.xml
+
+}
+```
+
+Assuming the width of your console is at least 120, this code should work. Otherwise, you might need to tweak positioning. This should also work in Windows Terminal. If you add some highlighted dates using `$PSDefaultParameterValues`, then you'll have a calendar right in front of you.
+
+![console calendar](assets/console-calendar.png)
 
 ## Potential Issues
 
 I have tried to make this module culture aware. Testing across cultures is not an easy process. If you encounter a problem and are not running PowerShell under the EN-US culture, run the command you are trying to use with -Verbose and post the results in a new issue.
 
-last updated 2019-11-08 19:17:27Z UTC
+last updated 2020-01-30 20:05:00Z UTC

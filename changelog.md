@@ -1,5 +1,11 @@
 # Change Log for PSCalendar
 
+## v1.10.0
+
++ Fixed cursor positioning in `Show-Calendar`
++ Refreshed some of the help examples
++ Updated `README.md`
+
 ## v1.9.0
 
 + Modified manifest to export all public functions and aliases

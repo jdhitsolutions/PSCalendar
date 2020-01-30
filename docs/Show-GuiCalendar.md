@@ -37,7 +37,7 @@ Display the current month as a graphical calendar.
 ### Example 2
 
 ```powershell
-PS C:\> Show-GuiCalendar -start 12/2018 -end 2/2019 -highlight 12/24/18,12/25/18,12/31/18,1/1/19,2/14/19 -font 'Century Gothic' -FontStyle italic
+PS C:\> Show-GuiCalendar -start 12/2019 -end 2/2020 -highlight 12/24/19,12/25/19,12/31/19,1/1/20,2/14/20 -font 'Century Gothic' -FontStyle italic
 ```
 
 Display 3 months with selected dates highlighted and style the calendar to font settings.

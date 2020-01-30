@@ -36,16 +36,15 @@ This command displays a visual representation of a calendar. It supports multipl
 ```powershell
 PS C:\> Get-Calendar
 
-          September 2018
+               January 2020
 
-Sun  Mon  Tue  Wed  Thu  Fri  Sat
----  ---  ---  ---  ---  ---  ---
- 26   27   28   29   30   31    1
-  2    3    4    5    6    7    8
-  9   10   11   12   13   14   15
- 16   17   18   19   20   21   22
- 23   24   25  *26*  27   28   29
- 30    1    2    3    4    5    6
+ Sun   Mon   Tue   Wed   Thu   Fri   Sat
+----  ----  ----  ----  ----  ----  ----
+  29    30    31     1     2     3     4
+   5     6     7     8     9    10    11
+  12    13    14    15    16    17    18
+  19    20    21    22    23    24    25
+  26    27    28    29  * 30*   31     1
 ```
 
 Show the current calendar and highlight today. The month name will be centered in your output.
@@ -53,53 +52,52 @@ Show the current calendar and highlight today. The month name will be centered i
 ### EXAMPLE 2
 
 ```powershell
-PS C:\> Get-Calendar -start "3/1/2019" -end "5/1/2019"
+PS C:\>  Get-Calendar -start "3/1/2020" -end "5/1/2020"
 
-            March 2019
+                March 2020
 
-Sun  Mon  Tue  Wed  Thu  Fri  Sat
----  ---  ---  ---  ---  ---  ---
- 24   25   26   27   28    1    2
-  3    4    5    6    7    8    9
- 10   11   12   13   14   15   16
- 17   18   19   20   21   22   23
- 24   25   26   27   28   29   30
- 31    1    2    3    4    5    6
+ Sun   Mon   Tue   Wed   Thu   Fri   Sat
+----  ----  ----  ----  ----  ----  ----
+   1     2     3     4     5     6     7
+   8     9    10    11    12    13    14
+  15    16    17    18    19    20    21
+  22    23    24    25    26    27    28
+  29    30    31     1     2     3     4
 
-            April 2019
+                April 2020
 
-Sun  Mon  Tue  Wed  Thu  Fri  Sat
----  ---  ---  ---  ---  ---  ---
-  7    8    9   10   11   12   13
- 14   15   16   17   18   19   20
- 21   22   23   24   25   26   27
- 28   29   30    1    2    3    4
+ Sun   Mon   Tue   Wed   Thu   Fri   Sat
+----  ----  ----  ----  ----  ----  ----
+   5     6     7     8     9    10    11
+  12    13    14    15    16    17    18
+  19    20    21    22    23    24    25
+* 26* * 27* * 28* * 29* * 30*    1     2
 
-            May 2019
+                 May 2020
 
-Sun  Mon  Tue  Wed  Thu  Fri  Sat
----  ---  ---  ---  ---  ---  ---
-  5    6    7    8    9   10   11
- 12   13   14   15   16   17   18
- 19   20   21   22   23   24   25
- 26   27   28   29   30   31    1
-```
+ Sun   Mon   Tue   Wed   Thu   Fri   Sat
+----  ----  ----  ----  ----  ----  ----
+   3     4     5     6     7     8  *  9*
+  10    11  * 12*   13    14    15    16
+  17    18    19    20    21    22    23
+  24    25    26    27    28    29    30
+  31     1     2     3     4     5     6```
 
 ### EXAMPLE 3
 
 ```powershell
-PS C:\> Get-Calendar -Start 12/1/2018 -end 12/1/2018  -HighlightDate 12/25/2018
+PS C:\> Get-Calendar December -HighlightDate 12/4/2020,12/25/2020,12/24/2020,12/31/2020
 
-          December 2018
 
-Sun  Mon  Tue  Wed  Thu  Fri  Sat
----  ---  ---  ---  ---  ---  ---
- 25   26   27   28   29   30    1
-  2    3    4    5    6    7    8
-  9   10   11   12   13   14   15
- 16   17   18   19   20   21   22
- 23   24  *25*  26   27   28   29
- 30   31    1    2    3    4    5
+              December 2020
+
+ Sun   Mon   Tue   Wed   Thu   Fri   Sat
+----  ----  ----  ----  ----  ----  ----
+  29    30     1     2     3  *  4*    5
+   6     7     8     9    10    11    12
+  13    14    15    16    17    18    19
+  20    21    22    23  * 24* * 25*   26
+  27    28    29    30  * 31*    1     2
 ```
 
 Display a month and highlight a specific date.

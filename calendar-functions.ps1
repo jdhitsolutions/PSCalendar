@@ -241,6 +241,7 @@ Function Show-Calendar {
     if ($position) {
         #save current cursor location
         $here = $host.ui.RawUI.CursorPosition
+       # New-WPFMessageBox $here
         [void]$PSBoundParameters.remove("Position")
     }
 
@@ -317,7 +318,6 @@ Function Show-Calendar {
                 }
                 else {
                     Write-Host "$(($day).PadLeft($l," "))$spacer" -nonewline
-
                 }
             }
 
@@ -334,7 +334,6 @@ Function Show-Calendar {
 
     if ($Position) {
         #set cursor position back
-        $here.y++
         $host.ui.RawUI.CursorPosition = $here
     }
 
@@ -372,7 +371,6 @@ Function Show-GuiCalendar {
         [Parameter(HelpMessage = "Select a font family for your calendar" )]
         [ValidateSet("Segoi UI", "QuickType", "Tahoma", "Lucida Console", "Century Gothic")]
         [string]$Font = "Segoi UI",
-
 
         [Parameter(HelpMessage = "Select a font style for your calendar." )]
         [ValidateSet("Normal", "Italic", "Oblique")]

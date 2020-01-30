@@ -36,10 +36,10 @@ Display a colorized version of the current month. The current day will also be c
 ### EXAMPLE 2
 
 ```powershell
-PS C:\> Show-Calendar -Month February -Year 2019 -HighlightDate 2/22/19 -HighlightColor red
+PS C:\> Show-Calendar -Month February -Year 2020 -HighlightDate 2/22/20 -HighlightColor red
 ```
 
-Display February 2019 and highlight the 22nd in red.
+Display February 2020 and highlight the 22nd in red.
 
 ### Example 3
 
