@@ -93,7 +93,7 @@ Assuming the width of your console is at least 120, this code should work. Other
 
 ![console calendar](assets/console-calendar.png)
 
-Note that any command output may be truncated because of the calendar display.
+Note that any command output may be truncated because of the calendar display. This prompt function works as expected when using the Windows Terminal. Function needs work to behave as expected in a traditional PowerShell console where you might have a large buffer for scrolling.
 
 ## Potential Issues
 
