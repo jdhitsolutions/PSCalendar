@@ -68,15 +68,17 @@ Function prompt {
 
   #define a buffercell fill
   $fill = [system.management.automation.host.buffercell]::new(" ",$host.ui.RawUI.BackgroundColor,$host.ui.RawUI.BackgroundColor,"complete")
-
-  #define a rectangle with an upper left corner at 100,0
-  $r = [System.Management.Automation.Host.Rectangle]::new(100,0,$host.ui.rawui.windowsize.width,15)
+ 
+  #define a rectangle with an upper left corner X distance from the edge
+  $left =$host.ui.RawUI.WindowSize.width - 42
+  $r = [System.Management.Automation.Host.Rectangle]::new($left, 0, $host.ui.rawui.windowsize.width,10)
 
   #clear the area for the calendar display
   $host.ui.rawui.SetBufferContents($r,$fill)
 
   #show the calendar in the upper right corner of the console
-  Show-Calendar -Position ([system.management.automation.host.coordinates]::new($host.ui.RawUI.WindowSize.width - 42,0))
+  $pos = [system.management.automation.host.coordinates]::new($left,0)
+  Show-Calendar -Position $pos
 
   "PS $($executionContext.SessionState.Path.CurrentLocation)$('>' * ($nestedPromptLevel + 1)) ";
 
@@ -90,6 +92,8 @@ Function prompt {
 Assuming the width of your console is at least 120, this code should work. Otherwise, you might need to tweak positioning. This should also work in Windows Terminal. If you add some highlighted dates using `$PSDefaultParameterValues`, then you'll have a calendar right in front of you.
 
 ![console calendar](assets/console-calendar.png)
+
+Note that any command output may be truncated because of the calendar display.
 
 ## Potential Issues
 
