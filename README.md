@@ -64,6 +64,8 @@ One way you might want to use this is in your PowerShell console. You can use pr
 
 ```powershell
 
+#requires -modules @{ModuleName="PSCalendar";ModuleVersion="1.10.0"}  
+
 Function prompt {
 
   #define a buffercell fill
@@ -71,7 +73,17 @@ Function prompt {
  
   #define a rectangle with an upper left corner X distance from the edge
   $left =$host.ui.RawUI.WindowSize.width - 42
-  $r = [System.Management.Automation.Host.Rectangle]::new($left, 0, $host.ui.rawui.windowsize.width,10)
+
+  #need to adjust positioning based on buffer size of the console
+  #is the cursor beyond the window size, ie have we scrolled down?
+    if ($host.UI.RawUI.CursorPosition.Y -gt $host.UI.RawUI.WindowSize.Height) {
+        $top = $host.ui.RawUI.CursorPosition.Y - $host.UI.RawUI.WindowSize.Height
+    }
+    else {
+        $top = 0
+    }
+  #    System.Management.Automation.Host.Rectangle new(int left, int top, int right, int bottom)
+  $r = [System.Management.Automation.Host.Rectangle]::new($left, 0, $host.ui.rawui.windowsize.width,$top+10)
 
   #clear the area for the calendar display
   $host.ui.rawui.SetBufferContents($r,$fill)
