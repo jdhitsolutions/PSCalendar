@@ -10,7 +10,9 @@ You can install this module from the PowerShell Gallery.
 Install-Module PSCalendar [-scope currentuser]
 ```
 
-It has been tested on PowerShell Core both under Windows and Linux and there is no reason these commands should not work, except for [Show-GuiCalendar](docs/Show-GuiCalendar.md).
+> Installing this module will also install the `ThreadJob` module from the PowerShell Gallery as that is module dependency if you want to use `Show-GuiCalendar`.
+
+It has been tested on PowerShell 7 both under Windows and Linux and there is no reason these commands should not work, except for [Show-GuiCalendar](docs/Show-GuiCalendar.md) which requires a Windows platform.
 
 ## [Get-Calendar](docs/Get-Calendar.md)
 
@@ -64,13 +66,13 @@ One way you might want to use this is in your PowerShell console. You can use pr
 
 ```powershell
 
-#requires -modules @{ModuleName="PSCalendar";ModuleVersion="1.10.0"}  
+#requires -modules @{ModuleName="PSCalendar";ModuleVersion="1.10.0"}
 
 Function prompt {
 
   #define a buffercell fill
   $fill = [system.management.automation.host.buffercell]::new(" ",$host.ui.RawUI.BackgroundColor,$host.ui.RawUI.BackgroundColor,"complete")
- 
+
   #define a rectangle with an upper left corner X distance from the edge
   $left =$host.ui.RawUI.WindowSize.width - 42
 
@@ -109,6 +111,6 @@ Note that any command output may be truncated because of the calendar display. T
 
 ## Potential Issues
 
-I have tried to make this module culture aware. Testing across cultures is not an easy process. If you encounter a problem and are not running PowerShell under the EN-US culture, run the command you are trying to use with -Verbose and post the results in a new issue.
+I have tried to make this module culture aware. Testing across cultures is not an easy process. If you encounter a problem and are not running PowerShell under the `EN-US` culture, run the calendar command you are trying to use with `-Verbose` and post the results in a new issue.
 
-last updated 2020-01-30 20:05:00Z UTC
+last updated 2020-05-11 12:59:13Z UTC

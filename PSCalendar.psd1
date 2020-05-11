@@ -7,7 +7,7 @@
     RootModule           = 'PSCalendar.psm1'
 
     # Version number of this module.
-    ModuleVersion        = '1.10.0'
+    ModuleVersion        = '1.11.0'
 
     # Supported PSEditions
     CompatiblePSEditions = @("Desktop", "Core")
@@ -46,7 +46,7 @@
     # ProcessorArchitecture = ''
 
     # Modules that must be imported into the global environment prior to importing this module
-    # RequiredModules = @()
+    RequiredModules = @("ThreadJob")
 
     # Assemblies that must be loaded prior to importing this module
     # RequiredAssemblies = @()

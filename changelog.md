@@ -1,5 +1,9 @@
 # Change Log for PSCalendar
 
+## v1.11.0
+
++ Add `ThreadJob` as a required module. (Issue #19)
+
 ## v1.10.0
 
 + Fixed cursor positioning in `Show-Calendar`
