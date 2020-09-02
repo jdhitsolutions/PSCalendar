@@ -1,5 +1,6 @@
 ﻿
-# http://www.leeholmes.com/blog/2008/12/03/showing-calendars-in-your-oof-messages/
+
+Return "These commands are archived and retained for testing and research purposes."
 
 Function Get-Calendar {
 
@@ -262,15 +263,23 @@ Function Show-Calendar {
 
     $cal = Get-Calendar @PSBoundParameters
 
-    #turn the calendar into an array of strings
+    Write-Verbose "Turn the calendar into an array of strings"
     $calarray = $cal.split("`n")
 
     # a regular expression pattern to match on highlighted days
     [regex]$m = "(\*)?[\s|\*]\d{1,2}(\*)?"
-
+    # a regular expression pattern to get the month and year
+    [regex]$moyr = "(?<month>\w+)\s(?<year>\d{4})"
     #go through each line and write it back to the console using Write-Host
     foreach ($line in $calarray) {
-        if ($line -match "\d{4}") {
+
+        if (($line -match "\w+") -AND ($moyr.IsMatch($line))) {
+            #get the month
+            $a = $moyr.Matches($line)
+            #convert the month name into a month number
+            $thisMonth = _getMonthnumber ($a.groups.where( { $_.name -eq 'month' }).value)
+            $thisYear = $a.groups.where( { $_.name -eq 'year' }).value
+            Write-Verbose "Currently processing $thismonth $thisyear from $($line.trim)"
             #write the line with the month and year
             if ($position) {
                 $host.ui.RawUI.CursorPosition = $Position
@@ -283,18 +292,22 @@ Function Show-Calendar {
                 $Position.y++
                 $host.ui.RawUI.CursorPosition = $Position
             }
+            Write-Verbose "Adding day names and underlines"
             Write-Host $line -ForegroundColor $DayColor
         }
         elseif ($line -match "\*") {
             #break apart lines with asterisks
+            Write-verbose "Processing lines with *"
             $week = $line
             if ($position) {
                 $Position.y++
                 $host.ui.RawUI.CursorPosition = $Position
             }
             $m.Matches($week).Value | ForEach-Object {
-
                 $day = "$_"
+                #turn the value into a datetime object
+                $dt = (Get-Date -Day ($day.replace('*', '').trim()) -Month $thisMonth -Year $thisYear).date
+                Write-Verbose "Checking $dt"
                 #pad based on the length of the day of week string
                 $l = $currCulture.DateTimeFormat.AbbreviatedDayNames[0].length
 
@@ -305,22 +318,32 @@ Function Show-Calendar {
                 elseif ($l -eq 3) {
                     $l++
                 }
-
-                if ($day.replace('*', '').trim() -eq (Get-Date).day) {
-
+                  if ($dt -eq (Get-Date).date) {
+                    #only highlight the first instance of the current day. Issue #20
+                    Write-Verbose "Highlighting today $day"
                     Write-Host "$($day.replace('*','').padleft($l," "))$spacer" -NoNewline -ForegroundColor $TodayColor
-
                 }
                 elseif ($day -match "\*") {
-
+                    Write-Verbose "Highlighting $day"
                     Write-Host "$($day.replace('*','').padleft($l," "))$spacer" -NoNewline -ForegroundColor $HighlightColor
-
                 }
                 else {
+                    write-Verbose "Writing $day"
                     Write-Host "$(($day).PadLeft($l," "))$spacer" -nonewline
                 }
-            }
-
+                #if the day is the last day of the month, advance the month
+                $daysInMonth = [datetime]::DaysInMonth($thisyear, $thisMonth)
+                if ($dt.day -eq $daysInMonth) {
+                    Write-Verbose "Detected the end of the month"
+                    if ($thismonth -eq 12) {
+                        $thismonth = 1
+                        $thisYear++
+                    }
+                    else {
+                        $thismonth++
+                    }
+                }
+            } #foreach week match value
             Write-Host ""
         }
         else {
@@ -328,6 +351,7 @@ Function Show-Calendar {
                 $Position.y++
                 $host.ui.RawUI.CursorPosition = $Position
             }
+            Write-Verbose "No formatting needed for $line"
             Write-Host $line
         }
     } #foreach line in calarray

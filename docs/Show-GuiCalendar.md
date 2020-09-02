@@ -20,7 +20,7 @@ Show-GuiCalendar [[-Start] <DateTime>] [[-End] <DateTime>] [-HighlightDate <Date
 
 ## DESCRIPTION
 
-If you are running Windows PowerShell or a version of PowerShell that supports Windows Presentation Foundation (WPF), you can display a graphical calendar. You can specify up to 3 months. There are also parameters to fine tune the calendar style. The calendar form itself is transparent, but you should be able to click on it to drag it around your screen. You can also use the + and - keys to increase or decrease the calendar's opacity. You may have to click on a calendar before making any adjustments.
+If you are running Windows PowerShell or a version of PowerShell that supports Windows Presentation Foundation (WPF), you can display a graphical calendar. You can specify up to 3 months. There are also parameters to fine0tune the calendar style. The calendar form itself is transparent, but you should be able to click on it to drag it around your screen. You can also use the + and - keys to increase or decrease the calendar's opacity. You may have to click on a calendar before making any adjustments.
 
 This command launches the calendar in a separate runspace so that it doesn't block your prompt. However, if you close the PowerShell session that launched the calendar, the calendar will also automatically close.
 
@@ -166,6 +166,6 @@ Learn more about PowerShell: http://jdhitsolutions.com/blog/essential-powershell
 
 ## RELATED LINKS
 
-[Show-Calendar]()
+[Show-Calendar](Show-Calendar.md)
 
-[Get-Calendar]()
+[Get-Calendar](Get-Calendar.md)

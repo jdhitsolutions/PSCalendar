@@ -1,5 +1,17 @@
 # Change Log for PSCalendar
 
+## v2.0.0
+
+__This is a major update of the module with many breaking changes__
+
++ Complete re-write of `Get-Calendar` that now uses to ANSI escape sequences for coloring and highlighting. (Issue #17)
++ Fixed issue with double-highlighting of the current day when it was found twice. (Issue #20)
++ Removed obsolete parameters from `Show-Calendar`.
++ Module reorganization to better handle non-Windows platforms. Platform-specific commands and aliases are exported in `PSCalendar.psm1`.(Issue #18)
++ Added the option to change ANSI formatting via a module-scoped hashtable. `Get-PSCalendarConfiguration` will show the current settings. `Set-PSCalendarConfiguration` will let the user modify them.
++ Created a format file, `pscalendarconfiguration.format.ps1xml`, to display the formatting values as a list.
++ Updated `README.md`.
+
 ## v1.11.0
 
 + Add `ThreadJob` as a required module. (Issue #19)
@@ -20,7 +32,7 @@
 
 ## v1.8.0
 
-+ Modified commands to begin on correct day of the week. (Issue #10)
++ Modified commands to begin on the correct day of the week. (Issue #10)
 + Switched to using .NET culture classes directly instead of `Get-Culture` for better international results
 + Corrected license file for GitHub
 + Code cleanup to replace `Out-Null` with `[void]`
@@ -56,7 +68,7 @@
 
 ## v1.4.0
 
-+ Added parameters to `Show-Calendar` to let user specify colors. (Issue #4)
++ Added parameters to `Show-Calendar` to let the user specify colors. (Issue #4)
 + Fixed highlight display bug in `Get-Calendar` (Issue #8)
 + Fixed DisplayMode bug in `Show-GuiCalendar`
 + Modified `Show-GuiCalendar` to not display in the taskbar

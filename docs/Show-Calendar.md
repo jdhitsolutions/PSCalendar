@@ -14,14 +14,13 @@ Display a colorized calendar month in the console.
 ## SYNTAX
 
 ```yaml
-Show-Calendar [[-Month] <String>] [[-Year] <Int32>] [-HighlightDate <String[]>]
- [-HighlightColor <ConsoleColor>] [-TitleColor <ConsoleColor>] [-DayColor <ConsoleColor>]
- [-TodayColor <ConsoleColor>] [-Position <Coordinates>] [<CommonParameters>]
+Show-Calendar [[-Month] <String>] [[-Year] <Int32>] [-HighlightDate <String[]>] [-Position <Coordinates>]
+ [<CommonParameters>]
 ```
 
 ## DESCRIPTION
 
-This command is a wrapper for Get-Calendar that will display the specified month in a colorized format. The command uses Write-Host so it does not write anything to the pipeline.
+This command is a wrapper for Get-Calendar that essentially shows the same result. The only difference is that you can use Show-Calendar to display the calendar at a specific position in your PowerShell session. This function is also retained for backwards compatibility.
 
 ## EXAMPLES
 
@@ -31,15 +30,15 @@ This command is a wrapper for Get-Calendar that will display the specified month
 PS C:\> Show-Calendar
 ```
 
-Display a colorized version of the current month. The current day will also be colorized.
+Display a colorized version of the current month.
 
 ### EXAMPLE 2
 
 ```powershell
-PS C:\> Show-Calendar -Month February -Year 2020 -HighlightDate 2/22/20 -HighlightColor red
+PS C:\> Show-Calendar -Month February -Year 2020 -HighlightDate 2/22/20
 ```
 
-Display February 2020 and highlight the 22nd in red.
+Display February 2020 and highlight the 22nd using the default highlight color.
 
 ### Example 3
 
@@ -85,7 +84,7 @@ Accept wildcard characters: False
 
 ### -HighlightDate
 
-Specific days (named) to highlight. These dates are surrounded by asterisk characters.
+Specific days (named) to highlight. These dates are colored by ANSI escape sequences. You can modify them with Set-PSCalendarConfiguration.
 
 ```yaml
 Type: String[]
@@ -95,39 +94,6 @@ Aliases:
 Required: False
 Position: Named
 Default value: (Get-Date).date.toString()
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -HighlightColor
-
-Specify a console color to use for the highlighted dates.
-
-```yaml
-Type: ConsoleColor
-Parameter Sets: (All)
-Aliases:
-Accepted values: Black, DarkBlue, DarkGreen, DarkCyan, DarkRed, DarkMagenta, DarkYellow, Gray, DarkGray, Blue, Green, Cyan, Red, Magenta, Yellow, White
-
-Required: False
-Position: Named
-Default value: Green
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -DayColor
-
-Specify a color for the days of the week heading.
-
-```yaml
-Type: ConsoleColor
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: Named
-Default value: Cyan
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
@@ -148,41 +114,9 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -TitleColor
-
-Specify a color for the days of the month heading.
-
-```yaml
-Type: ConsoleColor
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: Named
-Default value: Yellow
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -TodayColor
-
-Specify a color to mark today.
-
-```yaml
-Type: ConsoleColor
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: Named
-Default value: Red
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
 ### CommonParameters
 
-This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable. For more information, see about_CommonParameters (http://go.microsoft.com/fwlink/?LinkID=113216).
+This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable. For more information, see [about_CommonParameters](http://go.microsoft.com/fwlink/?LinkID=113216).
 
 ## INPUTS
 
@@ -190,16 +124,16 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## OUTPUTS
 
-### None
+### System.String
 
 ## NOTES
 
-This command should have an alias of scal. It writes to the PowerShell hosting application not to the PowerShell pipeline.
+This command should have an alias of scal.
 
 Learn more about PowerShell: http://jdhitsolutions.com/blog/essential-powershell-resources/
 
 ## RELATED LINKS
 
-[Get-Calendar]()
+[Get-Calendar](Get-Calendar.md)
 
-[Show-GuiCalendar]()
+[Show-GuiCalendar](Show-GuiCalendar.md)

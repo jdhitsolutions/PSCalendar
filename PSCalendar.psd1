@@ -1,13 +1,12 @@
 # Module manifest for module 'PSCalendar'
 
-
 @{
 
     # Script module or binary module file associated with this manifest.
     RootModule           = 'PSCalendar.psm1'
 
     # Version number of this module.
-    ModuleVersion        = '1.11.0'
+    ModuleVersion        = '2.0.0'
 
     # Supported PSEditions
     CompatiblePSEditions = @("Desktop", "Core")
@@ -58,13 +57,13 @@
     # TypesToProcess = @()
 
     # Format files (.ps1xml) to be loaded when importing this module
-    # FormatsToProcess = @()
+    FormatsToProcess = @('formats\pscalendarconfiguration.format.ps1xml')
 
     # Modules to import as nested modules of the module specified in RootModule/ModuleToProcess
     # NestedModules = @()
 
     # Functions to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no functions to export.
-    FunctionsToExport    = 'Get-Calendar', 'Show-Calendar', 'Show-GuiCalendar'
+    FunctionsToExport    = @("*")
 
     # Cmdlets to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no cmdlets to export.
     CmdletsToExport      = @()
@@ -73,7 +72,7 @@
     VariablesToExport    = @()
 
     # Aliases to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no aliases to export.
-    AliasesToExport      = 'cal', 'scal', 'gcal'
+    AliasesToExport      = @("*")
 
     # DSC resources to export from this module
     # DscResourcesToExport = @()

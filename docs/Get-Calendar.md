@@ -16,18 +16,18 @@ Displays a visual representation of a calendar.
 ### month (Default)
 
 ```yaml
-Get-Calendar [[-Month] <String>] [-Year <Int32>] [-HighlightDate <String[]>] [<CommonParameters>]
+Get-Calendar [[-Month] <String>] [[-Year] <Int32>] [-HighlightDate <DateTime[]>] [<CommonParameters>]
 ```
 
 ### span
 
 ```yaml
-Get-Calendar -Start <DateTime> -End <DateTime> [-HighlightDate <String[]>] [<CommonParameters>]
+Get-Calendar -Start <DateTime> -End <DateTime> [-HighlightDate <DateTime[]>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
 
-This command displays a visual representation of a calendar. It supports multiple months, as well as the ability to highlight a specific date or dates.
+This command displays a visual representation of a calendar. It supports multiple months, as well as the ability to highlight a specific date or dates. The default display uses ANSI escape sequences. You can adjust the color scheme using Set-PSCalendarConfiguration.
 
 ## EXAMPLES
 
@@ -36,52 +36,25 @@ This command displays a visual representation of a calendar. It supports multipl
 ```powershell
 PS C:\> Get-Calendar
 
-               January 2020
+              September 2020
 
  Sun   Mon   Tue   Wed   Thu   Fri   Sat
-----  ----  ----  ----  ----  ----  ----
-  29    30    31     1     2     3     4
-   5     6     7     8     9    10    11
-  12    13    14    15    16    17    18
-  19    20    21    22    23    24    25
-  26    27    28    29  * 30*   31     1
+  30    31     1     2     3     4     5
+   6     7     8     9    10    11    12
+  13    14    15    16    17    18    19
+  20    21    22    23    24    25    26
+  27    28    29    30     1     2     3
 ```
 
-Show the current calendar and highlight today. The month name will be centered in your output.
+Show the current month. The current day will be formatted in color.
 
 ### EXAMPLE 2
 
 ```powershell
 PS C:\>  Get-Calendar -start "3/1/2020" -end "5/1/2020"
+```
 
-                March 2020
-
- Sun   Mon   Tue   Wed   Thu   Fri   Sat
-----  ----  ----  ----  ----  ----  ----
-   1     2     3     4     5     6     7
-   8     9    10    11    12    13    14
-  15    16    17    18    19    20    21
-  22    23    24    25    26    27    28
-  29    30    31     1     2     3     4
-
-                April 2020
-
- Sun   Mon   Tue   Wed   Thu   Fri   Sat
-----  ----  ----  ----  ----  ----  ----
-   5     6     7     8     9    10    11
-  12    13    14    15    16    17    18
-  19    20    21    22    23    24    25
-* 26* * 27* * 28* * 29* * 30*    1     2
-
-                 May 2020
-
- Sun   Mon   Tue   Wed   Thu   Fri   Sat
-----  ----  ----  ----  ----  ----  ----
-   3     4     5     6     7     8  *  9*
-  10    11  * 12*   13    14    15    16
-  17    18    19    20    21    22    23
-  24    25    26    27    28    29    30
-  31     1     2     3     4     5     6```
+Display monthly calendars from March to May, 2020.
 
 ### EXAMPLE 3
 
@@ -92,15 +65,14 @@ PS C:\> Get-Calendar December -HighlightDate 12/4/2020,12/25/2020,12/24/2020,12/
               December 2020
 
  Sun   Mon   Tue   Wed   Thu   Fri   Sat
-----  ----  ----  ----  ----  ----  ----
-  29    30     1     2     3  *  4*    5
+  29    30     1     2     3     4     5
    6     7     8     9    10    11    12
   13    14    15    16    17    18    19
-  20    21    22    23  * 24* * 25*   26
-  27    28    29    30  * 31*    1     2
+  20    21    22    23    24    25    26
+  27    28    29    30    31     1     2
 ```
 
-Display a month and highlight a specific date.
+Display a month and highlight specific dates in color.
 
 ## PARAMETERS
 
@@ -170,10 +142,10 @@ Accept wildcard characters: False
 
 ### -HighlightDate
 
-Specific days (named) to highlight. These dates are surrounded by asterisk characters.
+Specific days (named) to highlight. These dates are color formatted using ANSI escape sequences.
 
 ```yaml
-Type: String[]
+Type: DateTime[]
 Parameter Sets: (All)
 Aliases:
 
@@ -186,8 +158,7 @@ Accept wildcard characters: False
 
 ### CommonParameters
 
-This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable.
-For more information, see about_CommonParameters (http://go.microsoft.com/fwlink/?LinkID=113216).
+This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable. For more information, see [about_CommonParameters](http://go.microsoft.com/fwlink/?LinkID=113216).
 
 ## INPUTS
 
@@ -197,14 +168,16 @@ For more information, see about_CommonParameters (http://go.microsoft.com/fwlink
 
 ## NOTES
 
-This command should have an alias of cal. The majority of this function was written by Lee Holmes at http://www.leeholmes.com/blog/2008/12/03/showing-calendars-in-your-oof-messages/
+This command should have an alias of cal. This function was originally inspired from work by Lee Holmes at http://www.leeholmes.com/blog/2008/12/03/showing-calendars-in-your-oof-messages/.
 
 Learn more about PowerShell: http://jdhitsolutions.com/blog/essential-powershell-resources/
 
 ## RELATED LINKS
 
-[Get-Date]()
+[Get-Date](Get-Date.md)
 
-[Show-Calendar]()
+[Set-PSCalendarConfiguration](Set-PSCalendarConfiguration.md)
 
-[Show-GuiCalendar]()
+[Show-Calendar](Show-Calendar.md)
+
+[Show-GuiCalendar](Show-GuiCalendar.md)

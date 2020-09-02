@@ -1,0 +1,43 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<!--
+format type data generated 09/02/2020 11:51:35 by BOVINE320\Jeff
+-->
+<Configuration>
+  <ViewDefinitions>
+    <View>
+      <!--Created 09/02/2020 11:51:35 by BOVINE320\Jeff-->
+      <Name>default</Name>
+      <ViewSelectedBy>
+        <TypeName>PSCalendarConfiguration</TypeName>
+      </ViewSelectedBy>
+      <ListControl>
+        <ListEntries>
+          <ListEntry>
+            <ListItems>
+              <!--
+            By default the entries use property names, but you can replace them with scriptblocks.
+            <ScriptBlock>$_.foo /1mb -as [int]</ScriptBlock>
+-->
+              <ListItem>
+                <Label>Title</Label>
+                <PropertyName>Title</PropertyName>
+              </ListItem>
+              <ListItem>
+                <Label>DayofWeek</Label>
+                <PropertyName>DayofWeek</PropertyName>
+              </ListItem>
+              <ListItem>
+                <Label>Today</Label>
+                <PropertyName>Today</PropertyName>
+              </ListItem>
+              <ListItem>
+                <Label>Highlight</Label>
+                <PropertyName>Highlight</PropertyName>
+              </ListItem>
+            </ListItems>
+          </ListEntry>
+        </ListEntries>
+      </ListControl>
+    </View>
+  </ViewDefinitions>
+</Configuration>
