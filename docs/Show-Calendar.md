@@ -14,13 +14,13 @@ Display a colorized calendar month in the console.
 ## SYNTAX
 
 ```yaml
-Show-Calendar [[-Month] <String>] [[-Year] <Int32>] [-HighlightDate <String[]>] [-Position <Coordinates>]
+Show-Calendar [[-Month] <String>] [[-Year] <Int32>] [-HighlightDate <DateTime[]>] [-Position <Coordinates>]
  [<CommonParameters>]
 ```
 
 ## DESCRIPTION
 
-This command is a wrapper for Get-Calendar that essentially shows the same result. The only difference is that you can use Show-Calendar to display the calendar at a specific position in your PowerShell session. This function is also retained for backwards compatibility.
+This command is a wrapper for Get-Calendar that essentially shows the same result. The only difference is that you can use Show-Calendar to display the calendar at a specific position in your PowerShell session. This function is also retained for backward compatibility.
 
 ## EXAMPLES
 
@@ -35,10 +35,10 @@ Display a colorized version of the current month.
 ### EXAMPLE 2
 
 ```powershell
-PS C:\> Show-Calendar -Month February -Year 2020 -HighlightDate 2/22/20
+PS C:\> Show-Calendar -Month February -Year 2021 -HighlightDate 2/22/21
 ```
 
-Display February 2020 and highlight the 22nd using the default highlight color.
+Display February 2021 and highlight the 22nd using the default highlight color.
 
 ### Example 3
 
@@ -84,16 +84,16 @@ Accept wildcard characters: False
 
 ### -HighlightDate
 
-Specific days (named) to highlight. These dates are colored by ANSI escape sequences. You can modify them with Set-PSCalendarConfiguration.
+Specify days to highlight. These dates are colored by ANSI escape sequences. You can modify them with Set-PSCalendarConfiguration.
 
 ```yaml
-Type: String[]
+Type: DateTime[]
 Parameter Sets: (All)
 Aliases:
 
 Required: False
 Position: Named
-Default value: (Get-Date).date.toString()
+Default value:
 Accept pipeline input: False
 Accept wildcard characters: False
 ```

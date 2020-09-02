@@ -477,7 +477,7 @@ Function Show-Calendar {
         [ValidatePattern('^\d{4}$')]
         [int]$Year = (Get-Date).Year,
 
-        [string[]]$HighlightDate = (Get-Date).date.toString(),
+        [datetime[]]$HighlightDate,
 
         [System.Management.Automation.Host.Coordinates]$Position
     )
@@ -493,7 +493,7 @@ Function Show-Calendar {
     }
 
     #add default values if not bound
-    $params = "Month", "Year", "HighlightDate"
+    $params = "Month", "Year"
     foreach ($param in $params) {
         if (-not $PSBoundParameters.ContainsKey($param)) {
             $PSBoundParameters.Add($param, $((Get-Variable -Name $param).value))
