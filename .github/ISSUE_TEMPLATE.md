@@ -3,8 +3,8 @@
 ## What is the syntax or expression you are using?
 <!-- copy command you are trying to run -->
 
-## What happens?
-<!-- copy the results especially any error messages. Screen shots are helpful. -->
+## What Happens?
+<!-- copy the results especially any error messages. Screenshots are helpful. -->
 
 ## What do you think should happen?
 
