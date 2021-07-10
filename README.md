@@ -50,7 +50,7 @@ One way you might want to use this is in your PowerShell console. You can use th
 
 ```powershell
 
-#requires -modules @{ModuleName="PSCalendar";ModuleVersion="1.10.0"}
+#requires -modules @{ModuleName="PSCalendar";ModuleVersion="2.1.0"}
 
 Function prompt {
 
@@ -121,8 +121,18 @@ You need to include the escape character but you do not need to include the clos
 
 This change lasts for the duration of your PowerShell session. If you want to make it more permanent, you will need to add the commands to your PowerShell profile script.
 
+## A Note on Culture
+
+I've tried very hard to make the commands respect culture. Most commands now that string values to represent dates which are then treated as dates internally. For this reason, it is important that you follow the culture-specific short date format that you get from running this command:
+
+```powershell
+(Get-Culture).datetimeformat.ShortDatePattern
+```
+
 ## Potential Issues
 
-I have tried to make this module culture aware. Testing across cultures is not an easy process. If you encounter a problem and are not running PowerShell under the `EN-US` culture, run the calendar command you are trying to use with `-Verbose` and post the results in a new issue.
+I have tried to make this module culture aware. Testing across cultures is not an easy process. If you encounter a problem and are not running PowerShell under the `EN-US` culture, run the calendar command you are trying to use with `-Verbose` and post the results in a new issue. Or if you have both Windows PowerShell and PowerShell 7 installed, try the same command in both versions.
 
-Last Updated *2020-09-02 14:17:47Z*
+*I'm tracking a potential discrepancy in how .NET returns culture information between the two PowerShell versions when using this module in PowerShell 7. If you use the module in Windows PowerShell, it should work as expected.*
+
+Last Updated *2021-07-09 14:12:41Z*

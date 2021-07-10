@@ -1,18 +1,37 @@
 function _getCalendar {
+    [cmdletbinding()]
     Param(
         [datetime]$start = (Get-Date),
-        [datetime[]]$highlightDates
+        [string[]]$highlightDates
     )
 
+    #TODO need to add enough days to month which is a problem when the week starts on Monday
+    # https://fmoralesdev.com/2019/03/21/c-datetime-examples/
+
     $currCulture = [system.globalization.cultureinfo]::CurrentCulture
+    Write-Verbose "Building calendar for $($currCulture.Name)"
+
+    #Need to rebuild HighlightDate to respect culture?
+    if ($HighlightDates) {
+        $highlightdates = foreach ($item in $HighlightDates) {
+            Write-Verbose "Casting $item as [datetime]"
+            $item -as [datetime]
+        }
+        write-Verbose "Detected $($highlightdates.count) highlight dates"
+        $highlightDates | out-file d:\temp\d.txt
+        $highlightDates | ForEach-Object { Write-Verbose $_.ToString()}
+    }
+
     $mo = $start.month
     $yr = $start.year
     $max = $currCulture.DateTimeFormat.Calendar.GetDaysInMonth($yr, $mo)
+    Write-Verbose "Totals days in $mo/$yr is $max"
     $end = Get-Date -Year $yr -Month $mo -Day $max
-
+    Write-Verbose "Ending $end"
     $dateTimeFormat = $currCulture.DateTimeFormat
     $fd = $dateTimeFormat.FirstDayOfWeek.value__
 
+    Write-Verbose "First day of the week is $($dateTimeFormat.FirstDayOfWeek) [$fd]"
     $currentDay = $start
 
     $day0 = @()
@@ -45,7 +64,7 @@ function _getCalendar {
     #add enough days to finish the week
     While ($currentDay.DayOfWeek.value__ -ne 0) {
         [datetime]$aDay = $currentDay
-
+        #Write-Verbose "adding $aDay"
         Switch ($aDay.DayOfWeek.value__) {
             0 { $day0 += $aday }
             1 { $day1 += $aday }
@@ -97,45 +116,46 @@ function _getCalendar {
     if ($fd -eq 0 ) {
         for ($n = 0; $n -lt $abbreviated.count; $n++) {
             $d = $abbreviated[$n].padleft(4, " ")
-            $days += "{0}{1}{2}" -f $PScalendarConfiguration.DayofWeek,$d,"$esc[0m"
-            #"`e[1;4;36m$d`e[0m"
+            $days += "{0}{1}{2}" -f $PScalendarConfiguration.DayofWeek, $d, "$esc[0m"
+
         }
     }
     else {
         for ($n = 1; $n -lt $abbreviated.count; $n++) {
             $d = $abbreviated[$n].padleft(4, " ")
             $days += "{0}{1}{2}" -f $PScalendarConfiguration.DayofWeek, $d, "$esc[0m"
-            #"`e[1;4;36m$d`e[0m"
+
         }
         $d = $abbreviated[0].padleft(4, " ")
         $days += "{0}{1}{2}" -f $PScalendarConfiguration.DayofWeek, $d, "$esc[0m"
-        #"`e[1;4;36m$d`e[0m"
+
     }
 
     $plainHead = "$($mo.Month) $($mo.Year)"
-    $head = "{0}{1}{2}" -f $pscalendarConfiguration.title,$plainhead,"$esc[0m"
-    # "`e[93m$plainhead`e[0"
-    $dayhead = $days -join '  '
+    $head = "{0}{1}{2}" -f $pscalendarConfiguration.title, $plainhead, "$esc[0m"
 
-    $month = for ($i = 0; $i -lt 5; $i++) {
+    $dayhead = $days -join '  '
+    Write-Verbose "Using day heading $dayhead"
+    $month = for ($i = 0; $i -lt 6; $i++) {
         $wk = for ($k = 0; $k -lt $dow.count; $k++) {
-            $theDay = ($mo.$($dow[$k])[$i])
+
+            $theDay = ($mo.$($dow[$k])[$i]) -as [datetime]
+            #Write-Verbose "Adding $theDay"
             if ($theDay) {
                 $d = $theDay.day
                 $value = $d.tostring().padleft(4, ' ')
                 if ($theDay.date -eq (Get-Date).date) {
-                   # "`e[91m$Value`e[0m"
-                    "{0}{1}{2}" -f $PScalendarConfiguration.Today,$value,"$esc[0m"
+                    "{0}{1}{2}" -f $PScalendarConfiguration.Today, $value, "$esc[0m"
                 }
                 elseif ( $highlightDates -contains $theDay.date) {
-                   # "`e[92m$Value`e[0m"
-                    "{0}{1}{2}" -f $PScalendarConfiguration.Highlight,$value,"$esc[0m"
+                    "{0}{1}{2}" -f $PScalendarConfiguration.Highlight, $value, "$esc[0m"
                 }
                 else {
                     $value
                 }
             }
         }
+        Write-Verbose "Adding week $wk"
         $wk -join '  '
     }
 
@@ -143,8 +163,8 @@ function _getCalendar {
     Function makemonth {
         #this is a hack function to write all the strings to the pipeline
         #separately
-        [int]$pad = (40 - $plainhead.Length)/2 + 1
-        $p = " "*$pad
+        [int]$pad = (40 - $plainhead.Length) / 2 + 1
+        $p = " " * $pad
         "`n$p$head`n"
         $dayhead
         $month
@@ -165,7 +185,7 @@ function _getMonthNumber {
     [cmdletbinding()]
     Param([string]$MonthName)
 
-    _getMonthsByCulture | ForEach-Object -begin { $i = 0 } -process { $i++; if ($_ -eq $MonthName) { return $i } }
+    _getMonthsByCulture | ForEach-Object -Begin { $i = 0 } -Process { $i++; if ($_ -eq $MonthName) { return $i } }
 }
 
 Function New-RunspaceCleanupJob {
@@ -203,7 +223,7 @@ Function New-RunspaceCleanupJob {
         #you'll see something you can use for debugging or troubleshooting.
         Write-Host "[$(Get-Date)] Sleeping in $sleep second loops"
         Write-Host "Watching this runspace"
-        Write-Host ($ps.runspace | Select-Object -property * | Out-String)
+        Write-Host ($ps.runspace | Select-Object -Property * | Out-String)
         #loop until the handle shows as completed, sleeping the the specified
         #number of seconds
         do {

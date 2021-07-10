@@ -16,18 +16,22 @@ Displays a visual representation of a calendar.
 ### month (Default)
 
 ```yaml
-Get-Calendar [[-Month] <String>] [[-Year] <Int32>] [-HighlightDate <DateTime[]>] [<CommonParameters>]
+Get-Calendar [[-Month] <String>] [[-Year] <Int32>] [-HighlightDate <String[]>] [<CommonParameters>]
 ```
 
 ### span
 
 ```yaml
-Get-Calendar -Start <DateTime> -End <DateTime> [-HighlightDate <DateTime[]>] [<CommonParameters>]
+Get-Calendar -Start <String> -End <String> [-HighlightDate <String[]>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
 
 This command displays a visual representation of a calendar. It supports multiple months, as well as the ability to highlight a specific date or dates. The default display uses ANSI escape sequences. You can adjust the color scheme using Set-PSCalendarConfiguration.
+
+When you enter Highlight, Start, or End dates, be sure to use the format that is culturally appropriate. It should match the pattern you get from running this command:
+
+(Get-Culture).datetimeformat.ShortDatePattern
 
 ## EXAMPLES
 
@@ -36,14 +40,14 @@ This command displays a visual representation of a calendar. It supports multipl
 ```powershell
 PS C:\> Get-Calendar
 
-              September 2020
+                  July 2021
 
  Sun   Mon   Tue   Wed   Thu   Fri   Sat
-  30    31     1     2     3     4     5
-   6     7     8     9    10    11    12
-  13    14    15    16    17    18    19
-  20    21    22    23    24    25    26
   27    28    29    30     1     2     3
+   4     5     6     7     8     9    10
+  11    12    13    14    15    16    17
+  18    19    20    21    22    23    24
+  25    26    27    28    29    30    31
 ```
 
 Show the current month. The current day will be formatted in color.
@@ -51,10 +55,10 @@ Show the current month. The current day will be formatted in color.
 ### EXAMPLE 2
 
 ```powershell
-PS C:\>  Get-Calendar -start "3/1/2020" -end "5/1/2020"
+PS C:\>  Get-Calendar -start "3/1/2021" -end "5/1/2021"
 ```
 
-Display monthly calendars from March to May, 2020.
+Display monthly calendars from March to May, 2021.
 
 ### EXAMPLE 3
 
@@ -110,10 +114,12 @@ Accept wildcard characters: False
 
 ### -Start
 
-The first month to display.
+The first month to display. You must format the dates to match your culture. It should match the pattern you get from running this command:
+
+(Get-Culture).datetimeformat.ShortDatePattern
 
 ```yaml
-Type: DateTime
+Type: String
 Parameter Sets: span
 Aliases:
 
@@ -126,10 +132,12 @@ Accept wildcard characters: False
 
 ### -End
 
-The last month to display.
+The last month to display. You must format the dates to match your culture. It should match the pattern you get from running this command:
+
+(Get-Culture).datetimeformat.ShortDatePattern
 
 ```yaml
-Type: DateTime
+Type: String
 Parameter Sets: span
 Aliases:
 
@@ -142,10 +150,12 @@ Accept wildcard characters: False
 
 ### -HighlightDate
 
-Specific days (named) to highlight. These dates are color formatted using ANSI escape sequences.
+Specific days (named) to highlight. These dates are color formatted using ANSI escape sequences. You must format the dates to match your culture. It should match the pattern you get from running this command:
+
+(Get-Culture).datetimeformat.ShortDatePattern
 
 ```yaml
-Type: DateTime[]
+Type: String[]
 Parameter Sets: (All)
 Aliases:
 

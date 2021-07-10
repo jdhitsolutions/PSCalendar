@@ -14,8 +14,7 @@ Display a colorized calendar month in the console.
 ## SYNTAX
 
 ```yaml
-Show-Calendar [[-Month] <String>] [[-Year] <Int32>] [-HighlightDate <DateTime[]>] [-Position <Coordinates>]
- [<CommonParameters>]
+Show-Calendar [[-Month] <String>] [[-Year] <Int32>] [-HighlightDate <String[]>] [-Position <Coordinates>]  [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -84,16 +83,16 @@ Accept wildcard characters: False
 
 ### -HighlightDate
 
-Specify days to highlight. These dates are colored by ANSI escape sequences. You can modify them with Set-PSCalendarConfiguration.
+Specify days to highlight. These dates are colored by ANSI escape sequences. You can modify them with Set-PSCalendarConfiguration. You must format the dates tpo match your culture. It should match the pattern you get from running this command: (Get-Culture).datetimeformat.ShortDatePattern
 
 ```yaml
-Type: DateTime[]
+Type: String[]
 Parameter Sets: (All)
 Aliases:
 
 Required: False
 Position: Named
-Default value:
+Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
@@ -115,7 +114,6 @@ Accept wildcard characters: False
 ```
 
 ### CommonParameters
-
 This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable. For more information, see [about_CommonParameters](http://go.microsoft.com/fwlink/?LinkID=113216).
 
 ## INPUTS

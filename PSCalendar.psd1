@@ -6,7 +6,7 @@
     RootModule           = 'PSCalendar.psm1'
 
     # Version number of this module.
-    ModuleVersion        = '2.0.0'
+    ModuleVersion        = '2.1.0'
 
     # Supported PSEditions
     CompatiblePSEditions = @("Desktop", "Core")
@@ -21,7 +21,7 @@
     CompanyName          = 'JDH Information Technology Solutions, Inc.'
 
     # Copyright statement for this module
-    Copyright            = '(c) 2018-2020 JDH Information Technology Solutions, Inc. All rights reserved.'
+    Copyright            = '(c) 2018-2021 JDH Information Technology Solutions, Inc. All rights reserved.'
 
     # Description of the functionality provided by this module
     Description          = 'A PowerShell module to display a calendar in the console.'
@@ -41,17 +41,8 @@
     # Minimum version of the common language runtime (CLR) required by this module. This prerequisite is valid for the PowerShell Desktop edition only.
     # CLRVersion = ''
 
-    # Processor architecture (None, X86, Amd64) required by this module
-    # ProcessorArchitecture = ''
-
     # Modules that must be imported into the global environment prior to importing this module
     RequiredModules = @("ThreadJob")
-
-    # Assemblies that must be loaded prior to importing this module
-    # RequiredAssemblies = @()
-
-    # Script files (.ps1) that are run in the caller's environment prior to importing this module.
-    # ScriptsToProcess = @()
 
     # Type files (.ps1xml) to be loaded when importing this module
     # TypesToProcess = @()
@@ -59,11 +50,8 @@
     # Format files (.ps1xml) to be loaded when importing this module
     FormatsToProcess = @('formats\pscalendarconfiguration.format.ps1xml')
 
-    # Modules to import as nested modules of the module specified in RootModule/ModuleToProcess
-    # NestedModules = @()
-
     # Functions to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no functions to export.
-    FunctionsToExport    = @("*")
+    FunctionsToExport    = @('*')
 
     # Cmdlets to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no cmdlets to export.
     CmdletsToExport      = @()
@@ -72,16 +60,7 @@
     VariablesToExport    = @()
 
     # Aliases to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no aliases to export.
-    AliasesToExport      = @("*")
-
-    # DSC resources to export from this module
-    # DscResourcesToExport = @()
-
-    # List of all modules packaged with this module
-    # ModuleList = @()
-
-    # List of all files packaged with this module
-    # FileList = @()
+    AliasesToExport      = @('*')
 
     # Private data to pass to the module specified in RootModule/ModuleToProcess. This may also contain a PSData hashtable with additional module metadata used by PowerShell.
     PrivateData          = @{

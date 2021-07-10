@@ -8,7 +8,7 @@ if ($IsCoreCLR) {
     $esc = "`e"
 }
 else {
-    $esc = [Char]0x1b
+    $esc = [Char]27
 }
 
 $PSCalendarConfiguration = @{
@@ -49,3 +49,6 @@ If ($IsWindows -OR ($PSEdition -eq 'Desktop')) {
 else {
     Export-ModuleMember -Function 'Get-Calendar', 'Show-Calendar', 'Get-PSCalendarConfiguration', 'Set-PSCalendarConfiguration' -Alias scal
 }
+
+#use this version in verbose output to reflect module version
+$modver = (Test-ModuleManifest $PSScriptRoot\PSCalendar.psd1).Version

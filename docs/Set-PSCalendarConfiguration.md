@@ -1,7 +1,7 @@
 ---
 external help file: PSCalendar-help.xml
 Module Name: PSCalendar
-online version: https://github.com/jdhitsolutions/PSCalendar/blob/master/docs/Set-PSCalendarConfiguration.md
+online version: https://bit.ly/2Vli4uJ
 schema: 2.0.0
 ---
 
@@ -14,8 +14,8 @@ Modify the PSCalendar ANSI configuration.
 ## SYNTAX
 
 ```yaml
-Set-PSCalendarConfiguration [[-Title] <String>] [[-DayOfWeek] <String>] [[-Today] <String>]
- [[-Highlight] <String>] [-WhatIf] [-Confirm] [<CommonParameters>]
+Set-PSCalendarConfiguration [[-Title] <String>] [[-DayOfWeek] <String>]
+[[-Today] <String>] [[-Highlight] <String>] [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ## DESCRIPTION

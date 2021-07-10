@@ -14,8 +14,7 @@ Display a WPF-based calendar
 ## SYNTAX
 
 ```yaml
-Show-GuiCalendar [[-Start] <DateTime>] [[-End] <DateTime>] [-HighlightDate <DateTime[]>] [-Font <String>]
- [-FontStyle <String>] [-FontWeight <String>] [<CommonParameters>]
+Show-GuiCalendar [[-Start] <String>] [[-End] <String>] [-HighlightDate <String[]>] [-Font <String>] [-FontStyle <String>] [-FontWeight <String>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -23,6 +22,10 @@ Show-GuiCalendar [[-Start] <DateTime>] [[-End] <DateTime>] [-HighlightDate <Date
 If you are running Windows PowerShell or a version of PowerShell that supports Windows Presentation Foundation (WPF), you can display a graphical calendar. You can specify up to 3 months. There are also parameters to fine-tune the calendar style. The calendar form itself is transparent, but you should be able to click on it to drag it around your screen. You can also use the + and - keys to increase or decrease the calendar's opacity. You may have to click on a calendar before making any adjustments.
 
 This command launches the calendar in a separate runspace so that it doesn't block your prompt. However, if you close the PowerShell session that launched the calendar, the calendar will also automatically close.
+
+You must format the dates to match your culture. It should match the pattern you get from running this command:
+
+(Get-Culture).datetimeformat.ShortDatePattern
 
 ## EXAMPLES
 
@@ -49,7 +52,7 @@ Display 3 months with selected dates highlighted and style the calendar to font 
 Enter the last month to display by date, like 3/1/2019. You cannot display more than 3 months.
 
 ```yaml
-Type: DateTime
+Type: String
 Parameter Sets: (All)
 Aliases:
 
@@ -116,7 +119,7 @@ Accept wildcard characters: False
 Enter an array of dates to highlight like 12/25/2019.
 
 ```yaml
-Type: DateTime[]
+Type: String[]
 Parameter Sets: (All)
 Aliases:
 
@@ -132,7 +135,7 @@ Accept wildcard characters: False
 Enter the first month to display by date, like 1/1/2019.
 
 ```yaml
-Type: DateTime
+Type: String
 Parameter Sets: (All)
 Aliases:
 
@@ -145,8 +148,7 @@ Accept wildcard characters: False
 
 ### CommonParameters
 
-This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable.
-For more information, see about_CommonParameters (http://go.microsoft.com/fwlink/?LinkID=113216).
+This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable. For more information, see [about_CommonParameters](http://go.microsoft.com/fwlink/?LinkID=113216).
 
 ## INPUTS
 
@@ -158,7 +160,7 @@ For more information, see about_CommonParameters (http://go.microsoft.com/fwlink
 
 ## NOTES
 
-This function requires the WPF-related assemblies. It should work in Windows PowerShell. For PowerShell Core and later it might or might not work depending on your platform. You will receive a warning if any incompatibility is detected.
+This function requires the WPF-related assemblies. It should work in Windows PowerShell and PowerShell 7 on Windows. You will receive a warning if any incompatibility is detected.
 
 This command should have an alias of gcal.
 
