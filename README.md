@@ -103,7 +103,36 @@ PS C:\> Show-GuiCalendar 12/2018 2/2019 -highlight 12/24/18,12/25/18,12/31/18,1/
 
 ![show-guicalendar](assets/show-guicalendar.png)
 
-The calendar form is transparent. But you should be able to click on it to drag it around your screen. You can also use the + and - keys to increase or decrease the calendar's opacity. Be aware that if you close the PowerShell session that launched the calendar, the calendar too will close.
+The calendar form is transparent. But you should be able to click on it to drag it around your screen. You can also use the `+` and `-` keys to increase or decrease the calendar's opacity. Be aware that if you close the PowerShell session that launched the calendar, the calendar too will close.
+
+Beginning with module version 2.2.0 you can also customize the calendar background with an image:
+
+```powershell
+Show-GuiCalendar -BackgroundImage D:\images\blue-robot-ps-thumb.jpg -Stretch UniformToFill -FontWeight Bold
+```
+
+![blue-psrobot-calendar](assets/calendar-background.png)
+
+Or you can specify a color. You can specify a WPF brush color like Cornsilk or Wheat, or use a color code like `#FFF000`:
+
+```powershell
+Show-GuiCalendar -BackgroundColor "#FFF000"
+```
+
+![calendar-backgroundcolor](assets/calendar-bgcolor.png)
+
+### Highlight Dates with Notes
+
+Beginning with v2.2.0, in addition to specifying an array of dates to highlight, you can also use a hashtable. The key should be the highlight date, and the value a brief description.
+
+```powershell
+$h = @{"7/4/2021"="4th of July Holiday";"7/14/2021"="Bastille Day";"7/22/2021"="Ballet recitial"}
+Show-GuiCalendar -Start 7/1/2021 -HighlightDate $h -BackgroundColor wheat -FontWeight Bold -Font Tahoma
+```
+
+When you pass a hashtable, you will get a tooltip popup when you hover the mouse over the month.
+
+![calendar-popup](assets/calendar-popup.png)g
 
 This function requires the WPF-related assemblies. It should work in Windows PowerShell and PowerShell 7. You will receive a warning if any incompatibility is detected.
 
@@ -129,10 +158,26 @@ I've tried very hard to make the commands respect culture. Most commands now tha
 (Get-Culture).datetimeformat.ShortDatePattern
 ```
 
+In Windows PowerShell, all of the commands appear to respect culture settings. However, when running in PowerShell 7 there appears to be a bug in .NET Core and how it returns culture information for some cultures, specifically the first day of the week. If you run `Get-Calendar` or `Show-Calendar` and the week begins on the wrong day, use the `FirstDay` parameter to override the detected .NET values with the correct one.
+
+```dos
+PS C:\> Get-Calendar august -firstday Monday -highlight 1/8/2021,15,8,2021
+
+                August 2021
+
+ Mon   Tue   Wed   Thu   Fri   Sat   Sun
+  26    27    28    29    30    31     1
+   2     3     4     5     6     7     8
+   9    10    11    12    13    14    15
+  16    17    18    19    20    21    22
+  23    24    25    26    27    28    29
+  30    31     1     2     3     4
+```
+
+For example, if you are running under the `en-AU` culture, you would need to use this syntax.
+
 ## Potential Issues
 
-I have tried to make this module culture aware. Testing across cultures is not an easy process. If you encounter a problem and are not running PowerShell under the `EN-US` culture, run the calendar command you are trying to use with `-Verbose` and post the results in a new issue. Or if you have both Windows PowerShell and PowerShell 7 installed, try the same command in both versions.
+I have tried to make this module culture-aware. Testing across cultures is not an easy process. If you encounter a problem and are not running PowerShell under the `EN-US` culture, run the calendar command you are trying to use with `-Verbose` and post the results in a new issue. Or if you have both Windows PowerShell and PowerShell 7 installed, try the same command in both versions.
 
-*I'm tracking a potential discrepancy in how .NET returns culture information between the two PowerShell versions when using this module in PowerShell 7. If you use the module in Windows PowerShell, it should work as expected.*
-
-Last Updated *2021-07-09 14:12:41Z*
+Last Updated 2021-07-13 13:18:13Z

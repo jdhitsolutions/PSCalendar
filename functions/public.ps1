@@ -20,7 +20,7 @@ Function Get-Calendar {
                     $False
                 }
             })]
-        [string]$Month = (Get-Date -format MMMM),
+        [string]$Month = (Get-Date -Format MMMM),
 
         [Parameter(Position = 2, ParameterSetName = "month")]
         [ValidatePattern('^\d{4}$')]
@@ -45,7 +45,14 @@ Function Get-Calendar {
 
         [Parameter(HelpMessage = "Specify a collection of dates to highlight in the calendar display.")]
         [ValidateNotNullorEmpty()]
-        [string[]]$HighlightDate
+        [string[]]$HighlightDate,
+
+        [Parameter(HelpMessage = "Specify the first day of the week.")]
+        [ValidateNotNullOrEmpty()]
+        [System.DayOfWeek]$FirstDay = ([System.Globalization.CultureInfo]::CurrentCulture).DateTimeFormat.FirstDayOfWeek,
+
+        [Parameter(HelpMessage = "Do not use any ANSI formatting.")]
+        [switch]$NoANSI
     )
 
     Begin {
@@ -75,11 +82,11 @@ Function Get-Calendar {
         }
         else {
             #Figure out the first day of the start and end months
-           # Write-Verbose "Calculating start from month $($start.month) year $($start.year)"
-           # $start = [datetime]::new($start.year, $start.Month, 1)
-           Write-Verbose "Treating $start as [datetime]"
+            # Write-Verbose "Calculating start from month $($start.month) year $($start.year)"
+            # $start = [datetime]::new($start.year, $start.Month, 1)
+            Write-Verbose "Treating $start as [datetime]"
             $startd = $start -as [datetime]
-          # Write-Verbose "Calculating end from month $($end.month) year $($end.year)"
+            # Write-Verbose "Calculating end from month $($end.month) year $($end.year)"
             # $end = [datetime]::new($end.year, $end.month, 1)
             Write-Verbose "Treating $end as [datetime]"
             $endd = $end -as [datetime]
@@ -94,10 +101,10 @@ Function Get-Calendar {
         Write-Verbose "Go through the requested months."
         while ($startd -le $endd) {
             Write-Verbose "Looping from $($startd.DateTime)"
-            _getCalendar -start $Startd -highlightDates $highlightDate
+            _getCalendar -start $Startd -highlightDates $highlightDate -firstday $FirstDay -noAnsi:$NoANSI
 
             #And now move onto the next month
-            $startd= $startd.AddMonths(1)
+            $startd = $startd.AddMonths(1)
         }
     } #process
 
@@ -106,22 +113,19 @@ Function Get-Calendar {
     }
 } #end Get-Calendar
 
-
-#display a colorized calendar in the console
-
-
 #create a WPF-based calendar
+
 Function Show-GuiCalendar {
-    [cmdletbinding()]
+    [cmdletbinding(DefaultParameterSetName = "basic")]
     [OutputType("None")]
     [Alias("gcal")]
 
     Param(
         [Parameter(Position = 1, HelpMessage = "Enter the first month to display by date, like 1/1/2019.")]
         [ValidateNotNullOrEmpty()]
-        [string]$Start = (Get-date -format d),
+        [string]$Start = (Get-Date -Year $([datetime]::now.year) -Month $([datetime]::now.month) -Day 1).ToShortDateString(),
 
-        [Parameter(Position = 2, HelpMessage = "Enter the last month to display by date, like 3/1/2019. You cannot display more than 3 months.")]
+        [Parameter(Position = 2, HelpMessage = "Enter the last month to display by date, like 3/1/2021. You cannot display more than 3 months.")]
         [ValidateNotNullOrEmpty()]
         [ValidateScript( {
                 if ( ($_ -as [datetime]) -ge ($Start -as [datetime])) {
@@ -132,10 +136,10 @@ Function Show-GuiCalendar {
                     $False
                 }
             })]
-        [string]$End = (Get-Date -format d),
+        [string]$End = (Get-Date -Year $([datetime]::now.year) -Month $([datetime]::now.month) -Day 1).ToShortDateString(),
 
-        [Parameter(HelpMessage = "Enter an array of dates to highlight like 12/25/2019.")]
-        [string[]]$HighlightDate,
+        [Parameter(HelpMessage = "Enter an array of dates to highlight like 12/25/2021. Or a hashtable with the date as the key and a description for the value.")]
+        [object[]]$HighlightDate,
 
         [Parameter(HelpMessage = "Select a font family for your calendar" )]
         [ValidateSet("Segoi UI", "QuickType", "Tahoma", "Lucida Console", "Century Gothic")]
@@ -147,7 +151,21 @@ Function Show-GuiCalendar {
 
         [Parameter(HelpMessage = "Select a font weight for your calendar." )]
         [ValidateSet("Normal", "DemiBold", "Light", "Bold")]
-        [string]$FontWeight = "Normal"
+        [string]$FontWeight = "Normal",
+
+        [Parameter(ParameterSetName = "bgimage", HelpMessage = "Specify the path to an image to use as the background.")]
+        [ValidateScript( { Test-Path $_ })]
+        [string]$BackgroundImage,
+
+        [Parameter(ParameterSetName = "bgimage", HelpMessage = "Specify image stretch setting.")]
+        [System.Windows.Media.Stretch]$Stretch = "UniformToFill",
+
+        [Parameter(ParameterSetName = "bgcolor", HelpMessage = "Specify calendar background color.")]
+        [string]$BackgroundColor,
+
+        [Parameter(HelpMessage = "Specify the first day of the week.")]
+        [ValidateNotNullOrEmpty()]
+        [System.DayOfWeek]$FirstDay = ([System.Globalization.CultureInfo]::CurrentCulture).DateTimeFormat.FirstDayOfWeek
     )
 
     Write-Verbose "Starting $($myinvocation.MyCommand) [v$modver]"
@@ -160,20 +178,12 @@ Function Show-GuiCalendar {
     #add the necessary type library and bail out if there are errors which means the
     #platform lacks support for WPF
 
-    Try {
-        Add-Type -AssemblyName PresentationFramework -ErrorAction Stop
-        Add-Type –AssemblyName PresentationCore -ErrorAction Stop
-    }
-    Catch {
-        Write-Warning "Failed to load a required type library. Your version of PowerShell and or platform may not support WPF. $($_.exception.message)"
-        #bail out of the command
-        Return
-    }
-
+    Write-Verbose "Treating $start as a datetime"
     $startd = $start -as [datetime]
+    Write-Verbose "Treating $end as a datetime"
     $endd = $end -as [datetime]
-    Write-Verbose "Using start $startd"
-    Write-Verbose "Using end $endd"
+    Write-Verbose "Using Start: $($startd.ToLongDateString())"
+    Write-Verbose "Using End: $($endd.ToLongDateString())"
     $months = do {
         $startd
         $startd = $startd.AddMonths(1)
@@ -186,19 +196,34 @@ Function Show-GuiCalendar {
         Return
     }
 
-    $hl = Foreach ($item in $HighlightDate) {
-        Write-Verbose "Treating $item as a datetime"
-        $item -as [datetime]
+    Try {
+        Add-Type -AssemblyName PresentationFramework -ErrorAction Stop
+        Add-Type –AssemblyName PresentationCore -ErrorAction Stop
     }
+    Catch {
+        Write-Warning "Failed to load a required type library. Your version of PowerShell and/or platform may not support WPF. $($_.exception.message)"
+        #bail out of the command
+        Return
+    }
+
     #the title won't normally be seen but is set for development and test purposes
     $myParams = @{
         Months        = $months
         Height        = (200 * $months.count)
         Title         = "My Calendar"
-        HighlightDate = $hl
+        HighlightDate = $highlightDate
         Font          = $Font
         FontStyle     = $FontStyle
         FontWeight    = $FontWeight
+        FirstDay      = $FirstDay
+    }
+
+    if ($PSCmdlet.ParameterSetName -eq 'bgImage') {
+        $myParams.add("BackgroundImage", $BackgroundImage)
+        $myParams.Add("Stretch", $Stretch)
+    }
+    elseif ($pscmdlet.ParameterSetName -eq 'bgColor') {
+        $myParams.Add("BackgroundColor", $BackgroundColor)
     }
 
     Write-Verbose "Using these parameters"
@@ -225,13 +250,17 @@ Function Show-GuiCalendar {
     $psCmd = [PowerShell]::Create().AddScript( {
 
             Param (
-                [datetime[]]$HighlightDate,
+                [object[]]$HighlightDate,
                 [string]$Font,
                 [string]$FontStyle,
                 [string]$FontWeight,
                 [int]$Height,
                 [string]$Title,
-                [datetime[]]$Months
+                [datetime[]]$Months,
+                [string]$BackgroundImage,
+                [string]$Stretch,
+                [string]$BackgroundColor,
+                [string]$FirstDay
             )
 
             #create a window form.
@@ -247,9 +276,10 @@ Function Show-GuiCalendar {
             $bg = New-Object System.Windows.Media.SolidColorBrush
 
             $form.Background = $bg
+
             #color is set for development purposes. It won't be seen normally.
-            # $form.Background.Color = "green"
-            # $form.background.Opacity = 0
+            #  $form.Background.Color = "green"
+            # $form.background.Opacity = 50
             $form.ShowInTaskbar = $False
             $form.Add_Loaded( {
                     $form.Topmost = $True
@@ -280,7 +310,7 @@ Function Show-GuiCalendar {
                     }
                 })
 
-            $stack = $stack = New-Object System.Windows.Controls.StackPanel
+            $stack = New-Object System.Windows.Controls.StackPanel
             $stack.Width = $form.Width
             $stack.Height = $form.Height
             $stack.HorizontalAlignment = "center"
@@ -290,22 +320,52 @@ Function Show-GuiCalendar {
             #set for multiple calendars in unison
             $myCals = @()
             foreach ($month in $months) {
+
                 $cal = New-Object System.Windows.Controls.Calendar
 
+                If ($HighlightDate[0] -is [hashtable]) {
+                    [array]$hl = Foreach ($item in $HighlightDate[0].Keys) {
+                        Write-Verbose "Treating $item as a datetime"
+                        $item -as [datetime] | Where-Object { $_.month -eq $month.month }
+                    }
+                    if ($hl.count -gt 0) {
+                        $thismonth = $highlightdate[0].GetEnumerator() | Where-Object { ($_.name -as [datetime]).month -eq $month.month }
+                        $hltip = ($thismonth.GetEnumerator() | Sort-Object { $_.name -as [datetime] } | Format-Table -HideTableHeaders -AutoSize | Out-String).Trim()
+                        if ($hltip -match "\w+") {
+                            $cal.ToolTip = $hltip
+                        }
+                        else {
+                            #do this when there is only one matching item
+                            $cal.Tooltip = ($thismonth | Format-Table -HideTableHeaders -AutoSize | Out-String).Trim()
+                        }
+                    }
+                    else {
+                        #uncomment for dev and debugging
+                        #$cal.tooltip = "no dates found for $($month.month)"
+                    }
+                }
+                else {
+                    [array]$hl = Foreach ($item in $HighlightDate) {
+                        Write-Verbose "Treating $item as a datetime"
+                        $item -as [datetime] | Where-Object { $_.month -eq $month.month }
+                    }
+                    #uncomment for dev and debugging
+                    # $cal.tooltip = "array"
+                }
+
                 $cal.DisplayMode = "Month"
+                $cal.FirstDayOfWeek = $FirstDay
 
-                <#
-                notes for future development
-                $calbg = new-object System.Windows.Media.ImageBrush
-                $calbg.Opacity = "0.3"
-                $calbg.ImageSource = "c:\scripts\zazu.gif"
-                $cal.Background = $calbg
+               if ($BackgroundImage) {
+                    $calbg = New-Object System.Windows.Media.ImageBrush -ArgumentList $BackgroundImage
+                    $calbg.Stretch = $Stretch
+                    $cal.Background = $calbg
+                }
+                elseif ($BackgroundColor) {
+                    $cal.Background = $BackgroundColor
+                }
 
-                $calbg = [System.Windows.Media.Brushes]::Aquamarine
-                $cal.Background =$calbg
-
-                #>
-                $cal.Opacity = 1
+                $cal.Opacity = 1.0
                 $cal.FontFamily = $font
                 $cal.FontSize = 24
                 $cal.FontWeight = $FontWeight
@@ -320,8 +380,8 @@ Function Show-GuiCalendar {
                 $cal.VerticalAlignment = "top"
 
                 $cal.SelectionMode = "multipleRange"
-                if ($highlightdate) {
-                    foreach ($d in $HighlightDate) {
+                if ($hl) {
+                    foreach ($d in $hl) {
                         if ($d.month -eq $month.Month) {
                             $cal.SelectedDates.add($d)
                         }
@@ -331,11 +391,10 @@ Function Show-GuiCalendar {
                 $cal.add_DisplayDateChanged( {
                         # add the selected days for the currently displayed month
                         [datetime]$month = $cal.Displaydate
-                        if ($highlightdate) {
-                            foreach ($d in $HighlightDate) {
+                        if ($hl) {
+                            foreach ($d in $hl) {
                                 if ($d.month -eq $month.Month) {
                                     $cal.SelectedDates.add($d)
-
                                 }
                             }
                         }
@@ -344,6 +403,7 @@ Function Show-GuiCalendar {
 
                 $stack.addchild($cal)
                 $myCals += $cal
+                Remove-Variable hl, hltip -Force
             } #foreach month
 
             $btn = New-Object System.Windows.Controls.Button
@@ -360,6 +420,7 @@ Function Show-GuiCalendar {
 
             $form.AddChild($stack)
             [void]$form.ShowDialog()
+
         }) #addScript
 
     [void]$psCmd.AddParameters($myparams)
@@ -378,7 +439,6 @@ Function Show-GuiCalendar {
 #region private functions
 
 #a helper function to retrieve names
-
 
 #endregion
 
@@ -401,13 +461,17 @@ Function Show-Calendar {
                     $False
                 }
             })]
-        [string]$Month = (Get-Date -format MMMM),
+        [string]$Month = (Get-Date -Format MMMM),
 
         [Parameter(Position = 2, ParameterSetName = "month")]
         [ValidatePattern('^\d{4}$')]
         [int]$Year = (Get-Date).Year,
 
         [string[]]$HighlightDate,
+
+        [Parameter(HelpMessage = "Specify the first day of the week.")]
+        [ValidateNotNullOrEmpty()]
+        [System.DayOfWeek]$FirstDay = ([System.Globalization.CultureInfo]::CurrentCulture).DateTimeFormat.FirstDayOfWeek,
 
         [System.Management.Automation.Host.Coordinates]$Position
     )
@@ -423,7 +487,7 @@ Function Show-Calendar {
     }
 
     #add default values if not bound
-    $params = "Month", "Year"
+    $params = "Month", "Year", "FirstDay"
     foreach ($param in $params) {
         if (-not $PSBoundParameters.ContainsKey($param)) {
             $PSBoundParameters.Add($param, $((Get-Variable -Name $param).value))
@@ -453,7 +517,7 @@ Function Show-Calendar {
 
 Function Get-PSCalendarConfiguration {
     [cmdletbinding()]
-     [outputType("PSCalendarConfiguration")]
+    [outputType("PSCalendarConfiguration")]
     Param()
 
     Write-Verbose "Starting $($myinvocation.MyCommand) [v$modver]"
@@ -466,10 +530,10 @@ Function Get-PSCalendarConfiguration {
 
     [pscustomobject]@{
         PSTypeName = "PSCalendarConfiguration"
-        Title      = "$($pscalendarConfiguration.title){0}{1}$esc[0m" -f $e, $(($PSCalendarConfiguration.Title.ToCharArray() | Select-Object -skip 1 ) -join "")
-        DayofWeek  = "$($pscalendarConfiguration.DayOfWeek){0}{1}$esc[0m" -f $e, $(($PSCalendarConfiguration.DayOfWeek.ToCharArray() | Select-Object -skip 1 ) -join "")
-        Today      = "$($pscalendarConfiguration.Today){0}{1}$esc[0m" -f $e, $(($PSCalendarConfiguration.Today.ToCharArray() | Select-Object -skip 1 ) -join "")
-        Highlight  = "$($pscalendarConfiguration.highlight){0}{1}$esc[0m" -f $e, $(($PSCalendarConfiguration.Highlight.ToCharArray() | Select-Object -skip 1 ) -join "")
+        Title      = "$($pscalendarConfiguration.title){0}{1}$esc[0m" -f $e, $(($PSCalendarConfiguration.Title.ToCharArray() | Select-Object -Skip 1 ) -join "")
+        DayofWeek  = "$($pscalendarConfiguration.DayOfWeek){0}{1}$esc[0m" -f $e, $(($PSCalendarConfiguration.DayOfWeek.ToCharArray() | Select-Object -Skip 1 ) -join "")
+        Today      = "$($pscalendarConfiguration.Today){0}{1}$esc[0m" -f $e, $(($PSCalendarConfiguration.Today.ToCharArray() | Select-Object -Skip 1 ) -join "")
+        Highlight  = "$($pscalendarConfiguration.highlight){0}{1}$esc[0m" -f $e, $(($PSCalendarConfiguration.Highlight.ToCharArray() | Select-Object -Skip 1 ) -join "")
     }
     Write-Verbose "Ending $($myinvocation.mycommand)"
 }

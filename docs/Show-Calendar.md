@@ -14,7 +14,7 @@ Display a colorized calendar month in the console.
 ## SYNTAX
 
 ```yaml
-Show-Calendar [[-Month] <String>] [[-Year] <Int32>] [-HighlightDate <String[]>] [-Position <Coordinates>]  [<CommonParameters>]
+Show-Calendar [[-Month] <String>] [[-Year] <Int32>] [-HighlightDate <String[]>] [-FirstDay <DayOfWeek>] [-Position <Coordinates>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -109,6 +109,22 @@ Aliases:
 Required: False
 Position: Named
 Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -FirstDay
+
+Specify the first day of the week. There is a potential bug in .NET Core where the detected first day of the week is incorrect. If that is true for your culture, use this parameter to manually specify the correct first day of the week.
+
+```yaml
+Type: DayOfWeek
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: ([System.Globalization.CultureInfo]::CurrentCulture).DateTimeFormat.FirstDayOfWeek
 Accept pipeline input: False
 Accept wildcard characters: False
 ```

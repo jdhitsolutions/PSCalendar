@@ -1,5 +1,16 @@
 # Change Log for PSCalendar
 
+## v2.2.0
+
++ Revised commands to let the user specify the first day of the week. There appears to be a bug in .NET Core that doesn't always return the correct first day of the week. Commands will default to this value, but I want to give a user an option to specify an alternate value if necessary. This is a continuation of work to resolve [Issue #21](https://github.com/jdhitsolutions/PSCalendar/issues/21).
++ Modified `Show-GuiCalendar` to default to first day of current month. [Issue #23](https://github.com/jdhitsolutions/PSCalendar/issues/23).
++ Updated `Show-GuiCalendar` to let the user specify a background image or color. [Issue #14](https://github.com/jdhitsolutions/PSCalendar/issues/14).
++ Modified `Show-GuiCalendar` to let the user pass a hashtable of highlight date information so that a summary can be displayed as a tooltip. [Issue #7](https://github.com/jdhitsolutions/PSCalendar/issues/7).
++ Modified `Get-Calendar` to support a no ANSI parameter. [Issue #24](https://github.com/jdhitsolutions/PSCalendar/issues/24).
++ Removed development code.
++ Updated help files.
++ Updated `README.md`.
+
 ## v2.1.0
 
 + Updated license.txt

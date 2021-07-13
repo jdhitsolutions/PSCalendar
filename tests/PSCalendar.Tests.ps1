@@ -9,12 +9,17 @@ $ModuleManifestPath = "$PSScriptRoot\..\$ModuleManifestName"
 If (Get-Module $moduleName) {
     Remove-Module $moduleName
 }
+
+Add-Type -AssemblyName PresentationFramework -ErrorAction Stop
+Add-Type –AssemblyName PresentationCore -ErrorAction Stop
+
 Import-Module $ModuleManifestPath -Force
 
 Describe $ModuleName {
     $myModule = Test-ModuleManifest -Path $ModuleManifestPath
+    $exported = Get-Command -Module $ModuleName -CommandType Function
     Context Manifest {
-        It 'Passes Test-ModuleManifest' {
+        It "Passes Test-ModuleManifest" {
             $myModule | Should Not BeNullOrEmpty
         }
         It "Should have a root module" {
@@ -43,7 +48,7 @@ Describe $ModuleName {
         }
     }
     Context Exports {
-        $exported = Get-Command -Module $ModuleName -CommandType Function
+
         It "Should have an exported command of Get-Calendar" {
             $exported.name | Should Contain "Get-Calendar"
         }
@@ -67,7 +72,7 @@ Describe $ModuleName {
         It "Should have a Docs folder" {
             Get-Item $PSScriptRoot\..\docs | Should Be $True
         }
-        foreach ($cmd in $myModule.ExportedFunctions.keys) {
+        foreach ($cmd in $exported.name) {
             It "Should have a markdown help file for $cmd" {
                 Get-Item $PSScriptRoot\..\docs\$cmd.md | Should be $True
             }
@@ -113,7 +118,7 @@ InModuleScope $moduleName {
             {Get-Calendar -year 20} | Should Throw
             {Get-Calendar -year 20200} | Should Throw
         }
-        It "Should let you higlight a date" {
+        It "Should let you highlight a date" {
             $c = Get-Calendar -month January -Year 2020 -HighlightDate 1/1/2020
             $c -match "\*  1\*" | Should Be $True
         } -skip
@@ -146,4 +151,5 @@ InModuleScope $moduleName {
     } -tag command
 }
 
-Write-Host "You will need to manually kill any graphical calendars that were spawned from the test. You may also see errors if running this test under a non-North American culture with differing datetime formats." -ForegroundColor yellow
+Write-Host "`n"
+Write-Warning "You will need to manually kill any graphical calendars that were spawned from the test. You may also see errors if running this test under a non-North American culture with differing datetime formats."

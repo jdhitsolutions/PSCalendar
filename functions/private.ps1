@@ -2,10 +2,11 @@ function _getCalendar {
     [cmdletbinding()]
     Param(
         [datetime]$start = (Get-Date),
-        [string[]]$highlightDates
+        [System.DayOfWeek]$FirstDay = "Sunday",
+        [string[]]$highlightDates,
+        [switch]$NoANSI
     )
 
-    #TODO need to add enough days to month which is a problem when the week starts on Monday
     # https://fmoralesdev.com/2019/03/21/c-datetime-examples/
 
     $currCulture = [system.globalization.cultureinfo]::CurrentCulture
@@ -18,7 +19,6 @@ function _getCalendar {
             $item -as [datetime]
         }
         write-Verbose "Detected $($highlightdates.count) highlight dates"
-        $highlightDates | out-file d:\temp\d.txt
         $highlightDates | ForEach-Object { Write-Verbose $_.ToString()}
     }
 
@@ -28,10 +28,13 @@ function _getCalendar {
     Write-Verbose "Totals days in $mo/$yr is $max"
     $end = Get-Date -Year $yr -Month $mo -Day $max
     Write-Verbose "Ending $end"
-    $dateTimeFormat = $currCulture.DateTimeFormat
-    $fd = $dateTimeFormat.FirstDayOfWeek.value__
 
-    Write-Verbose "First day of the week is $($dateTimeFormat.FirstDayOfWeek) [$fd]"
+    #$dateTimeFormat = $currCulture.DateTimeFormat
+
+    $fd = $FirstDay.value__
+    #$dateTimeFormat.FirstDayOfWeek.value__
+
+    Write-Verbose "First day of the week is $FirstDay [$fd]"
     $currentDay = $start
 
     $day0 = @()
@@ -116,23 +119,42 @@ function _getCalendar {
     if ($fd -eq 0 ) {
         for ($n = 0; $n -lt $abbreviated.count; $n++) {
             $d = $abbreviated[$n].padleft(4, " ")
-            $days += "{0}{1}{2}" -f $PScalendarConfiguration.DayofWeek, $d, "$esc[0m"
-
+            if ($NoANSI) {
+                $days += $d
+            }
+            else {
+                $days += "{0}{1}{2}" -f $PScalendarConfiguration.DayofWeek, $d, "$esc[0m"
+            }
         }
     }
     else {
         for ($n = 1; $n -lt $abbreviated.count; $n++) {
             $d = $abbreviated[$n].padleft(4, " ")
-            $days += "{0}{1}{2}" -f $PScalendarConfiguration.DayofWeek, $d, "$esc[0m"
+            if ($NoANSI) {
+                $days += $d
+            }
+            else {
+                $days += "{0}{1}{2}" -f $PScalendarConfiguration.DayofWeek, $d, "$esc[0m"
+            }
 
         }
         $d = $abbreviated[0].padleft(4, " ")
-        $days += "{0}{1}{2}" -f $PScalendarConfiguration.DayofWeek, $d, "$esc[0m"
+        if ($NoANSI) {
+            $days += $d
+        }
+        else {
+            $days += "{0}{1}{2}" -f $PScalendarConfiguration.DayofWeek, $d, "$esc[0m"
+        }
 
     }
 
     $plainHead = "$($mo.Month) $($mo.Year)"
-    $head = "{0}{1}{2}" -f $pscalendarConfiguration.title, $plainhead, "$esc[0m"
+    if ($NoANSI) {
+        $head = $plainHead
+    }
+    else {
+        $head = "{0}{1}{2}" -f $pscalendarConfiguration.title, $plainhead, "$esc[0m"
+    }
 
     $dayhead = $days -join '  '
     Write-Verbose "Using day heading $dayhead"
@@ -144,10 +166,11 @@ function _getCalendar {
             if ($theDay) {
                 $d = $theDay.day
                 $value = $d.tostring().padleft(4, ' ')
-                if ($theDay.date -eq (Get-Date).date) {
+                if ( ($theDay.date -eq (Get-Date).date) -AND (-Not $NoANSI)) {
                     "{0}{1}{2}" -f $PScalendarConfiguration.Today, $value, "$esc[0m"
+
                 }
-                elseif ( $highlightDates -contains $theDay.date) {
+                elseif ( ($highlightDates -contains $theDay.date) -AND (-Not $NoANSI)) {
                     "{0}{1}{2}" -f $PScalendarConfiguration.Highlight, $value, "$esc[0m"
                 }
                 else {

@@ -16,13 +16,13 @@ Displays a visual representation of a calendar.
 ### month (Default)
 
 ```yaml
-Get-Calendar [[-Month] <String>] [[-Year] <Int32>] [-HighlightDate <String[]>] [<CommonParameters>]
+Get-Calendar [[-Month] <String>] [[-Year] <Int32>] [-HighlightDate <String[]>] [-FirstDay <DayOfWeek>] [-NoANSI] [<CommonParameters>]
 ```
 
 ### span
 
 ```yaml
-Get-Calendar -Start <String> -End <String> [-HighlightDate <String[]>] [<CommonParameters>]
+Get-Calendar -Start <String> -End <String> [-HighlightDate <String[]>] [-FirstDay <DayOfWeek>] [-NoANSI] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -77,6 +77,32 @@ PS C:\> Get-Calendar December -HighlightDate 12/4/2020,12/25/2020,12/24/2020,12/
 ```
 
 Display a month and highlight specific dates in color.
+
+### EXAMPLE 4
+
+```powershell
+PS C:\> Get-Calendar august -firstday Monday -highlight 1/8/2021,15,8,2021
+
+                August 2021
+
+ Mon   Tue   Wed   Thu   Fri   Sat   Sun
+  26    27    28    29    30    31     1
+   2     3     4     5     6     7     8
+   9    10    11    12    13    14    15
+  16    17    18    19    20    21    22
+  23    24    25    26    27    28    29
+  30    31     1     2     3     4
+```
+
+In Windows PowerShell, all of the commands appear to respect culture settings. However, when running in PowerShell 7 there appears to be a bug in .NET Core and how it returns culture information for some cultures, specifically the first day of the week. If you run `Get-Calendar` or `Show-Calendar` and the week begins on the wrong day, use the `FirstDay` parameter to override the detected .NET values with the correct one. If you are running under the en-AU culture in PowerShell 7, you would need to run this command.
+
+### EXAMPLE 5
+
+```powershell
+PS C:\> Get-Calendar -NoANSI -Start 7/1/2021 -end 9/1/2021  | Out-File c:\work\Q3.txt
+```
+
+Get the calendars for a month of ranges with no ANSI formatting and save the output to a text file.
 
 ## PARAMETERS
 
@@ -162,6 +188,38 @@ Aliases:
 Required: False
 Position: Named
 Default value: (Get-Date).date.toString()
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -FirstDay
+
+Specify the first day of the week. There is a potential bug in .NET Core where the detected first day of the week is incorrect. If that is true for your culture, use this parameter to manually specify the correct first day of the week.
+
+```yaml
+Type: DayOfWeek
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: ([System.Globalization.CultureInfo]::CurrentCulture).DateTimeFormat.FirstDayOfWeek
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -NoANSI
+
+Do not use any ANSI formatting. The output will be plain-text. This also means that the current day and highlight dates will not be reflected in the output.
+
+```yaml
+Type: SwitchParameter
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
