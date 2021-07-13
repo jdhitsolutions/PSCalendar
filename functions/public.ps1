@@ -198,7 +198,7 @@ Function Show-GuiCalendar {
 
     Try {
         Add-Type -AssemblyName PresentationFramework -ErrorAction Stop
-        Add-Type –AssemblyName PresentationCore -ErrorAction Stop
+        Add-Type -AssemblyName PresentationCore -ErrorAction Stop
     }
     Catch {
         Write-Warning "Failed to load a required type library. Your version of PowerShell and/or platform may not support WPF. $($_.exception.message)"

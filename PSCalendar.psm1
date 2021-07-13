@@ -18,6 +18,13 @@ $PSCalendarConfiguration = @{
     Highlight = "$esc[92m"
 }
 
+#define a function to open the README pdf file
+Function Show-PSCalendarHelp {
+    [cmdletbinding()]
+    param()
+
+    Start-process $PSScriptRoot\README.pdf
+}
 
 #define an auto completer for the Month parameter
 Register-ArgumentCompleter -CommandName Get-Calendar, Show-Calendar -ParameterName Month -ScriptBlock {
@@ -44,10 +51,28 @@ Register-ArgumentCompleter -CommandName Get-Calendar, Show-Calendar -ParameterNa
 
 #Export appropriate module members based on whether the user is running Windows or not.
 If ($IsWindows -OR ($PSEdition -eq 'Desktop')) {
-    Export-ModuleMember -Function 'Get-Calendar', 'Show-Calendar', 'Show-GuiCalendar', 'Get-PSCalendarConfiguration', 'Set-PSCalendarConfiguration' -Alias 'cal', 'scal', 'gcal'
+    Export-ModuleMember -Function 'Show-PSCalendarHelp','Get-Calendar', 'Show-Calendar', 'Show-GuiCalendar', 'Get-PSCalendarConfiguration', 'Set-PSCalendarConfiguration' -Alias 'cal', 'scal', 'gcal'
+
+    #define an autocompleter for background color
+    Register-ArgumentCompleter -CommandName Show-GuiCalendar -ParameterName BackgroundColor -ScriptBlock {
+        param($commandName, $parameterName, $wordToComplete, $commandAst, $fakeBoundParameter)
+
+        Try {
+            Add-Type -AssemblyName PresentationFramework -ErrorAction Stop
+            Add-Type -AssemblyName PresentationCore -ErrorAction Stop
+
+            [System.Windows.Media.Brushes].GetProperties().Name |
+            ForEach-Object {
+                [System.Management.Automation.CompletionResult]::new($_, $_, 'ParameterValue', $_)
+            }
+        }
+        Catch {
+            #if assemblies can't be loaded don't do anything
+        }
+    }
 }
 else {
-    Export-ModuleMember -Function 'Get-Calendar', 'Show-Calendar', 'Get-PSCalendarConfiguration', 'Set-PSCalendarConfiguration' -Alias scal
+    Export-ModuleMember -Function 'Show-PSCalendarHelp', 'Get-Calendar', 'Show-Calendar', 'Get-PSCalendarConfiguration', 'Set-PSCalendarConfiguration' -Alias scal
 }
 
 #use this version in verbose output to reflect module version

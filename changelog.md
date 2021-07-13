@@ -7,6 +7,8 @@
 + Updated `Show-GuiCalendar` to let the user specify a background image or color. [Issue #14](https://github.com/jdhitsolutions/PSCalendar/issues/14).
 + Modified `Show-GuiCalendar` to let the user pass a hashtable of highlight date information so that a summary can be displayed as a tooltip. [Issue #7](https://github.com/jdhitsolutions/PSCalendar/issues/7).
 + Modified `Get-Calendar` to support a no ANSI parameter. [Issue #24](https://github.com/jdhitsolutions/PSCalendar/issues/24).
++ Added an argument completer for the `BackgroundColor` parameter of `Show-GuiCalendar` for Windows systems.
++ Added `Show-PSCalendarHelp` which will open a local PDF version of the `README.md` file.
 + Removed development code.
 + Updated help files.
 + Updated `README.md`.

@@ -2,7 +2,9 @@
 
 [![PSGallery Version](https://img.shields.io/powershellgallery/v/PSCalendar.png?style=for-the-badge&logo=powershell&label=PowerShell%20Gallery)](https://www.powershellgallery.com/packages/PSCalendar/) [![PSGallery Downloads](https://img.shields.io/powershellgallery/dt/PSCalendar.png?style=for-the-badge&label=Downloads)](https://www.powershellgallery.com/packages/PSCalendar/)
 
-This module contains a few functions for displaying a calendar in the PowerShell console. The primary function is based on code originally published by Lee Holmes at [http://www.leeholmes.com/blog/2008/12/03/showing-calendars-in-your-oof-messages/](http://www.leeholmes.com/blog/2008/12/03/showing-calendars-in-your-oof-messages/). However, `v2.0.0` of this module contains a complete rewrite of the core function.
+This module contains a few functions for displaying a calendar in the PowerShell console. The primary function is based on code originally published by Lee Holmes at [http://www.leeholmes.com/blog/2008/12/03/showing-calendars-in-your-oof-messages/](http://www.leeholmes.com/blog/2008/12/03/showing-calendars-in-your-oof-messages/). However, `v2.0.0` of this module contains a complete rewrite of the core functions.
+
+*After installing the module, you can view a local PDF version of this file by running `Show-PSCalendarHelp`.*
 
 ## Installation
 
@@ -121,6 +123,8 @@ Show-GuiCalendar -BackgroundColor "#FFF000"
 
 ![calendar-backgroundcolor](assets/calendar-bgcolor.png)
 
+On Windows platforms, the `-BackgroundColor` parameter will autocomplete the available brush colors.
+
 ### Highlight Dates with Notes
 
 Beginning with v2.2.0, in addition to specifying an array of dates to highlight, you can also use a hashtable. The key should be the highlight date, and the value a brief description.
@@ -142,7 +146,9 @@ Beginning with v2.0.0 of this module, ANSI escape sequences used to format the c
 
 ![configuration](assets/pscalendar-configuration-1.png)
 
-The output will show you the escape sequence appropriate for your PowerShell version. If you want to change a setting, you can use [Set-PSCalendarConfiguration](docs/Set-PSCalendarConfiguration.md)
+The output will show you the escape sequence appropriate for your PowerShell version. If you want to change a setting, you can use:
+
+[Set-PSCalendarConfiguration](docs/Set-PSCalendarConfiguration.md)
 
 You need to include the escape character but you do not need to include the closing escape sequence.
 
@@ -180,4 +186,4 @@ For example, if you are running under the `en-AU` culture, you would need to use
 
 I have tried to make this module culture-aware. Testing across cultures is not an easy process. If you encounter a problem and are not running PowerShell under the `EN-US` culture, run the calendar command you are trying to use with `-Verbose` and post the results in a new issue. Or if you have both Windows PowerShell and PowerShell 7 installed, try the same command in both versions.
 
-Last Updated 2021-07-13 13:18:13Z
+Last Updated 2021-07-13 13:50:40Z

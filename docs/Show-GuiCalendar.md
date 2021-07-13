@@ -187,7 +187,7 @@ Accept wildcard characters: False
 
 ### -BackgroundColor
 
-Specify calendar background color.
+Specify calendar background color. On Windows platforms you should be able to tab complete possible colors. Or you can use a color format like '#FFF000'. Remember to wrap this kind of value in quotes.
 
 ```yaml
 Type: String
@@ -219,7 +219,7 @@ Accept wildcard characters: False
 
 ### -FirstDay
 
-Specify the first day of the week.
+Specify the first day of the week. Normally, .NET should detect the first day of the week based on culture settings. But if for some reason, .NET is detecting incorrect information, you can manually set the first day of the week with this parameter.
 
 ```yaml
 Type: DayOfWeek
@@ -235,7 +235,7 @@ Accept wildcard characters: False
 
 ### -Stretch
 
-Specify image stretch setting.
+Specify image stretch setting. Possible values are None, Fill, Uniform, and UniformToFill
 
 ```yaml
 Type: Stretch
