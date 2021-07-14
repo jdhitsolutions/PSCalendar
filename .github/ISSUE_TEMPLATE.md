@@ -2,6 +2,7 @@
 
 ## What is the syntax or expression you are using?
 <!-- copy command you are trying to run -->
+<!-- If you have Windows PowerShell and PowerShell 7 installed, try in both versions and report what happens -->
 
 ## What Happens?
 <!-- copy the results especially any error messages. Screenshots are helpful. -->
