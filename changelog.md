@@ -1,5 +1,13 @@
 # Change Log for PSCalendar
 
+## v2.3.0
+
++ Added `Get-PNCalendar` and its alias `ncal`. [Issue #16](https://github.com/jdhitsolutions/PSCalendar/issues/16).
++ Added `Get-MonthName` function.
++ Updated Pester tests.
++ Updated help documentation.
++ Updated `README.md`.
+
 ## v2.2.0
 
 + Revised commands to let the user specify the first day of the week. There appears to be a bug in .NET Core that doesn't always return the correct first day of the week. Commands will default to this value, but I want to give a user an option to specify an alternate value if necessary. This is a continuation of work to resolve [Issue #21](https://github.com/jdhitsolutions/PSCalendar/issues/21).

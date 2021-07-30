@@ -27,7 +27,7 @@ Function Show-PSCalendarHelp {
 }
 
 #define an auto completer for the Month parameter
-Register-ArgumentCompleter -CommandName Get-Calendar, Show-Calendar -ParameterName Month -ScriptBlock {
+Register-ArgumentCompleter -CommandName Get-Calendar, Show-Calendar,Get-NCalendar -ParameterName Month -ScriptBlock {
     param($commandName, $parameterName, $wordToComplete, $commandAst, $fakeBoundParameter)
 
     #get month names, filtering out blanks
@@ -38,7 +38,7 @@ Register-ArgumentCompleter -CommandName Get-Calendar, Show-Calendar -ParameterNa
 }
 
 #define an auto completer for the Year parameter
-Register-ArgumentCompleter -CommandName Get-Calendar, Show-Calendar -ParameterName Year -ScriptBlock {
+Register-ArgumentCompleter -CommandName Get-Calendar, Show-Calendar,Get-NCalendar -ParameterName Year -ScriptBlock {
     param($commandName, $parameterName, $wordToComplete, $commandAst, $fakeBoundParameter)
 
     $first = (Get-Date).Year
@@ -51,7 +51,9 @@ Register-ArgumentCompleter -CommandName Get-Calendar, Show-Calendar -ParameterNa
 
 #Export appropriate module members based on whether the user is running Windows or not.
 If ($IsWindows -OR ($PSEdition -eq 'Desktop')) {
-    Export-ModuleMember -Function 'Show-PSCalendarHelp','Get-Calendar', 'Show-Calendar', 'Show-GuiCalendar', 'Get-PSCalendarConfiguration', 'Set-PSCalendarConfiguration' -Alias 'cal', 'scal', 'gcal'
+    Export-ModuleMember -Function 'Show-PSCalendarHelp','Get-Calendar',
+    'Show-Calendar', 'Show-GuiCalendar', 'Get-PSCalendarConfiguration',
+    'Set-PSCalendarConfiguration','Get-NCalendar','Get-MonthName' -Alias 'cal', 'scal', 'gcal', 'ncal'
 
     #define an autocompleter for background color
     Register-ArgumentCompleter -CommandName Show-GuiCalendar -ParameterName BackgroundColor -ScriptBlock {
@@ -72,7 +74,9 @@ If ($IsWindows -OR ($PSEdition -eq 'Desktop')) {
     }
 }
 else {
-    Export-ModuleMember -Function 'Show-PSCalendarHelp', 'Get-Calendar', 'Show-Calendar', 'Get-PSCalendarConfiguration', 'Set-PSCalendarConfiguration' -Alias scal
+    Export-ModuleMember -Function 'Show-PSCalendarHelp', 'Get-Calendar',
+    'Show-Calendar', 'Get-PSCalendarConfiguration',
+    'Set-PSCalendarConfiguration','Get-MonthName' -Alias scal
 }
 
 #use this version in verbose output to reflect module version

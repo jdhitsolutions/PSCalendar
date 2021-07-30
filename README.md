@@ -125,6 +125,82 @@ Show-GuiCalendar -BackgroundColor "#FFF000"
 
 On Windows platforms, the `-BackgroundColor` parameter will autocomplete the available brush colors.
 
+## [Get-NCalendar](docs/Get-NCalendar.md)
+
+The Linux world has an *ncal* command which displays the month in a vertical fashion. `Get-NCalendar` and its alias `ncal` work in a similar manner. The default is for the current month and year.
+
+![ncal](assets/ncal-1.png)
+
+The current date will be highlighted unless you use `-HideHighlight`. You must use the full month name, although there is tab completion.
+
+```dos
+PS C:\> ncal January 2022
+    January 2022
+Sun   2  9 16 23 30
+Mon   3 10 17 24 31
+Tue      4 11 18 25
+Wed      5 12 19 26
+Thu      6 13 20 27
+Fri      7 14 21 28
+Sat   1  8 15 22 29
+```
+
+This command does not support date highlighting. See below.
+
+### [Get-MonthName](docs/Get-MonthName.md)
+
+This simple command will list the full month names for the current culture.
+
+```dos
+PS C:\> Get-MonthName
+January
+February
+March
+April
+May
+June
+July
+August
+September
+October
+November
+December
+```
+
+You might use this to build a larger `ncal` listing.
+
+```dos
+PS C:\> Get-MonthName | Select-Object -first 3 | Get-NCalendar -Year 2022
+    January 2022
+Sun   2  9 16 23 30
+Mon   3 10 17 24 31
+Tue      4 11 18 25
+Wed      5 12 19 26
+Thu      6 13 20 27
+Fri      7 14 21 28
+Sat   1  8 15 22 29
+
+
+    February 2022
+Sun      6 13 20 27
+Mon      7 14 21 28
+Tue      1  8 15 22
+Wed      2  9 16 23
+Thu      3 10 17 24
+Fri      4 11 18 25
+Sat      5 12 19 26
+
+
+      March 2022
+Sun      6 13 20 27
+Mon      7 14 21 28
+Tue   1  8 15 22 29
+Wed   2  9 16 23 30
+Thu   3 10 17 24 31
+Fri      4 11 18 25
+Sat      5 12 19 26
+```
+
 ### Highlight Dates with Notes
 
 Beginning with v2.2.0, in addition to specifying an array of dates to highlight, you can also use a hashtable. The key should be the highlight date, and the value a brief description.
@@ -186,4 +262,4 @@ For example, if you are running under the `en-AU` culture, you would need to use
 
 I have tried to make this module culture-aware. Testing across cultures is not an easy process. If you encounter a problem and are not running PowerShell under the `EN-US` culture, run the calendar command you are trying to use with `-Verbose` and post the results in a new issue. Or if you have both Windows PowerShell and PowerShell 7 installed, try the same command in both versions.
 
-Last Updated 2021-07-13 13:50:40Z
+Last Updated 2021-07-30 16:30:17Z

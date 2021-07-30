@@ -12,11 +12,11 @@ If (Get-Module $moduleName) {
 
 Add-Type -AssemblyName PresentationFramework -ErrorAction Stop
 Add-Type –AssemblyName PresentationCore -ErrorAction Stop
-
+write-host "Importing $ModuleManifestpath" -ForegroundColor cyan
 Import-Module $ModuleManifestPath -Force
 
-Describe $ModuleName {
-    $myModule = Test-ModuleManifest -Path $ModuleManifestPath
+$myModule = Test-ModuleManifest -Path $ModuleManifestPath
+Describe "$ModuleName v$($myModule.Version)" {
     $exported = Get-Command -Module $ModuleName -CommandType Function
     Context Manifest {
         It "Passes Test-ModuleManifest" {
@@ -49,25 +49,28 @@ Describe $ModuleName {
     }
     Context Exports {
 
-        It "Should have an exported command of Get-Calendar" {
-            $exported.name | Should Contain "Get-Calendar"
+        It "Should have an exported command of <Name>" -TestCases @(
+         @{Name = 'Get-Calendar'},
+         @{Name = 'Show-Calendar'},
+         @{Name = 'Show-GuiCalendar'},
+         @{Name = 'Get-NCalendar'},
+         @{Name = 'Get-MonthName'},
+         @{Name= 'Show-PSCalendarHelp'}
+        ) {
+            param($Name)
+            $exported.name | Should Contain $Name
         }
-        It "Should have an exported command of Show-Calendar" {
-            $exported.name | Should Contain "Show-Calendar"
+
+        It "Should have an alias of <Name>" -TestCases @(
+            @{Name='cal';Resolved="Get-Calendar"},
+            @{Name='scal';Resolved="Show-Calendar"},
+            @{Name='gcal';Resolved="Show-GuiCalendar"},
+            @{Name='ncal';Resolved="Get-NCalendar"}
+        ) {
+            Param($Name,$Resolved)
+            (Get-Alias -Name $Name).ResolvedCommandName | Should be $Resolved
         }
-        It "Should have an exported command of Show-GuiCalendar" {
-            $exported.name | Should Contain "Show-GuiCalendar"
-        }
-        It "Should have an alias of cal" {
-            (Get-Alias -Name cal).ResolvedCommandName | Should be "Get-Calendar"
-        }
-        It "Should have an alias of scal" {
-            (Get-Alias -Name scal).ResolvedCommandName | Should be "Show-Calendar"
-        }
-        It "Should have an alias of gcal" {
-            (Get-Alias -Name gcal).ResolvedCommandName | Should be "Show-GuiCalendar"
-        }
-    }
+ }
     Context Structure {
         It "Should have a Docs folder" {
             Get-Item $PSScriptRoot\..\docs | Should Be $True
@@ -78,17 +81,14 @@ Describe $ModuleName {
             }
         }
         It "Should have an external help file" {
-            get-item $PSScriptRoot\..\en-us\*.xml | Should Be $True
+            Get-Item $PSScriptRoot\..\en-us\*.xml | Should Be $True
         }
-
         It "Should have a license file" {
             Get-Item $PSScriptRoot\..\license.* | Should be $True
         }
-
         It "Should have a changelog file" {
             Get-Item $PSScriptRoot\..\changelog* | Should be $True
         }
-
         It "Should have a README.md file" {
             Get-Item $PSScriptRoot\..\README.md | Should be $True
         }
@@ -137,10 +137,10 @@ InModuleScope $moduleName {
     Describe Show-GuiCalendar {
         It "Should run without error." {
             {Show-GuiCalendar} | Should Not Throw
-        }
+        } -skip
         It "Should let you customize the layout" {
             Show-GuiCalendar -end (Get-Date).AddMonths(2) -font "Century Gothic" -FontStyle Italic -FontWeight demibold
-        }
+        } -skip
         It "Should fail with a bad month" {
             {Show-GuiCalendar -start "99/1/2020" } | Should Throw
         }
@@ -149,7 +149,31 @@ InModuleScope $moduleName {
             $w | Should Not BeNullOrEmpty
         }
     } -tag command
+
+    Describe Get-NCalendar {
+        It "Should run without error." {
+            {Get-NCalendar} | Should Not Throw
+        }
+        It "Should fail with an invalid month" {
+            {Get-NCalendar -month FOO} |Should Throw
+        }
+        It "Should fail with an invalid year" {
+            {Get-Ncalendar -year 20} | Should Throw
+        }
+    } -tag command
+
+    Describe Get-MonthName {
+        It "Should run without error." {
+            {Get-MonthName} | Should Not Throw
+        }
+        It "Should return short month names" {
+            (Get-MonthName -Short).count |Should Be 12
+        }
+        It "Should return 12 items" {
+            (Get-MonthName).count |Should Be 12
+        }
+    } -tag command
 }
 
-Write-Host "`n"
+#Write-Host "`n"
 Write-Warning "You will need to manually kill any graphical calendars that were spawned from the test. You may also see errors if running this test under a non-North American culture with differing datetime formats."
