@@ -1,5 +1,10 @@
 # Change Log for PSCalendar
 
+## v2.3.1
+
++ Fixed alignment problem when first day of a row is highlighted in `Get-NCalendar`. [Issue #25](https://github.com/jdhitsolutions/PSCalendar/issues/25).
++ Updated `Get-Calendar` to fix validation bug when the end date is less than the start date. [Issue #26](https://github.com/jdhitsolutions/PSCalendar/issues/26)
+
 ## v2.3.0
 
 + Added `Get-PNCalendar` and its alias `ncal`. [Issue #16](https://github.com/jdhitsolutions/PSCalendar/issues/16).

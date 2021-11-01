@@ -10,7 +10,7 @@ Function Get-Calendar {
     Param(
         [Parameter(Position = 1, ParameterSetName = "month")]
         [ValidateNotNullorEmpty()]
-        [ValidateScript( {
+        [ValidateScript({
                 $names = _getMonthsByCulture
                 if ($names -contains $_) {
                     $True
@@ -32,15 +32,6 @@ Function Get-Calendar {
 
         [Parameter(Mandatory, HelpMessage = "Enter an ending date for the month like 3/1/2020 that is correct for your culture.", ParameterSetName = "span")]
         [ValidateNotNullOrEmpty()]
-        [ValidateScript( {
-                if ($_ -ge $Start) {
-                    $True
-                }
-                else {
-                    Throw "The end date ($_) must be later than the start date ($start)"
-                    $False
-                }
-            })]
         [string]$End,
 
         [Parameter(HelpMessage = "Specify a collection of dates to highlight in the calendar display.")]
@@ -64,6 +55,14 @@ Function Get-Calendar {
     }
     Process {
         Write-Verbose "Using parameter set: $($pscmdlet.ParameterSetName)"
+
+        #validate $End Issue #26
+        if ($PSCmdlet.ParameterSetName -eq 'span') {
+            if ([datetime]$end -le [datetime]$Start) {
+                Write-Verbose "Validating End ($end) compared to Start ($Start)"
+                Throw "[Validation Error] The end date ($end) must be later than the start date ($start)"
+            }
+        }
         Write-Verbose "Using culture: $($currculture.displayname) [$($currCulture.name)]"
         Write-Verbose "Using PSBoundParameters:"
         Write-Verbose ($PSBoundParameters | Out-String).trim()
@@ -624,7 +623,9 @@ Function Get-NCalendar {
             $daylist.AddRange($daynames)
         }
 
-        $daylist | ForEach-Object -Begin { $dayHash = [ordered]@{} } -Process {
+        $daylist | ForEach-Object -Begin {
+            $dayHash = [ordered]@{}
+        } -Process {
             $dayHash.Add($_, @())
         }
 
@@ -634,6 +635,7 @@ Function Get-NCalendar {
             $dayname = "{0:ddd}" -f $day
             if ((-NOT $HideHighlight) -AND ($day -eq $today)) {
                 $dom = "$([char]27)[7m$($day.day)$([char]27)[0m"
+                $dayLength = $day.day.ToString()
             }
             else {
                 $dom = $day.day
@@ -651,15 +653,18 @@ Function Get-NCalendar {
                         $str = $_.tostring()
                         if ($str -match [char]27) {
                             #add extra padding to account for ANSI escape sequence
-                            $ansipad = 8
+                            Write-Verbose "Adjusting for ANSI sequence"
+                            $ansipad = $str.length - $daylength  #8
+                            Write-Verbose "Padding $ansipad"
+                            $str = "     $str"
                         }
                         else {
                             $ansipad = 0
                         }
-                        $str.padleft(2)
+                        $str.padleft(2+$ansipad)
                     }) -join " ").padleft($maxDayLength + 12 + $ansipad)
         }
-        #Write-verbose "display length = $($out[0].length)"
+        Write-verbose "display length = $($out[0].length)"
         #write-Verbose "head length = $($head.length)"
         $pad = (($out[0].length - $head.length) / 2) + $head.length + 1
         #Write-Verbose "padding $pad"
