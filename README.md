@@ -262,4 +262,4 @@ For example, if you are running under the `en-AU` culture, you would need to use
 
 I have tried to make this module culture-aware. Testing across cultures is not an easy process. If you encounter a problem and are not running PowerShell under the `EN-US` culture, run the calendar command you are trying to use with `-Verbose` and post the results in a new issue. Or if you have both Windows PowerShell and PowerShell 7 installed, try the same command in both versions.
 
-Last Updated2021-11-01 18:36:52Z
+Last Updated 2021-11-02 18:25:51Z

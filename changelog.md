@@ -1,5 +1,9 @@
 # Change Log for PSCalendar
 
+## v2.3.2
+
++ Updated `Get-Calendar` to allow start date and end date to be equal. [Issue #26](https://github.com/jdhitsolutions/PSCalendar/issues/26)
+
 ## v2.3.1
 
 + Fixed alignment problem when first day of a row is highlighted in `Get-NCalendar`. [Issue #25](https://github.com/jdhitsolutions/PSCalendar/issues/25).

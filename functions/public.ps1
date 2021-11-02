@@ -58,7 +58,7 @@ Function Get-Calendar {
 
         #validate $End Issue #26
         if ($PSCmdlet.ParameterSetName -eq 'span') {
-            if ([datetime]$end -le [datetime]$Start) {
+            if ( [datetime]$end -lt [datetime]$Start) {
                 Write-Verbose "Validating End ($end) compared to Start ($Start)"
                 Throw "[Validation Error] The end date ($end) must be later than the start date ($start)"
             }
