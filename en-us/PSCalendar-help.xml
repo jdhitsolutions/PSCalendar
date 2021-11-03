@@ -19,9 +19,9 @@
         <maml:name>Get-Calendar</maml:name>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="none">
           <maml:name>Month</maml:name>
-          <maml:Description>
+          <maml:description>
             <maml:para>Select a month to display. The command will default to the current year unless otherwise specified.</maml:para>
-          </maml:Description>
+          </maml:description>
           <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
           <dev:type>
             <maml:name>String</maml:name>
@@ -31,9 +31,9 @@
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="2" aliases="none">
           <maml:name>Year</maml:name>
-          <maml:Description>
+          <maml:description>
             <maml:para>Select a year for the specified month.</maml:para>
-          </maml:Description>
+          </maml:description>
           <command:parameterValue required="true" variableLength="false">Int32</command:parameterValue>
           <dev:type>
             <maml:name>Int32</maml:name>
@@ -43,10 +43,10 @@
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>HighlightDate</maml:name>
-          <maml:Description>
+          <maml:description>
             <maml:para>Specific days (named) to highlight. These dates are color formatted using ANSI escape sequences. You must format the dates to match your culture. It should match the pattern you get from running this command:</maml:para>
             <maml:para>(Get-Culture).datetimeformat.ShortDatePattern</maml:para>
-          </maml:Description>
+          </maml:description>
           <command:parameterValue required="true" variableLength="false">String[]</command:parameterValue>
           <dev:type>
             <maml:name>String[]</maml:name>
@@ -56,9 +56,9 @@
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>FirstDay</maml:name>
-          <maml:Description>
+          <maml:description>
             <maml:para>Specify the first day of the week. There is a potential bug in .NET Core where the detected first day of the week is incorrect. If that is true for your culture, use this parameter to manually specify the correct first day of the week.</maml:para>
-          </maml:Description>
+          </maml:description>
           <command:parameterValue required="true" variableLength="false">DayOfWeek</command:parameterValue>
           <dev:type>
             <maml:name>DayOfWeek</maml:name>
@@ -68,9 +68,9 @@
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>NoANSI</maml:name>
-          <maml:Description>
+          <maml:description>
             <maml:para>Do not use any ANSI formatting. The output will be plain-text. This also means that the current day and highlight dates will not be reflected in the output.</maml:para>
-          </maml:Description>
+          </maml:description>
           <dev:type>
             <maml:name>SwitchParameter</maml:name>
             <maml:uri />
@@ -82,10 +82,10 @@
         <maml:name>Get-Calendar</maml:name>
         <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>Start</maml:name>
-          <maml:Description>
+          <maml:description>
             <maml:para>The first month to display. You must format the dates to match your culture. It should match the pattern you get from running this command:</maml:para>
             <maml:para>(Get-Culture).datetimeformat.ShortDatePattern</maml:para>
-          </maml:Description>
+          </maml:description>
           <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
           <dev:type>
             <maml:name>String</maml:name>
@@ -95,10 +95,10 @@
         </command:parameter>
         <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>End</maml:name>
-          <maml:Description>
+          <maml:description>
             <maml:para>The last month to display. You must format the dates to match your culture. It should match the pattern you get from running this command:</maml:para>
             <maml:para>(Get-Culture).datetimeformat.ShortDatePattern</maml:para>
-          </maml:Description>
+          </maml:description>
           <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
           <dev:type>
             <maml:name>String</maml:name>
@@ -108,10 +108,10 @@
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>HighlightDate</maml:name>
-          <maml:Description>
+          <maml:description>
             <maml:para>Specific days (named) to highlight. These dates are color formatted using ANSI escape sequences. You must format the dates to match your culture. It should match the pattern you get from running this command:</maml:para>
             <maml:para>(Get-Culture).datetimeformat.ShortDatePattern</maml:para>
-          </maml:Description>
+          </maml:description>
           <command:parameterValue required="true" variableLength="false">String[]</command:parameterValue>
           <dev:type>
             <maml:name>String[]</maml:name>
@@ -121,9 +121,9 @@
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>FirstDay</maml:name>
-          <maml:Description>
+          <maml:description>
             <maml:para>Specify the first day of the week. There is a potential bug in .NET Core where the detected first day of the week is incorrect. If that is true for your culture, use this parameter to manually specify the correct first day of the week.</maml:para>
-          </maml:Description>
+          </maml:description>
           <command:parameterValue required="true" variableLength="false">DayOfWeek</command:parameterValue>
           <dev:type>
             <maml:name>DayOfWeek</maml:name>
@@ -133,9 +133,9 @@
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>NoANSI</maml:name>
-          <maml:Description>
+          <maml:description>
             <maml:para>Do not use any ANSI formatting. The output will be plain-text. This also means that the current day and highlight dates will not be reflected in the output.</maml:para>
-          </maml:Description>
+          </maml:description>
           <dev:type>
             <maml:name>SwitchParameter</maml:name>
             <maml:uri />
@@ -147,9 +147,9 @@
     <command:parameters>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="none">
         <maml:name>Month</maml:name>
-        <maml:Description>
+        <maml:description>
           <maml:para>Select a month to display. The command will default to the current year unless otherwise specified.</maml:para>
-        </maml:Description>
+        </maml:description>
         <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
         <dev:type>
           <maml:name>String</maml:name>
@@ -159,9 +159,9 @@
       </command:parameter>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="2" aliases="none">
         <maml:name>Year</maml:name>
-        <maml:Description>
+        <maml:description>
           <maml:para>Select a year for the specified month.</maml:para>
-        </maml:Description>
+        </maml:description>
         <command:parameterValue required="true" variableLength="false">Int32</command:parameterValue>
         <dev:type>
           <maml:name>Int32</maml:name>
@@ -171,10 +171,10 @@
       </command:parameter>
       <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>Start</maml:name>
-        <maml:Description>
+        <maml:description>
           <maml:para>The first month to display. You must format the dates to match your culture. It should match the pattern you get from running this command:</maml:para>
           <maml:para>(Get-Culture).datetimeformat.ShortDatePattern</maml:para>
-        </maml:Description>
+        </maml:description>
         <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
         <dev:type>
           <maml:name>String</maml:name>
@@ -184,10 +184,10 @@
       </command:parameter>
       <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>End</maml:name>
-        <maml:Description>
+        <maml:description>
           <maml:para>The last month to display. You must format the dates to match your culture. It should match the pattern you get from running this command:</maml:para>
           <maml:para>(Get-Culture).datetimeformat.ShortDatePattern</maml:para>
-        </maml:Description>
+        </maml:description>
         <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
         <dev:type>
           <maml:name>String</maml:name>
@@ -197,10 +197,10 @@
       </command:parameter>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>HighlightDate</maml:name>
-        <maml:Description>
+        <maml:description>
           <maml:para>Specific days (named) to highlight. These dates are color formatted using ANSI escape sequences. You must format the dates to match your culture. It should match the pattern you get from running this command:</maml:para>
           <maml:para>(Get-Culture).datetimeformat.ShortDatePattern</maml:para>
-        </maml:Description>
+        </maml:description>
         <command:parameterValue required="true" variableLength="false">String[]</command:parameterValue>
         <dev:type>
           <maml:name>String[]</maml:name>
@@ -210,9 +210,9 @@
       </command:parameter>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>FirstDay</maml:name>
-        <maml:Description>
+        <maml:description>
           <maml:para>Specify the first day of the week. There is a potential bug in .NET Core where the detected first day of the week is incorrect. If that is true for your culture, use this parameter to manually specify the correct first day of the week.</maml:para>
-        </maml:Description>
+        </maml:description>
         <command:parameterValue required="true" variableLength="false">DayOfWeek</command:parameterValue>
         <dev:type>
           <maml:name>DayOfWeek</maml:name>
@@ -222,9 +222,9 @@
       </command:parameter>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>NoANSI</maml:name>
-        <maml:Description>
+        <maml:description>
           <maml:para>Do not use any ANSI formatting. The output will be plain-text. This also means that the current day and highlight dates will not be reflected in the output.</maml:para>
-        </maml:Description>
+        </maml:description>
         <command:parameterValue required="false" variableLength="false">SwitchParameter</command:parameterValue>
         <dev:type>
           <maml:name>SwitchParameter</maml:name>
@@ -360,9 +360,9 @@
         <maml:name>Get-MonthName</maml:name>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>Short</maml:name>
-          <maml:Description>
+          <maml:description>
             <maml:para>Get short month names.</maml:para>
-          </maml:Description>
+          </maml:description>
           <dev:type>
             <maml:name>SwitchParameter</maml:name>
             <maml:uri />
@@ -374,9 +374,9 @@
     <command:parameters>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>Short</maml:name>
-        <maml:Description>
+        <maml:description>
           <maml:para>Get short month names.</maml:para>
-        </maml:Description>
+        </maml:description>
         <command:parameterValue required="false" variableLength="false">SwitchParameter</command:parameterValue>
         <dev:type>
           <maml:name>SwitchParameter</maml:name>
@@ -474,9 +474,9 @@ Dec</dev:code>
         <maml:name>Get-NCalendar</maml:name>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName, ByValue)" position="0" aliases="none">
           <maml:name>Month</maml:name>
-          <maml:Description>
+          <maml:description>
             <maml:para>Enter the full month name. You should be able to tab-complete the parameter value. The default is the current month.</maml:para>
-          </maml:Description>
+          </maml:description>
           <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
           <dev:type>
             <maml:name>String</maml:name>
@@ -486,9 +486,9 @@ Dec</dev:code>
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="1" aliases="none">
           <maml:name>Year</maml:name>
-          <maml:Description>
+          <maml:description>
             <maml:para>Enter the 4 digit year. You should be able to tab-complete the next 5 years but you can enter any 4 digit year. The default is the current year.</maml:para>
-          </maml:Description>
+          </maml:description>
           <command:parameterValue required="true" variableLength="false">Int32</command:parameterValue>
           <dev:type>
             <maml:name>Int32</maml:name>
@@ -498,9 +498,9 @@ Dec</dev:code>
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>HideHighlight</maml:name>
-          <maml:Description>
+          <maml:description>
             <maml:para>Don't highlight the current date.</maml:para>
-          </maml:Description>
+          </maml:description>
           <dev:type>
             <maml:name>SwitchParameter</maml:name>
             <maml:uri />
@@ -509,9 +509,9 @@ Dec</dev:code>
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>Monday</maml:name>
-          <maml:Description>
+          <maml:description>
             <maml:para>Start the week on Monday.</maml:para>
-          </maml:Description>
+          </maml:description>
           <dev:type>
             <maml:name>SwitchParameter</maml:name>
             <maml:uri />
@@ -523,9 +523,9 @@ Dec</dev:code>
     <command:parameters>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName, ByValue)" position="0" aliases="none">
         <maml:name>Month</maml:name>
-        <maml:Description>
+        <maml:description>
           <maml:para>Enter the full month name. You should be able to tab-complete the parameter value. The default is the current month.</maml:para>
-        </maml:Description>
+        </maml:description>
         <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
         <dev:type>
           <maml:name>String</maml:name>
@@ -535,9 +535,9 @@ Dec</dev:code>
       </command:parameter>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="1" aliases="none">
         <maml:name>Year</maml:name>
-        <maml:Description>
+        <maml:description>
           <maml:para>Enter the 4 digit year. You should be able to tab-complete the next 5 years but you can enter any 4 digit year. The default is the current year.</maml:para>
-        </maml:Description>
+        </maml:description>
         <command:parameterValue required="true" variableLength="false">Int32</command:parameterValue>
         <dev:type>
           <maml:name>Int32</maml:name>
@@ -547,9 +547,9 @@ Dec</dev:code>
       </command:parameter>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>HideHighlight</maml:name>
-        <maml:Description>
+        <maml:description>
           <maml:para>Don't highlight the current date.</maml:para>
-        </maml:Description>
+        </maml:description>
         <command:parameterValue required="false" variableLength="false">SwitchParameter</command:parameterValue>
         <dev:type>
           <maml:name>SwitchParameter</maml:name>
@@ -559,9 +559,9 @@ Dec</dev:code>
       </command:parameter>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>Monday</maml:name>
-        <maml:Description>
+        <maml:description>
           <maml:para>Start the week on Monday.</maml:para>
-        </maml:Description>
+        </maml:description>
         <command:parameterValue required="false" variableLength="false">SwitchParameter</command:parameterValue>
         <dev:type>
           <maml:name>SwitchParameter</maml:name>
@@ -751,9 +751,9 @@ Highlight : `e[92m</dev:code>
         <maml:name>Set-PSCalendarConfiguration</maml:name>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="0" aliases="none">
           <maml:name>Title</maml:name>
-          <maml:Description>
+          <maml:description>
             <maml:para>Specify the ANSI escape sequence for the calendar title which will be the month and year.</maml:para>
-          </maml:Description>
+          </maml:description>
           <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
           <dev:type>
             <maml:name>String</maml:name>
@@ -763,9 +763,9 @@ Highlight : `e[92m</dev:code>
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="none">
           <maml:name>DayOfWeek</maml:name>
-          <maml:Description>
+          <maml:description>
             <maml:para>Specify an ANSI sequence for the day of the week heading.</maml:para>
-          </maml:Description>
+          </maml:description>
           <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
           <dev:type>
             <maml:name>String</maml:name>
@@ -775,9 +775,9 @@ Highlight : `e[92m</dev:code>
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="2" aliases="none">
           <maml:name>Today</maml:name>
-          <maml:Description>
+          <maml:description>
             <maml:para>Specify the ANSI escape sequence to highlight the current day.</maml:para>
-          </maml:Description>
+          </maml:description>
           <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
           <dev:type>
             <maml:name>String</maml:name>
@@ -787,9 +787,9 @@ Highlight : `e[92m</dev:code>
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="3" aliases="none">
           <maml:name>Highlight</maml:name>
-          <maml:Description>
+          <maml:description>
             <maml:para>Specify the ANSI escape sequence to highlight specified dates.</maml:para>
-          </maml:Description>
+          </maml:description>
           <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
           <dev:type>
             <maml:name>String</maml:name>
@@ -799,9 +799,9 @@ Highlight : `e[92m</dev:code>
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="cf">
           <maml:name>Confirm</maml:name>
-          <maml:Description>
+          <maml:description>
             <maml:para>Prompts you for confirmation before running the cmdlet.</maml:para>
-          </maml:Description>
+          </maml:description>
           <dev:type>
             <maml:name>SwitchParameter</maml:name>
             <maml:uri />
@@ -810,9 +810,9 @@ Highlight : `e[92m</dev:code>
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="wi">
           <maml:name>WhatIf</maml:name>
-          <maml:Description>
+          <maml:description>
             <maml:para>Shows what would happen if the cmdlet runs. The cmdlet is not run.</maml:para>
-          </maml:Description>
+          </maml:description>
           <dev:type>
             <maml:name>SwitchParameter</maml:name>
             <maml:uri />
@@ -824,9 +824,9 @@ Highlight : `e[92m</dev:code>
     <command:parameters>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="cf">
         <maml:name>Confirm</maml:name>
-        <maml:Description>
+        <maml:description>
           <maml:para>Prompts you for confirmation before running the cmdlet.</maml:para>
-        </maml:Description>
+        </maml:description>
         <command:parameterValue required="false" variableLength="false">SwitchParameter</command:parameterValue>
         <dev:type>
           <maml:name>SwitchParameter</maml:name>
@@ -836,9 +836,9 @@ Highlight : `e[92m</dev:code>
       </command:parameter>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="none">
         <maml:name>DayOfWeek</maml:name>
-        <maml:Description>
+        <maml:description>
           <maml:para>Specify an ANSI sequence for the day of the week heading.</maml:para>
-        </maml:Description>
+        </maml:description>
         <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
         <dev:type>
           <maml:name>String</maml:name>
@@ -848,9 +848,9 @@ Highlight : `e[92m</dev:code>
       </command:parameter>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="3" aliases="none">
         <maml:name>Highlight</maml:name>
-        <maml:Description>
+        <maml:description>
           <maml:para>Specify the ANSI escape sequence to highlight specified dates.</maml:para>
-        </maml:Description>
+        </maml:description>
         <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
         <dev:type>
           <maml:name>String</maml:name>
@@ -860,9 +860,9 @@ Highlight : `e[92m</dev:code>
       </command:parameter>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="0" aliases="none">
         <maml:name>Title</maml:name>
-        <maml:Description>
+        <maml:description>
           <maml:para>Specify the ANSI escape sequence for the calendar title which will be the month and year.</maml:para>
-        </maml:Description>
+        </maml:description>
         <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
         <dev:type>
           <maml:name>String</maml:name>
@@ -872,9 +872,9 @@ Highlight : `e[92m</dev:code>
       </command:parameter>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="2" aliases="none">
         <maml:name>Today</maml:name>
-        <maml:Description>
+        <maml:description>
           <maml:para>Specify the ANSI escape sequence to highlight the current day.</maml:para>
-        </maml:Description>
+        </maml:description>
         <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
         <dev:type>
           <maml:name>String</maml:name>
@@ -884,9 +884,9 @@ Highlight : `e[92m</dev:code>
       </command:parameter>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="wi">
         <maml:name>WhatIf</maml:name>
-        <maml:Description>
+        <maml:description>
           <maml:para>Shows what would happen if the cmdlet runs. The cmdlet is not run.</maml:para>
-        </maml:Description>
+        </maml:description>
         <command:parameterValue required="false" variableLength="false">SwitchParameter</command:parameterValue>
         <dev:type>
           <maml:name>SwitchParameter</maml:name>
@@ -964,9 +964,9 @@ Highlight : `e[92m</dev:code>
         <maml:name>Show-Calendar</maml:name>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="none">
           <maml:name>Month</maml:name>
-          <maml:Description>
+          <maml:description>
             <maml:para>Select a month to display. The command will default to the current year unless otherwise specified.</maml:para>
-          </maml:Description>
+          </maml:description>
           <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
           <dev:type>
             <maml:name>String</maml:name>
@@ -976,9 +976,9 @@ Highlight : `e[92m</dev:code>
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="2" aliases="none">
           <maml:name>Year</maml:name>
-          <maml:Description>
+          <maml:description>
             <maml:para>Select a year for the specified month.</maml:para>
-          </maml:Description>
+          </maml:description>
           <command:parameterValue required="true" variableLength="false">Int32</command:parameterValue>
           <dev:type>
             <maml:name>Int32</maml:name>
@@ -988,9 +988,9 @@ Highlight : `e[92m</dev:code>
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>HighlightDate</maml:name>
-          <maml:Description>
+          <maml:description>
             <maml:para>Specify days to highlight. These dates are colored by ANSI escape sequences. You can modify them with Set-PSCalendarConfiguration. You must format the dates tpo match your culture. It should match the pattern you get from running this command: (Get-Culture).datetimeformat.ShortDatePattern</maml:para>
-          </maml:Description>
+          </maml:description>
           <command:parameterValue required="true" variableLength="false">String[]</command:parameterValue>
           <dev:type>
             <maml:name>String[]</maml:name>
@@ -1000,9 +1000,9 @@ Highlight : `e[92m</dev:code>
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>Position</maml:name>
-          <maml:Description>
+          <maml:description>
             <maml:para>Enter a System.Management.Automation.Host.Coordinates object to specify a location for the calendar. This may not work properly in all hosts or PowerShell versions and you might need some trial and error to figure out a position that works for you.</maml:para>
-          </maml:Description>
+          </maml:description>
           <command:parameterValue required="true" variableLength="false">Coordinates</command:parameterValue>
           <dev:type>
             <maml:name>Coordinates</maml:name>
@@ -1012,9 +1012,9 @@ Highlight : `e[92m</dev:code>
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>FirstDay</maml:name>
-          <maml:Description>
+          <maml:description>
             <maml:para>Specify the first day of the week. There is a potential bug in .NET Core where the detected first day of the week is incorrect. If that is true for your culture, use this parameter to manually specify the correct first day of the week.</maml:para>
-          </maml:Description>
+          </maml:description>
           <command:parameterValue required="true" variableLength="false">DayOfWeek</command:parameterValue>
           <dev:type>
             <maml:name>DayOfWeek</maml:name>
@@ -1027,9 +1027,9 @@ Highlight : `e[92m</dev:code>
     <command:parameters>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="none">
         <maml:name>Month</maml:name>
-        <maml:Description>
+        <maml:description>
           <maml:para>Select a month to display. The command will default to the current year unless otherwise specified.</maml:para>
-        </maml:Description>
+        </maml:description>
         <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
         <dev:type>
           <maml:name>String</maml:name>
@@ -1039,9 +1039,9 @@ Highlight : `e[92m</dev:code>
       </command:parameter>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="2" aliases="none">
         <maml:name>Year</maml:name>
-        <maml:Description>
+        <maml:description>
           <maml:para>Select a year for the specified month.</maml:para>
-        </maml:Description>
+        </maml:description>
         <command:parameterValue required="true" variableLength="false">Int32</command:parameterValue>
         <dev:type>
           <maml:name>Int32</maml:name>
@@ -1051,9 +1051,9 @@ Highlight : `e[92m</dev:code>
       </command:parameter>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>HighlightDate</maml:name>
-        <maml:Description>
+        <maml:description>
           <maml:para>Specify days to highlight. These dates are colored by ANSI escape sequences. You can modify them with Set-PSCalendarConfiguration. You must format the dates tpo match your culture. It should match the pattern you get from running this command: (Get-Culture).datetimeformat.ShortDatePattern</maml:para>
-        </maml:Description>
+        </maml:description>
         <command:parameterValue required="true" variableLength="false">String[]</command:parameterValue>
         <dev:type>
           <maml:name>String[]</maml:name>
@@ -1063,9 +1063,9 @@ Highlight : `e[92m</dev:code>
       </command:parameter>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>Position</maml:name>
-        <maml:Description>
+        <maml:description>
           <maml:para>Enter a System.Management.Automation.Host.Coordinates object to specify a location for the calendar. This may not work properly in all hosts or PowerShell versions and you might need some trial and error to figure out a position that works for you.</maml:para>
-        </maml:Description>
+        </maml:description>
         <command:parameterValue required="true" variableLength="false">Coordinates</command:parameterValue>
         <dev:type>
           <maml:name>Coordinates</maml:name>
@@ -1075,9 +1075,9 @@ Highlight : `e[92m</dev:code>
       </command:parameter>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>FirstDay</maml:name>
-        <maml:Description>
+        <maml:description>
           <maml:para>Specify the first day of the week. There is a potential bug in .NET Core where the detected first day of the week is incorrect. If that is true for your culture, use this parameter to manually specify the correct first day of the week.</maml:para>
-        </maml:Description>
+        </maml:description>
         <command:parameterValue required="true" variableLength="false">DayOfWeek</command:parameterValue>
         <dev:type>
           <maml:name>DayOfWeek</maml:name>
@@ -1160,7 +1160,7 @@ Highlight : `e[92m</dev:code>
       </maml:description>
     </command:details>
     <maml:description>
-      <maml:para>If you are running Windows PowerShell or a version of PowerShell that supports Windows Presentation Foundation (WPF), you can display a graphical calendar. You can specify up to 3 months. There are also parameters to fine-tune the calendar style. The calendar form itself is transparent, but you should be able to click on it to drag it around your screen. You can also use the + and - keys to increase or decrease the calendar's opacity. You may have to click on a calendar before making any adjustments.</maml:para>
+      <maml:para>If you are running Windows PowerShell or a version of PowerShell that supports the [System.Windows.Media] .NET class, which does NOT include PowerShell 7, you can display a graphical calendar. You can specify up to 3 months. There are also parameters to fine-tune the calendar style. The calendar form itself is transparent, but you should be able to click on it to drag it around your screen. You can also use the + and - keys to increase or decrease the calendar's opacity. You may have to click on a calendar before making any adjustments.</maml:para>
       <maml:para>This command launches the calendar in a separate runspace so that it doesn't block your prompt. However, if you close the PowerShell session that launched the calendar, the calendar will also automatically close.</maml:para>
       <maml:para>You must format the dates to match your culture. It should match the pattern you get from running this command:</maml:para>
       <maml:para>(Get-Culture).datetimeformat.ShortDatePattern</maml:para>
@@ -1170,9 +1170,9 @@ Highlight : `e[92m</dev:code>
         <maml:name>Show-GuiCalendar</maml:name>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="none">
           <maml:name>Start</maml:name>
-          <maml:Description>
+          <maml:description>
             <maml:para>Enter the first month to display by date, like 1/1/2020.</maml:para>
-          </maml:Description>
+          </maml:description>
           <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
           <dev:type>
             <maml:name>String</maml:name>
@@ -1182,9 +1182,9 @@ Highlight : `e[92m</dev:code>
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="2" aliases="none">
           <maml:name>End</maml:name>
-          <maml:Description>
+          <maml:description>
             <maml:para>Enter the last month to display by date, like 3/1/2020. You cannot display more than 3 months.</maml:para>
-          </maml:Description>
+          </maml:description>
           <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
           <dev:type>
             <maml:name>String</maml:name>
@@ -1194,9 +1194,9 @@ Highlight : `e[92m</dev:code>
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>Font</maml:name>
-          <maml:Description>
+          <maml:description>
             <maml:para>Select a font family for your calendar.</maml:para>
-          </maml:Description>
+          </maml:description>
           <command:parameterValueGroup>
             <command:parameterValue required="false" command:variableLength="false">Segoi UI</command:parameterValue>
             <command:parameterValue required="false" command:variableLength="false">QuickType</command:parameterValue>
@@ -1213,9 +1213,9 @@ Highlight : `e[92m</dev:code>
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>FontStyle</maml:name>
-          <maml:Description>
+          <maml:description>
             <maml:para>Select a font style for your calendar.</maml:para>
-          </maml:Description>
+          </maml:description>
           <command:parameterValueGroup>
             <command:parameterValue required="false" command:variableLength="false">Normal</command:parameterValue>
             <command:parameterValue required="false" command:variableLength="false">Italic</command:parameterValue>
@@ -1230,9 +1230,9 @@ Highlight : `e[92m</dev:code>
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>FontWeight</maml:name>
-          <maml:Description>
+          <maml:description>
             <maml:para>Select a font weight for your calendar.</maml:para>
-          </maml:Description>
+          </maml:description>
           <command:parameterValueGroup>
             <command:parameterValue required="false" command:variableLength="false">Normal</command:parameterValue>
             <command:parameterValue required="false" command:variableLength="false">DemiBold</command:parameterValue>
@@ -1248,9 +1248,9 @@ Highlight : `e[92m</dev:code>
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>HighlightDate</maml:name>
-          <maml:Description>
+          <maml:description>
             <maml:para>Enter an array of dates to highlight like 12/25/202,12/31/2020 or a hashtable where the key is the date and the value is a description. This data will be displayed as a tooltip for each month.</maml:para>
-          </maml:Description>
+          </maml:description>
           <command:parameterValue required="true" variableLength="false">Object[]</command:parameterValue>
           <dev:type>
             <maml:name>Object[]</maml:name>
@@ -1260,9 +1260,9 @@ Highlight : `e[92m</dev:code>
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>BackgroundColor</maml:name>
-          <maml:Description>
+          <maml:description>
             <maml:para>Specify calendar background color. On Windows platforms you should be able to tab complete possible colors. Or you can use a color format like '#FFF000'. Remember to wrap this kind of value in quotes.</maml:para>
-          </maml:Description>
+          </maml:description>
           <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
           <dev:type>
             <maml:name>String</maml:name>
@@ -1272,9 +1272,9 @@ Highlight : `e[92m</dev:code>
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>FirstDay</maml:name>
-          <maml:Description>
+          <maml:description>
             <maml:para>Specify the first day of the week. Normally, .NET should detect the first day of the week based on culture settings. But if for some reason, .NET is detecting incorrect information, you can manually set the first day of the week with this parameter.</maml:para>
-          </maml:Description>
+          </maml:description>
           <command:parameterValue required="true" variableLength="false">DayOfWeek</command:parameterValue>
           <dev:type>
             <maml:name>DayOfWeek</maml:name>
@@ -1287,9 +1287,9 @@ Highlight : `e[92m</dev:code>
         <maml:name>Show-GuiCalendar</maml:name>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="none">
           <maml:name>Start</maml:name>
-          <maml:Description>
+          <maml:description>
             <maml:para>Enter the first month to display by date, like 1/1/2020.</maml:para>
-          </maml:Description>
+          </maml:description>
           <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
           <dev:type>
             <maml:name>String</maml:name>
@@ -1299,9 +1299,9 @@ Highlight : `e[92m</dev:code>
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="2" aliases="none">
           <maml:name>End</maml:name>
-          <maml:Description>
+          <maml:description>
             <maml:para>Enter the last month to display by date, like 3/1/2020. You cannot display more than 3 months.</maml:para>
-          </maml:Description>
+          </maml:description>
           <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
           <dev:type>
             <maml:name>String</maml:name>
@@ -1311,9 +1311,9 @@ Highlight : `e[92m</dev:code>
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>Font</maml:name>
-          <maml:Description>
+          <maml:description>
             <maml:para>Select a font family for your calendar.</maml:para>
-          </maml:Description>
+          </maml:description>
           <command:parameterValueGroup>
             <command:parameterValue required="false" command:variableLength="false">Segoi UI</command:parameterValue>
             <command:parameterValue required="false" command:variableLength="false">QuickType</command:parameterValue>
@@ -1330,9 +1330,9 @@ Highlight : `e[92m</dev:code>
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>FontStyle</maml:name>
-          <maml:Description>
+          <maml:description>
             <maml:para>Select a font style for your calendar.</maml:para>
-          </maml:Description>
+          </maml:description>
           <command:parameterValueGroup>
             <command:parameterValue required="false" command:variableLength="false">Normal</command:parameterValue>
             <command:parameterValue required="false" command:variableLength="false">Italic</command:parameterValue>
@@ -1347,9 +1347,9 @@ Highlight : `e[92m</dev:code>
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>FontWeight</maml:name>
-          <maml:Description>
+          <maml:description>
             <maml:para>Select a font weight for your calendar.</maml:para>
-          </maml:Description>
+          </maml:description>
           <command:parameterValueGroup>
             <command:parameterValue required="false" command:variableLength="false">Normal</command:parameterValue>
             <command:parameterValue required="false" command:variableLength="false">DemiBold</command:parameterValue>
@@ -1365,9 +1365,9 @@ Highlight : `e[92m</dev:code>
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>HighlightDate</maml:name>
-          <maml:Description>
+          <maml:description>
             <maml:para>Enter an array of dates to highlight like 12/25/202,12/31/2020 or a hashtable where the key is the date and the value is a description. This data will be displayed as a tooltip for each month.</maml:para>
-          </maml:Description>
+          </maml:description>
           <command:parameterValue required="true" variableLength="false">Object[]</command:parameterValue>
           <dev:type>
             <maml:name>Object[]</maml:name>
@@ -1377,9 +1377,9 @@ Highlight : `e[92m</dev:code>
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>BackgroundImage</maml:name>
-          <maml:Description>
+          <maml:description>
             <maml:para>Specify the path to an image to use as the background.</maml:para>
-          </maml:Description>
+          </maml:description>
           <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
           <dev:type>
             <maml:name>String</maml:name>
@@ -1389,9 +1389,9 @@ Highlight : `e[92m</dev:code>
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>FirstDay</maml:name>
-          <maml:Description>
+          <maml:description>
             <maml:para>Specify the first day of the week. Normally, .NET should detect the first day of the week based on culture settings. But if for some reason, .NET is detecting incorrect information, you can manually set the first day of the week with this parameter.</maml:para>
-          </maml:Description>
+          </maml:description>
           <command:parameterValue required="true" variableLength="false">DayOfWeek</command:parameterValue>
           <dev:type>
             <maml:name>DayOfWeek</maml:name>
@@ -1401,12 +1401,12 @@ Highlight : `e[92m</dev:code>
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>Stretch</maml:name>
-          <maml:Description>
+          <maml:description>
             <maml:para>Specify image stretch setting. Possible values are None, Fill, Uniform, and UniformToFill</maml:para>
-          </maml:Description>
-          <command:parameterValue required="true" variableLength="false">Stretch</command:parameterValue>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
           <dev:type>
-            <maml:name>Stretch</maml:name>
+            <maml:name>String</maml:name>
             <maml:uri />
           </dev:type>
           <dev:defaultValue>None</dev:defaultValue>
@@ -1416,9 +1416,9 @@ Highlight : `e[92m</dev:code>
     <command:parameters>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="2" aliases="none">
         <maml:name>End</maml:name>
-        <maml:Description>
+        <maml:description>
           <maml:para>Enter the last month to display by date, like 3/1/2020. You cannot display more than 3 months.</maml:para>
-        </maml:Description>
+        </maml:description>
         <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
         <dev:type>
           <maml:name>String</maml:name>
@@ -1428,9 +1428,9 @@ Highlight : `e[92m</dev:code>
       </command:parameter>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>Font</maml:name>
-        <maml:Description>
+        <maml:description>
           <maml:para>Select a font family for your calendar.</maml:para>
-        </maml:Description>
+        </maml:description>
         <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
         <dev:type>
           <maml:name>String</maml:name>
@@ -1440,9 +1440,9 @@ Highlight : `e[92m</dev:code>
       </command:parameter>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>FontStyle</maml:name>
-        <maml:Description>
+        <maml:description>
           <maml:para>Select a font style for your calendar.</maml:para>
-        </maml:Description>
+        </maml:description>
         <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
         <dev:type>
           <maml:name>String</maml:name>
@@ -1452,9 +1452,9 @@ Highlight : `e[92m</dev:code>
       </command:parameter>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>FontWeight</maml:name>
-        <maml:Description>
+        <maml:description>
           <maml:para>Select a font weight for your calendar.</maml:para>
-        </maml:Description>
+        </maml:description>
         <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
         <dev:type>
           <maml:name>String</maml:name>
@@ -1464,9 +1464,9 @@ Highlight : `e[92m</dev:code>
       </command:parameter>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>HighlightDate</maml:name>
-        <maml:Description>
+        <maml:description>
           <maml:para>Enter an array of dates to highlight like 12/25/202,12/31/2020 or a hashtable where the key is the date and the value is a description. This data will be displayed as a tooltip for each month.</maml:para>
-        </maml:Description>
+        </maml:description>
         <command:parameterValue required="true" variableLength="false">Object[]</command:parameterValue>
         <dev:type>
           <maml:name>Object[]</maml:name>
@@ -1476,9 +1476,9 @@ Highlight : `e[92m</dev:code>
       </command:parameter>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="none">
         <maml:name>Start</maml:name>
-        <maml:Description>
+        <maml:description>
           <maml:para>Enter the first month to display by date, like 1/1/2020.</maml:para>
-        </maml:Description>
+        </maml:description>
         <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
         <dev:type>
           <maml:name>String</maml:name>
@@ -1488,9 +1488,9 @@ Highlight : `e[92m</dev:code>
       </command:parameter>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>BackgroundColor</maml:name>
-        <maml:Description>
+        <maml:description>
           <maml:para>Specify calendar background color. On Windows platforms you should be able to tab complete possible colors. Or you can use a color format like '#FFF000'. Remember to wrap this kind of value in quotes.</maml:para>
-        </maml:Description>
+        </maml:description>
         <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
         <dev:type>
           <maml:name>String</maml:name>
@@ -1500,9 +1500,9 @@ Highlight : `e[92m</dev:code>
       </command:parameter>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>BackgroundImage</maml:name>
-        <maml:Description>
+        <maml:description>
           <maml:para>Specify the path to an image to use as the background.</maml:para>
-        </maml:Description>
+        </maml:description>
         <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
         <dev:type>
           <maml:name>String</maml:name>
@@ -1512,9 +1512,9 @@ Highlight : `e[92m</dev:code>
       </command:parameter>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>FirstDay</maml:name>
-        <maml:Description>
+        <maml:description>
           <maml:para>Specify the first day of the week. Normally, .NET should detect the first day of the week based on culture settings. But if for some reason, .NET is detecting incorrect information, you can manually set the first day of the week with this parameter.</maml:para>
-        </maml:Description>
+        </maml:description>
         <command:parameterValue required="true" variableLength="false">DayOfWeek</command:parameterValue>
         <dev:type>
           <maml:name>DayOfWeek</maml:name>
@@ -1524,12 +1524,12 @@ Highlight : `e[92m</dev:code>
       </command:parameter>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>Stretch</maml:name>
-        <maml:Description>
+        <maml:description>
           <maml:para>Specify image stretch setting. Possible values are None, Fill, Uniform, and UniformToFill</maml:para>
-        </maml:Description>
-        <command:parameterValue required="true" variableLength="false">Stretch</command:parameterValue>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
         <dev:type>
-          <maml:name>Stretch</maml:name>
+          <maml:name>String</maml:name>
           <maml:uri />
         </dev:type>
         <dev:defaultValue>None</dev:defaultValue>

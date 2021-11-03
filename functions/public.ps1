@@ -157,7 +157,8 @@ Function Show-GuiCalendar {
         [string]$BackgroundImage,
 
         [Parameter(ParameterSetName = "bgimage", HelpMessage = "Specify image stretch setting.")]
-        [System.Windows.Media.Stretch]$Stretch = "UniformToFill",
+        [ValidateSet("UniformToFill","Uniform","None","Fill")]
+        [string]$Stretch = "UniformToFill",
 
         [Parameter(ParameterSetName = "bgcolor", HelpMessage = "Specify calendar background color.")]
         [string]$BackgroundColor,
@@ -168,6 +169,15 @@ Function Show-GuiCalendar {
     )
 
     Write-Verbose "Starting $($myinvocation.MyCommand) [v$modver]"
+    #PowerShell 7 doesn't support the .NET classes necessary for this function
+    #https://github.com/jdhitsolutions/PSCalendar/issues/27
+    if ($PSEdition -eq 'Core') {
+        Write-Warning "This command is not supported in this version of PowerShell."
+        Return
+    }
+    else {
+        Write-Verbose "Running in a supported version of PowerShell."
+    }
     $currCulture = [system.globalization.cultureinfo]::CurrentCulture
     Write-Verbose "Using culture: $($currculture.displayname) [$($currCulture.name)]"
     Write-Verbose "Using PSBoundParameters:"

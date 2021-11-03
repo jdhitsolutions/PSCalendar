@@ -6,7 +6,7 @@
     RootModule           = 'PSCalendar.psm1'
 
     # Version number of this module.
-    ModuleVersion        = '2.3.2'
+    ModuleVersion        = '2.4.0'
 
     # Supported PSEditions
     CompatiblePSEditions = @("Desktop", "Core")
@@ -29,18 +29,6 @@
     # Minimum version of the Windows PowerShell engine required by this module
     PowerShellVersion    = '5.1'
 
-    # Name of the Windows PowerShell host required by this module
-    # PowerShellHostName = ''
-
-    # Minimum version of the Windows PowerShell host required by this module
-    # PowerShellHostVersion = ''
-
-    # Minimum version of Microsoft .NET Framework required by this module. This prerequisite is valid for the PowerShell Desktop edition only.
-    # DotNetFrameworkVersion = ''
-
-    # Minimum version of the common language runtime (CLR) required by this module. This prerequisite is valid for the PowerShell Desktop edition only.
-    # CLRVersion = ''
-
     # Modules that must be imported into the global environment prior to importing this module
     RequiredModules = @("ThreadJob")
 
@@ -51,16 +39,18 @@
     FormatsToProcess = @('formats\pscalendarconfiguration.format.ps1xml')
 
     # Functions to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no functions to export.
-    FunctionsToExport    = @('*')
-
-    # Cmdlets to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no cmdlets to export.
-    CmdletsToExport      = @()
+    FunctionsToExport    = if ($PSEdition -eq 'Desktop') {
+        "Get-Calendar","Show-Calendar","Get-NCalendar","Show-GuiCalendar","Show-PSCalendarHelp"
+    }
+    else {
+        "Get-Calendar","Show-Calendar","Get-NCalendar","Show-PSCalendarHelp"
+    }
 
     # Variables to export from this module
     VariablesToExport    = @()
 
     # Aliases to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no aliases to export.
-    AliasesToExport      = @('*')
+    AliasesToExport      = @('ncal','cal','gcal','scal')
 
     # Private data to pass to the module specified in RootModule/ModuleToProcess. This may also contain a PSData hashtable with additional module metadata used by PowerShell.
     PrivateData          = @{
