@@ -18,12 +18,12 @@ $PSCalendarConfiguration = @{
     Highlight = "$esc[92m"
 }
 
-#define a function to open the README pdf file
+#define a function to open the doeumentation pdf file
 Function Show-PSCalendarHelp {
     [cmdletbinding()]
     param()
 
-    Start-process $PSScriptRoot\README.pdf
+    Start-process $PSScriptRoot\PSCalendarManual.pdf
 }
 
 #define an auto completer for the Month parameter

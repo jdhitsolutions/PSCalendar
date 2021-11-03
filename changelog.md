@@ -1,5 +1,12 @@
 # Change Log for PSCalendar
 
+## v2.4.0
+
++ Add error handling to `Show-GUICalendar` to not run in PowerShell 7 since the underlying .NET display classes are not supported. Restructured module to not export this command if running in PowerShell 7. [Issue #27](https://github.com/jdhitsolutions/PSCalendar/issues/27)
++ Updated `Show-PSCalendarHelp` to use a new PDF which includes `README.md` and the command help.
++ Help updates
++ Updated `README.md`.
+
 ## v2.3.2
 
 + Updated `Get-Calendar` to allow start date and end date to be equal. [Issue #26](https://github.com/jdhitsolutions/PSCalendar/issues/26)
