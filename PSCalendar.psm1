@@ -6,8 +6,7 @@
 #define a hashtable of ANSI escapes to use in the calendar
 if ($IsCoreCLR) {
     $esc = "`e"
-}
-else {
+} else {
     $esc = [Char]27
 }
 

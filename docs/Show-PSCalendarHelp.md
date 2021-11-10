@@ -1,7 +1,7 @@
 ---
 external help file: PSCalendar-help.xml
 Module Name: PSCalendar
-online version:
+online version: https://bit.ly/3CMRX0A
 schema: 2.0.0
 ---
 

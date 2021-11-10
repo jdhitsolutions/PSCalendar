@@ -2,7 +2,6 @@
 # http://www.leeholmes.com/blog/2008/12/03/showing-calendars-in-your-oof-messages/
 
 Function Get-Calendar {
-
     [cmdletbinding(DefaultParameterSetName = "month")]
     [OutputType([System.String])]
     [Alias("cal")]
@@ -11,15 +10,15 @@ Function Get-Calendar {
         [Parameter(Position = 1, ParameterSetName = "month")]
         [ValidateNotNullorEmpty()]
         [ValidateScript({
-                $names = _getMonthsByCulture
-                if ($names -contains $_) {
-                    $True
-                }
-                else {
-                    Throw "You entered an invalid month. Valid choices are $($names -join ',')"
-                    $False
-                }
-            })]
+            $names = _getMonthsByCulture
+            if ($names -contains $_) {
+                $True
+            }
+            else {
+                Throw "You entered an invalid month. Valid choices are $($names -join ',')"
+                $False
+            }
+        })]
         [string]$Month = (Get-Date -Format MMMM),
 
         [Parameter(Position = 2, ParameterSetName = "month")]
@@ -157,7 +156,7 @@ Function Show-GuiCalendar {
         [string]$BackgroundImage,
 
         [Parameter(ParameterSetName = "bgimage", HelpMessage = "Specify image stretch setting.")]
-        [ValidateSet("UniformToFill","Uniform","None","Fill")]
+        [ValidateSet("UniformToFill", "Uniform", "None", "Fill")]
         [string]$Stretch = "UniformToFill",
 
         [Parameter(ParameterSetName = "bgcolor", HelpMessage = "Specify calendar background color.")]
@@ -671,10 +670,10 @@ Function Get-NCalendar {
                         else {
                             $ansipad = 0
                         }
-                        $str.padleft(2+$ansipad)
+                        $str.padleft(2 + $ansipad)
                     }) -join " ").padleft($maxDayLength + 12 + $ansipad)
         }
-        Write-verbose "display length = $($out[0].length)"
+        Write-Verbose "display length = $($out[0].length)"
         #write-Verbose "head length = $($head.length)"
         $pad = (($out[0].length - $head.length) / 2) + $head.length + 1
         #Write-Verbose "padding $pad"

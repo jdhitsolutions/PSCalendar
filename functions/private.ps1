@@ -145,7 +145,6 @@ function _getCalendar {
         else {
             $days += "{0}{1}{2}" -f $PScalendarConfiguration.DayofWeek, $d, "$esc[0m"
         }
-
     }
 
     $plainHead = "$($mo.Month) $($mo.Year)"
@@ -194,9 +193,9 @@ function _getCalendar {
     }
 
     #join all the strings into a single string
-    makemonth | Out-String
+    makemonth #| Out-String
 
-}
+} #_getCalendar
 function _getMonthsByCulture {
     [cmdletbinding()]
     Param([string]$Culture = ([system.threading.thread]::currentThread).CurrentCulture)

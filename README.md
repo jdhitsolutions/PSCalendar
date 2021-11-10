@@ -52,7 +52,7 @@ One way you might want to use this is in your PowerShell console. You can use th
 
 ```powershell
 
-#requires -modules @{ModuleName="PSCalendar";ModuleVersion="2.1.0"}
+#requires -modules @{ModuleName="PSCalendar";ModuleVersion="2.5.0"}
 
 Function prompt {
 

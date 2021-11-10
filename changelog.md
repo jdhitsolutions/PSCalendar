@@ -1,5 +1,13 @@
 # Change Log for PSCalendar
 
+## v2.5.0
+
++ Updated commands to work in PowerShell 7.2. [Issue #28](https://github.com/jdhitsolutions/PSCalendar/issues/28).
++ Updated online help link for `Show-PSCalendarHelp`.
++ Help updates
++ Module manifest clean up.
++ Updated `README.md`.
+
 ## v2.4.0
 
 + Add error handling to `Show-GUICalendar` to not run in PowerShell 7 since the underlying .NET display classes are not supported. Restructured module to not export this command if running in PowerShell 7. [Issue #27](https://github.com/jdhitsolutions/PSCalendar/issues/27)
