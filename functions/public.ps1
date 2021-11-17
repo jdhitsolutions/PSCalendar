@@ -574,23 +574,30 @@ Function Get-NCalendar {
     [Outputtype("String")]
 
     Param(
-        [Parameter(Position = 0, ValueFromPipeline, ValueFromPipelineByPropertyName,
-            HelpMessage = "Enter the full month name. The default is the current month.")]
+        [Parameter(
+            Position = 0,
+            ValueFromPipeline,
+            ValueFromPipelineByPropertyName,
+            HelpMessage = "Enter the full month name. The default is the current month."
+            )]
         [ValidateNotNullOrEmpty()]
         [ValidateScript( {
-                #sometimes this returns an extra and blank entry
-                $m = [system.globalization.cultureinfo]::CurrentCulture.DateTimeFormat.MonthNames | Where-Object { $_ }
-                if ( $m -contains $_) {
-                    $True
-                }
-                Else {
-                    Throw "You must enter one of these values: $($m -join ',')"
-                    $False
-                }
-            })]
+            #sometimes this returns an extra and blank entry
+            $m = [system.globalization.cultureinfo]::CurrentCulture.DateTimeFormat.MonthNames | Where-Object { $_ }
+            if ( $m -contains $_) {
+                $True
+            }
+            Else {
+                Throw "You must enter one of these values: $($m -join ',')"
+                $False
+            }
+        })]
         [string]$Month = (Get-Date -Format MMMM),
-        [Parameter(Position = 1, ValueFromPipelineByPropertyName,
-            HelpMessage = "Enter the 4 digit year. The default is the current year.")]
+        [Parameter(
+            Position = 1,
+            ValueFromPipelineByPropertyName,
+            HelpMessage = "Enter the 4 digit year. The default is the current year."
+            )]
         [ValidatePattern("\d{4}")]
         [ValidateRange(1000, 9999)]
         [int]$Year = (Get-Date).Year,
@@ -644,7 +651,7 @@ Function Get-NCalendar {
             $dayname = "{0:ddd}" -f $day
             if ((-NOT $HideHighlight) -AND ($day -eq $today)) {
                 $dom = "$([char]27)[7m$($day.day)$([char]27)[0m"
-                $dayLength = $day.day.ToString()
+                $dayLength = $day.day.ToString().length
             }
             else {
                 $dom = $day.day
@@ -652,26 +659,50 @@ Function Get-NCalendar {
             $dayhash[$dayname] += $dom
         }
 
+        $dayhash | Out-String | Write-Verbose
         #make sure month is in title case
         $head = "$($currculture.TextInfo.toTitleCase($Month)) $Year"
         $maxDayLength = $dayhash.keys.length | Sort-Object | Select-Object -Last 1
         Write-Verbose "Building day hashtable"
         $out = $dayhash.GetEnumerator() |
         ForEach-Object {
-            "{0}{1}" -f $_.name.Padright(4), ($_.value.foreach( {
-                        $str = $_.tostring()
-                        if ($str -match [char]27) {
-                            #add extra padding to account for ANSI escape sequence
-                            Write-Verbose "Adjusting for ANSI sequence"
-                            $ansipad = $str.length - $daylength  #8
-                            Write-Verbose "Padding $ansipad"
-                            $str = "     $str"
-                        }
-                        else {
-                            $ansipad = 0
-                        }
-                        $str.padleft(2 + $ansipad)
-                    }) -join " ").padleft($maxDayLength + 12 + $ansipad)
+            Write-Verbose $_.name
+            #build a value string
+            $vstring = $_.value.foreach( {
+                $str = $_.tostring()
+                Write-Verbose "Day: $str"
+                if ($str -match [char]27) {
+                    #add extra padding to account for ANSI escape sequence
+                    Write-Verbose "Adjusting for ANSI sequence"
+                    Write-Verbose "String length = $($str.length)"
+                    Write-Verbose "Saved length $ANSILength"
+                    Write-Verbose "Day length = $daylength"
+                    if ($daylength -le $str.length) {
+                        $ansipad = $str.length - $daylength #8
+                        #save ANSI length
+                        $ANSILength = $str.length - $daylength
+                    }
+                    else {
+                        $ansipad = 0
+                    }
+                    Write-Verbose "Padding $ansipad"
+                }
+                else {
+                    $ansipad = 0
+
+                }
+                $str.padleft(1 + $ansipad)
+            })
+            Write-Verbose "Does day string contain ANSI?"
+            Write-Verbose (($vstring -join ' ') -match [char]27)
+            if ((($vstring -join ' ') -match [char]27)) {
+                Write-Verbose "Adding $ANSILength to AnsiPad value"
+                   $ansipad+= $ANSILength
+            }
+            Write-Verbose "Using days $($vstring -join ' ')"
+            # Write-Verbose "Padding left $MaxDayLength + 12 + $ANSIPad"
+            "{0}{1}" -f $_.name.Padright(4), $($vstring -join " ").padleft($maxDayLength + 12 + $ansipad)
+            $ANSILength=0
         }
         Write-Verbose "display length = $($out[0].length)"
         #write-Verbose "head length = $($head.length)"
@@ -689,6 +720,7 @@ Function Get-NCalendar {
 
 Function Get-MonthName {
     [cmdletbinding()]
+    [outputtype("string")]
     Param(
         [Parameter(HelpMessage = "Get short month names")]
         [switch]$Short

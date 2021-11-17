@@ -9,7 +9,7 @@ schema: 2.0.0
 
 ## SYNOPSIS
 
-Display a WPF-based calendar
+Display a WPF-based calendar.
 
 ## SYNTAX
 

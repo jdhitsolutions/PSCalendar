@@ -1,7 +1,7 @@
 ---
 external help file: PSCalendar-help.xml
 Module Name: PSCalendar
-online version:
+online version: https://bit.ly/2YWjIFn
 schema: 2.0.0
 ---
 
@@ -9,7 +9,7 @@ schema: 2.0.0
 
 ## SYNOPSIS
 
-Display a Linux-style ncal calendar
+Display a Linux-style ncal calendar.
 
 ## SYNTAX
 

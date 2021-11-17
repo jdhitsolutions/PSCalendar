@@ -1,5 +1,12 @@
 # Change Log for PSCalendar
 
+## v2.6.0
+
++ Updates to `Get-NCalendar` [Issue #25](https://github.com/jdhitsolutions/PSCalendar/issues/25).
++ Exported `Get-MonthName` in the module manifest.
++ Added missing online help links.
++ Help updates.
+
 ## v2.5.0
 
 + Updated commands to work in PowerShell 7.2. [Issue #28](https://github.com/jdhitsolutions/PSCalendar/issues/28).

@@ -452,6 +452,10 @@ Dec</dev:code>
     </command:examples>
     <command:relatedLinks>
       <maml:navigationLink>
+        <maml:linkText>Online Version:</maml:linkText>
+        <maml:uri>https://bit.ly/3qPYLaH</maml:uri>
+      </maml:navigationLink>
+      <maml:navigationLink>
         <maml:linkText>Get-Culture</maml:linkText>
         <maml:uri></maml:uri>
       </maml:navigationLink>
@@ -463,7 +467,7 @@ Dec</dev:code>
       <command:verb>Get</command:verb>
       <command:noun>NCalendar</command:noun>
       <maml:description>
-        <maml:para>Display a Linux-style ncal calendar</maml:para>
+        <maml:para>Display a Linux-style ncal calendar.</maml:para>
       </maml:description>
     </command:details>
     <maml:description>
@@ -655,6 +659,10 @@ Sat      6 13 20 27
       </command:example>
     </command:examples>
     <command:relatedLinks>
+      <maml:navigationLink>
+        <maml:linkText>Online Version:</maml:linkText>
+        <maml:uri>https://bit.ly/2YWjIFn</maml:uri>
+      </maml:navigationLink>
       <maml:navigationLink>
         <maml:linkText>Get-Calendar</maml:linkText>
         <maml:uri></maml:uri>
@@ -1156,7 +1164,7 @@ Highlight : `e[92m</dev:code>
       <command:verb>Show</command:verb>
       <command:noun>GuiCalendar</command:noun>
       <maml:description>
-        <maml:para>Display a WPF-based calendar</maml:para>
+        <maml:para>Display a WPF-based calendar.</maml:para>
       </maml:description>
     </command:details>
     <maml:description>

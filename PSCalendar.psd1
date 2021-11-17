@@ -4,7 +4,7 @@
 
 
     RootModule           = 'PSCalendar.psm1'
-    ModuleVersion        = '2.5.0'
+    ModuleVersion        = '2.6.0'
     CompatiblePSEditions = @("Desktop", "Core")
     GUID                 = '222beda0-cdb5-464d-bf49-7ab701da86c9'
     Author               = 'Jeff Hicks'
@@ -20,11 +20,11 @@
     FormatsToProcess     = @('formats\pscalendarconfiguration.format.ps1xml')
     FunctionsToExport    = if ($PSEdition -eq 'Desktop') {
         "Get-Calendar", "Show-Calendar", "Get-NCalendar", "Show-GuiCalendar", "Show-PSCalendarHelp",
-        "Get-PSCalendarConfiguration", "Set-PSCalendarConfiguration"
+        "Get-PSCalendarConfiguration", "Set-PSCalendarConfiguration","Get-MonthName"
     }
     else {
         "Get-Calendar", "Show-Calendar", "Get-NCalendar", "Show-PSCalendarHelp",
-        "Get-PSCalendarConfiguration", "Set-PSCalendarConfiguration"
+        "Get-PSCalendarConfiguration", "Set-PSCalendarConfiguration","Get-MonthName"
     }
     VariablesToExport    = @()
     AliasesToExport      = @('ncal', 'cal', 'gcal', 'scal')
