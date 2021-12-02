@@ -2,6 +2,156 @@
 
 Return "These commands are archived and retained for testing and research purposes."
 
+Function Get-NCalendar {
+    [cmdletbinding()]
+    [alias("ncal")]
+    [Outputtype("String")]
+
+    Param(
+        [Parameter(
+            Position = 0,
+            ValueFromPipeline,
+            ValueFromPipelineByPropertyName,
+            HelpMessage = "Enter the full month name. The default is the current month."
+            )]
+        [ValidateNotNullOrEmpty()]
+        [ValidateScript( {
+            #sometimes this returns an extra and blank entry
+            $m = [system.globalization.cultureinfo]::CurrentCulture.DateTimeFormat.MonthNames | Where-Object { $_ }
+            if ( $m -contains $_) {
+                $True
+            }
+            Else {
+                Throw "You must enter one of these values: $($m -join ',')"
+                $False
+            }
+        })]
+        [string]$Month = (Get-Date -Format MMMM),
+        [Parameter(
+            Position = 1,
+            ValueFromPipelineByPropertyName,
+            HelpMessage = "Enter the 4 digit year. The default is the current year."
+            )]
+        [ValidatePattern("\d{4}")]
+        [ValidateRange(1000, 9999)]
+        [int]$Year = (Get-Date).Year,
+        [Parameter(HelpMessage = "Don't highlight the current date.")]
+        [Switch]$HideHighlight,
+        [Parameter(HelpMessage = "Start the week on Monday")]
+        [Switch]$Monday
+    )
+
+    Begin {
+        #display the module version defined in the psm1 file
+        Write-Verbose "Starting $($myinvocation.MyCommand) [v$modver]"
+        Write-Verbose "Using PowerShell version $($psversiontable.PSVersion)"
+        #Call .NET for better results when testing this command in different cultures
+        $currCulture = [system.globalization.cultureinfo]::CurrentCulture
+    }
+
+    Process {
+        Write-Verbose "Using month $month and year $year"
+
+        #get month number
+        Write-Verbose "Parsing $month to number"
+        $monthint = [datetime]::parse("1 $month $year").month
+        Write-Verbose "Returned month number $monthint"
+        $startd = [datetime]::new($year, $monthint, 1)
+
+        $max = $currCulture.DateTimeFormat.Calendar.GetDaysInMonth($year, $monthint)
+        Write-Verbose "Max days in month is $max."
+
+        $daynames = $currCulture.DateTimeFormat.AbbreviatedDayNames
+        $daylist = [System.Collections.Generic.list[string]]::new()
+
+        if ($Monday) {
+            Write-Verbose "Using a Monday-based week"
+            ($daynames[1..6]).Foreach( { $daylist.add($_) })
+            $daylist.Add($daynames[0])
+        }
+        else {
+            $daylist.AddRange($daynames)
+        }
+
+        $daylist | ForEach-Object -Begin {
+            $dayHash = [ordered]@{}
+        } -Process {
+            $dayHash.Add($_, @())
+        }
+
+        $today = (Get-Date).Date
+        for ($i = 0; $i -lt $max; $i++) {
+            $day = $startd.AddDays($i).date
+            $dayname = "{0:ddd}" -f $day
+            if ((-NOT $HideHighlight) -AND ($day -eq $today)) {
+                $dom = "$([char]27)[7m$($day.day)$([char]27)[0m"
+                $dayLength = $day.day.ToString().length
+            }
+            else {
+                $dom = $day.day
+            }
+            $dayhash[$dayname] += $dom
+        }
+
+        $dayhash | Out-String | Write-Verbose
+        #make sure month is in title case
+        $head = "$($currculture.TextInfo.toTitleCase($Month)) $Year"
+        $maxDayLength = $dayhash.keys.length | Sort-Object | Select-Object -Last 1
+        Write-Verbose "Building day hashtable"
+        $out = $dayhash.GetEnumerator() |
+        ForEach-Object {
+            Write-Verbose $_.name
+            #build a value string
+            $vstring = $_.value.foreach( {
+                $str = $_.tostring()
+                Write-Verbose "Day: $str"
+                if ($str -match [char]27) {
+                    #add extra padding to account for ANSI escape sequence
+                    Write-Verbose "Adjusting for ANSI sequence"
+                    Write-Verbose "String length = $($str.length)"
+                    Write-Verbose "Saved length $ANSILength"
+                    Write-Verbose "Day length = $daylength"
+                    if ($daylength -le $str.length) {
+                        $ansipad = $str.length - $daylength #8
+                        #save ANSI length
+                        $ANSILength = $str.length - $daylength
+                    }
+                    else {
+                        $ansipad = 0
+                    }
+                    Write-Verbose "Padding $ansipad"
+                }
+                else {
+                    $ansipad = 0
+
+                }
+                $str.padleft(1 + $ansipad)
+            })
+            Write-Verbose "Does day string contain ANSI?"
+            Write-Verbose (($vstring -join ' ') -match [char]27)
+            if ((($vstring -join ' ') -match [char]27)) {
+                Write-Verbose "Adding $ANSILength to AnsiPad value"
+                   $ansipad+= $ANSILength
+            }
+            Write-Verbose "Using days $($vstring -join ' ')"
+            # Write-Verbose "Padding left $MaxDayLength + 12 + $ANSIPad"
+            "{0}{1}" -f $_.name.Padright(4), $($vstring -join " ").padleft($maxDayLength + 12 + $ansipad)
+            $ANSILength=0
+        }
+        Write-Verbose "display length = $($out[0].length)"
+        #write-Verbose "head length = $($head.length)"
+        $pad = (($out[0].length - $head.length) / 2) + $head.length + 1
+        #Write-Verbose "padding $pad"
+        $head.padleft($pad)
+        $out
+        #insert a blank line
+        "`r"
+    }
+    End {
+        Write-Verbose "Ending $($myinvocation.MyCommand)"
+    }
+}
+
 Function Get-Calendar {
 
     [cmdletbinding(DefaultParameterSetName = "month")]

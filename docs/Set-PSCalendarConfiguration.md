@@ -29,7 +29,7 @@ Any configuration changes you make are only for the duration of your PowerShell 
 ### Example 1
 
 ```powershell
-PS C:\>  Set-PSCalendarConfiguration -title "$([char]0x1b)[48;5;57m"
+PS C:\>  Set-PSCalendarConfiguration -title "$([char]27)[48;5;57m"
 ```
 
 Change the title color scheme on Windows 5.1. Although, this would also work in PowerShell 7.
@@ -37,7 +37,7 @@ Change the title color scheme on Windows 5.1. Although, this would also work in 
 ### Example 2
 
 ```powershell
-PS C:\>  Set-PSCalendarConfiguration -DayOfWeek "$([char]0x1b)[48;5;57m"
+PS C:\>  Set-PSCalendarConfiguration -DayOfWeek "`e[48;5;57m"
 ```
 
 Change the week day headings color scheme on PowerShell 7.x.

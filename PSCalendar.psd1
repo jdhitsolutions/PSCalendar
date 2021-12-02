@@ -4,7 +4,7 @@
 
 
     RootModule           = 'PSCalendar.psm1'
-    ModuleVersion        = '2.6.0'
+    ModuleVersion        = '2.7.0'
     CompatiblePSEditions = @("Desktop", "Core")
     GUID                 = '222beda0-cdb5-464d-bf49-7ab701da86c9'
     Author               = 'Jeff Hicks'
@@ -35,7 +35,7 @@
         PSData = @{
 
             # Tags applied to this module. These help with module discovery in online galleries.
-            Tags         = @('calendar', 'reminder', 'wpf')
+            Tags         = @('calendar', 'reminder', 'wpf', 'ncal')
 
             # A URL to the license for this module.
             LicenseUri   = 'https://github.com/jdhitsolutions/PSCalendar/blob/master/license.txt'

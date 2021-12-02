@@ -27,30 +27,30 @@ This command generates equivalent output to the ncal Linux command. This is not 
 
 ```powershell
 PS C:\> Get-NCalendar
-      July 2021
-Sun      4 11 18 25
-Mon      5 12 19 26
-Tue      6 13 20 27
-Wed      7 14 21 28
-Thu   1  8 15 22 29
-Fri   2  9 16 23 30
-Sat   3 10 17 24 31
+     July 2021
+Sun     4 11 18 25
+Mon     5 12 19 26
+Tue     6 13 20 27
+Wed     7 14 21 28
+Thu  1  8 15 22 29
+Fri  2  9 16 23 30
+Sat  3 10 17 24 31
 ```
 
-Get the calendar for the current month. The current month will be highlighted.
+Get the calendar for the current month. The current day will be highlighted.
 
 ### Example 2
 
 ```powershell
 PS C:\> ncal April 2022
      April 2022
-Sun      3 10 17 24
-Mon      4 11 18 25
-Tue      5 12 19 26
-Wed      6 13 20 27
-Thu      7 14 21 28
-Fri   1  8 15 22 29
-Sat   2  9 16 23 30
+Sun     3 10 17 24
+Mon     4 11 18 25
+Tue     5 12 19 26
+Wed     6 13 20 27
+Thu     7 14 21 28
+Fri  1  8 15 22 29
+Sat  2  9 16 23 30
 ```
 
 Get an ncal for April 2022. This example is using the ncal alias.
@@ -61,23 +61,22 @@ Get an ncal for April 2022. This example is using the ncal alias.
 PS C:\> Get-MonthName | ncal
 
     January 2021
-Sun   3 10 17 24 31
-Mon      4 11 18 25
-Tue      5 12 19 26
-Wed      6 13 20 27
-Thu      7 14 21 28
-Fri   1  8 15 22 29
-Sat   2  9 16 23 30
+Sun  3 10 17 24 31
+Mon     4 11 18 25
+Tue     5 12 19 26
+Wed     6 13 20 27
+Thu     7 14 21 28
+Fri  1  8 15 22 29
+Sat  2  9 16 23 30
 
-    February 2021
-Sun      7 14 21 28
-Mon      1  8 15 22
-Tue      2  9 16 23
-Wed      3 10 17 24
-Thu      4 11 18 25
-Fri      5 12 19 26
-Sat      6 13 20 27
-
+   February 2021
+Sun     7 14 21 28
+Mon     1  8 15 22
+Tue     2  9 16 23
+Wed     3 10 17 24
+Thu     4 11 18 25
+Fri     5 12 19 26
+Sat     6 13 20 27
 ...
 ```
 
@@ -151,6 +150,7 @@ Accept wildcard characters: False
 ```
 
 ### CommonParameters
+
 This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable. For more information, see [about_CommonParameters](http://go.microsoft.com/fwlink/?LinkID=113216).
 
 ## INPUTS

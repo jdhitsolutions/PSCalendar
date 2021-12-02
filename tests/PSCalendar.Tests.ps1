@@ -11,7 +11,7 @@ If (Get-Module $moduleName) {
 }
 
 Add-Type -AssemblyName PresentationFramework -ErrorAction Stop
-Add-Type –AssemblyName PresentationCore -ErrorAction Stop
+Add-Type -AssemblyName PresentationCore -ErrorAction Stop
 write-host "Importing $ModuleManifestpath" -ForegroundColor cyan
 Import-Module $ModuleManifestPath -Force
 
@@ -49,19 +49,22 @@ Describe "$ModuleName v$($myModule.Version)" {
     }
     Context Exports {
 
-        It "Should have an exported command of <Name>" -TestCases @(
+        It "Should have an exported command of $Name" -TestCases @(
          @{Name = 'Get-Calendar'},
          @{Name = 'Show-Calendar'},
          @{Name = 'Show-GuiCalendar'},
          @{Name = 'Get-NCalendar'},
          @{Name = 'Get-MonthName'},
-         @{Name= 'Show-PSCalendarHelp'}
+         @{Name= 'Show-PSCalendarHelp'},
+         @{Name = 'Get-PSCalendarConfiguration'},
+         @{Name = 'Set-PSCalendarConfiguration'}
+
         ) {
             param($Name)
             $exported.name | Should Contain $Name
         }
 
-        It "Should have an alias of <Name>" -TestCases @(
+        It "Should have an alias of $Name" -TestCases @(
             @{Name='cal';Resolved="Get-Calendar"},
             @{Name='scal';Resolved="Show-Calendar"},
             @{Name='gcal';Resolved="Show-GuiCalendar"},
@@ -114,19 +117,19 @@ InModuleScope $moduleName {
             $c -match "January 2020" | Should be $True
         }
         It "Should fail with a year unless using 4 digits" {
-            {get-Calendar -year 2020 } | Should Not Throw
+            {get-Calendar -year 2022 } | Should Not Throw
             {Get-Calendar -year 20} | Should Throw
             {Get-Calendar -year 20200} | Should Throw
         }
         It "Should let you highlight a date" {
-            $c = Get-Calendar -month January -Year 2020 -HighlightDate 1/1/2020
-            $c -match "\*  1\*" | Should Be $True
-        } -skip
+            $c = Get-Calendar -month January -Year 2022 -HighlightDate 1/1/2022
+            $c -match "$([char]27)\[92m\s+\d+" | Should Be $True
+        }
         It "Should let you specify a start month and end month" {
-            $c = Get-Calendar -Start "1/1/2020" -end "2/1/2020"
-            $c.length | Should be 2
-            $c -match "January 2020" | Should be $true
-            $c -match "February 2020" | Should be $true
+            $c = Get-Calendar -Start "1/1/2022" -end "2/1/2022"
+            $c.length | Should be 16
+            $c -match "January 2022" | Should be $true
+            $c -match "February 2022" | Should be $true
         }
     } -tag command
 
@@ -176,4 +179,4 @@ InModuleScope $moduleName {
 }
 
 #Write-Host "`n"
-Write-Warning "You will need to manually kill any graphical calendars that were spawned from the test. You may also see errors if running this test under a non-North American culture with differing datetime formats."
+#Write-Warning "You will need to manually kill any graphical calendars that were spawned from the test. You may also see errors if running this test under a non-North American culture with differing datetime formats."

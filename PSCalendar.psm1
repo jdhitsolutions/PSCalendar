@@ -1,7 +1,12 @@
 
+#functions based on code from Lee Holmes
+# http://www.leeholmes.com/blog/2008/12/03/showing-calendars-in-your-oof-messages/
+
 #dot source the calendar functions
-. $PSScriptRoot\functions\private.ps1
-. $PSScriptRoot\functions\public.ps1
+Get-Childitem $PSScriptRoot\functions\*.ps1 -Exclude dev.ps1 |
+Foreach-Object {
+    . $_.Fullname
+}
 
 #define a hashtable of ANSI escapes to use in the calendar
 if ($IsCoreCLR) {
