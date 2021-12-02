@@ -603,29 +603,29 @@ Dec</dev:code>
       <command:example>
         <maml:title>-------------------------- Example 1 --------------------------</maml:title>
         <dev:code>PS C:\&gt; Get-NCalendar
-      July 2021
-Sun      4 11 18 25
-Mon      5 12 19 26
-Tue      6 13 20 27
-Wed      7 14 21 28
-Thu   1  8 15 22 29
-Fri   2  9 16 23 30
-Sat   3 10 17 24 31</dev:code>
+     July 2021
+Sun     4 11 18 25
+Mon     5 12 19 26
+Tue     6 13 20 27
+Wed     7 14 21 28
+Thu  1  8 15 22 29
+Fri  2  9 16 23 30
+Sat  3 10 17 24 31</dev:code>
         <dev:remarks>
-          <maml:para>Get the calendar for the current month. The current month will be highlighted.</maml:para>
+          <maml:para>Get the calendar for the current month. The current day will be highlighted.</maml:para>
         </dev:remarks>
       </command:example>
       <command:example>
         <maml:title>-------------------------- Example 2 --------------------------</maml:title>
         <dev:code>PS C:\&gt; ncal April 2022
      April 2022
-Sun      3 10 17 24
-Mon      4 11 18 25
-Tue      5 12 19 26
-Wed      6 13 20 27
-Thu      7 14 21 28
-Fri   1  8 15 22 29
-Sat   2  9 16 23 30</dev:code>
+Sun     3 10 17 24
+Mon     4 11 18 25
+Tue     5 12 19 26
+Wed     6 13 20 27
+Thu     7 14 21 28
+Fri  1  8 15 22 29
+Sat  2  9 16 23 30</dev:code>
         <dev:remarks>
           <maml:para>Get an ncal for April 2022. This example is using the ncal alias.</maml:para>
         </dev:remarks>
@@ -635,23 +635,22 @@ Sat   2  9 16 23 30</dev:code>
         <dev:code>PS C:\&gt; Get-MonthName | ncal
 
     January 2021
-Sun   3 10 17 24 31
-Mon      4 11 18 25
-Tue      5 12 19 26
-Wed      6 13 20 27
-Thu      7 14 21 28
-Fri   1  8 15 22 29
-Sat   2  9 16 23 30
+Sun  3 10 17 24 31
+Mon     4 11 18 25
+Tue     5 12 19 26
+Wed     6 13 20 27
+Thu     7 14 21 28
+Fri  1  8 15 22 29
+Sat  2  9 16 23 30
 
-    February 2021
-Sun      7 14 21 28
-Mon      1  8 15 22
-Tue      2  9 16 23
-Wed      3 10 17 24
-Thu      4 11 18 25
-Fri      5 12 19 26
-Sat      6 13 20 27
-
+   February 2021
+Sun     7 14 21 28
+Mon     1  8 15 22
+Tue     2  9 16 23
+Wed     3 10 17 24
+Thu     4 11 18 25
+Fri     5 12 19 26
+Sat     6 13 20 27
 ...</dev:code>
         <dev:remarks>
           <maml:para>Display an ncal listing for the entire year.</maml:para>
@@ -931,14 +930,14 @@ Highlight : `e[92m</dev:code>
     <command:examples>
       <command:example>
         <maml:title>-------------------------- Example 1 --------------------------</maml:title>
-        <dev:code>PS C:\&gt;  Set-PSCalendarConfiguration -title "$([char]0x1b)[48;5;57m"</dev:code>
+        <dev:code>PS C:\&gt;  Set-PSCalendarConfiguration -title "$([char]27)[48;5;57m"</dev:code>
         <dev:remarks>
           <maml:para>Change the title color scheme on Windows 5.1. Although, this would also work in PowerShell 7.</maml:para>
         </dev:remarks>
       </command:example>
       <command:example>
         <maml:title>-------------------------- Example 2 --------------------------</maml:title>
-        <dev:code>PS C:\&gt;  Set-PSCalendarConfiguration -DayOfWeek "$([char]0x1b)[48;5;57m"</dev:code>
+        <dev:code>PS C:\&gt;  Set-PSCalendarConfiguration -DayOfWeek "`e[48;5;57m"</dev:code>
         <dev:remarks>
           <maml:para>Change the week day headings color scheme on PowerShell 7.x.</maml:para>
         </dev:remarks>
