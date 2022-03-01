@@ -1,5 +1,21 @@
 # Change Log for PSCalendar
 
+## v2.8.0
+
++ Updated `Get-Calendar` and `Show-Calendar` with a new parameter `MonthOnly` to only show days from the specified month. This will remove leading and trailing days from other months. [Issue #29](https://github.com/jdhitsolutions/PSCalendar/issues/29). Much thanks to [Matthew Gray](https://github.com/scriptingstudio) for the suggestions and code snippet.
++ Updated `Get-Calendar`, `Show-Calendar`, and `Get-NCalendar` to suppress all ANSI formatting when running in the PowerShell ISE.  [Issue #30](https://github.com/jdhitsolutions/PSCalendar/issues/30)
++ Moved `Show-PSCalendarHelp` to a separate file under Functions.
++ Documentation updates.
++ Updated `README.md`.
++ Help updates.
+
+## v2.7.0
+
++ Updates to `Get-NCalendar` [Issue #25](https://github.com/jdhitsolutions/PSCalendar/issues/25). Much thanks to [atkinsroy](https://github.com/atkinsroy) for excellent suggestions and code examples.
++ Restructured module layout.
++ Updated Pester tests.
++ Help updates.
+
 ## v2.6.0
 
 + Updates to `Get-NCalendar` [Issue #25](https://github.com/jdhitsolutions/PSCalendar/issues/25).

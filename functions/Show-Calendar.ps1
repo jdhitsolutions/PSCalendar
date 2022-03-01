@@ -29,7 +29,10 @@ Function Show-Calendar {
         [ValidateNotNullOrEmpty()]
         [System.DayOfWeek]$FirstDay = ([System.Globalization.CultureInfo]::CurrentCulture).DateTimeFormat.FirstDayOfWeek,
 
-        [System.Management.Automation.Host.Coordinates]$Position
+        [System.Management.Automation.Host.Coordinates]$Position,
+
+        [Parameter(HelpMessage = "Do not show any leading or trailing days.")]
+        [switch]$MonthOnly
     )
 
     Write-Verbose "Starting $($myinvocation.MyCommand) [v$modver]"
@@ -50,6 +53,10 @@ Function Show-Calendar {
         }
     }
 
+    if ($host.name -Match "ISE Host") {
+        #enforce NoAnsi when running in the PowerShell ISE. Issue #30
+        $PSBoundParameters.Add("NoAnsi",$True)
+    }
     $cal = Get-Calendar @PSBoundParameters
 
     if ($Position) {

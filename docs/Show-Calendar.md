@@ -14,7 +14,7 @@ Display a colorized calendar month in the console.
 ## SYNTAX
 
 ```yaml
-Show-Calendar [[-Month] <String>] [[-Year] <Int32>] [-HighlightDate <String[]>] [-FirstDay <DayOfWeek>] [-Position <Coordinates>] [<CommonParameters>]
+Show-Calendar [[-Month] <String>] [[-Year] <Int32>] [-HighlightDate <String[]>] [-FirstDay <DayOfWeek>] [-Position <Coordinates>] [-MonthOnly] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -23,7 +23,7 @@ This command is a wrapper for Get-Calendar that essentially shows the same resul
 
 ## EXAMPLES
 
-### EXAMPLE 1
+### Example 1
 
 ```powershell
 PS C:\> Show-Calendar
@@ -31,7 +31,7 @@ PS C:\> Show-Calendar
 
 Display a colorized version of the current month.
 
-### EXAMPLE 2
+### Example 2
 
 ```powershell
 PS C:\> Show-Calendar -Month February -Year 2021 -HighlightDate 2/22/21
@@ -46,6 +46,24 @@ PS C:\> Show-Calendar  -Position ([system.management.automation.host.coordinates
 ```
 
 Display the calendar at a specified X,Y position in the console. This parameter will probably not work in the PowerShell ISE.
+
+### Example 4
+
+```powershell
+PS C:\> Show-Calendar -Month January -Year 2022 -MonthOnly
+
+               January 2022
+
+ Sun   Mon   Tue   Wed   Thu   Fri   Sat
+                                       1
+   2     3     4     5     6     7     8
+   9    10    11    12    13    14    15
+  16    17    18    19    20    21    22
+  23    24    25    26    27    28    29
+  30    31
+```
+
+Suppress leading and trailing days from other months with the MonthOnly parameter.
 
 ## PARAMETERS
 
@@ -129,7 +147,24 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
+### -MonthOnly
+
+Do not show any leading or trailing days.
+
+```yaml
+Type: SwitchParameter
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
 ### CommonParameters
+
 This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable. For more information, see [about_CommonParameters](http://go.microsoft.com/fwlink/?LinkID=113216).
 
 ## INPUTS

@@ -21,6 +21,8 @@ Get-NCalendar [[-Month] <String>] [[-Year] <Int32>] [-HideHighlight] [-Monday] [
 
 This command generates equivalent output to the ncal Linux command. This is not a 100% port of that command but it should provide similar results for the same month and year. You should enter the complete month name. There should be tab-completion for the month and year values. This command has an alias of ncal on Windows platforms.
 
+If you run this command in the PowerShell ISE, there will be no highlighting or ANSI formatting.
+
 ## EXAMPLES
 
 ### Example 1
@@ -119,7 +121,7 @@ Accept wildcard characters: False
 
 ### -HideHighlight
 
-Don't highlight the current date.
+Don't highlight the current date. This parameter is automatically set to true when running in the PowerShell ISE.
 
 ```yaml
 Type: SwitchParameter

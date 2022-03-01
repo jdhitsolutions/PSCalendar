@@ -43,7 +43,13 @@ Function Get-NCalendar {
         Write-Verbose "Using PowerShell version $($psversiontable.PSVersion)"
         #Call .NET for better results when testing this command in different cultures
         $currCulture = [system.globalization.cultureinfo]::CurrentCulture
-    }
+
+        #enforce NoAnsi if running in the PowerShell ISE [Issue #30]
+        if ($host.name -Match "ISE Host") {
+            Write-Verbose "PowerShell ISE detected. Turning off highlighting."
+            $HideHighlight = $True
+        }
+    } #begin
 
     Process {
         Write-Verbose "Using month $month and year $year"

@@ -16,13 +16,13 @@ Displays a visual representation of a calendar.
 ### month (Default)
 
 ```yaml
-Get-Calendar [[-Month] <String>] [[-Year] <Int32>] [-HighlightDate <String[]>] [-FirstDay <DayOfWeek>] [-NoANSI] [<CommonParameters>]
+Get-Calendar [[-Month] <String>] [[-Year] <Int32>] [-HighlightDate <String[]>] [-FirstDay <DayOfWeek>] [-NoANSI] [-MonthOnly] [<CommonParameters>]
 ```
 
 ### span
 
 ```yaml
-Get-Calendar -Start <String> -End <String> [-HighlightDate <String[]>] [-FirstDay <DayOfWeek>] [-NoANSI] [<CommonParameters>]
+Get-Calendar -Start <String> -End <String> [-HighlightDate <String[]>] [-FirstDay <DayOfWeek>] [-NoANSI] [-MonthOnly] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -35,7 +35,7 @@ When you enter Highlight, Start, or End dates, be sure to use the format that is
 
 ## EXAMPLES
 
-### EXAMPLE 1
+### Example 1
 
 ```powershell
 PS C:\> Get-Calendar
@@ -52,7 +52,7 @@ PS C:\> Get-Calendar
 
 Show the current month. The current day will be formatted in color.
 
-### EXAMPLE 2
+### Example 2
 
 ```powershell
 PS C:\>  Get-Calendar -start "3/1/2021" -end "5/1/2021"
@@ -60,7 +60,7 @@ PS C:\>  Get-Calendar -start "3/1/2021" -end "5/1/2021"
 
 Display monthly calendars from March to May, 2021.
 
-### EXAMPLE 3
+### Example 3
 
 ```powershell
 PS C:\> Get-Calendar December -HighlightDate 12/4/2020,12/25/2020,12/24/2020,12/31/2020
@@ -78,7 +78,7 @@ PS C:\> Get-Calendar December -HighlightDate 12/4/2020,12/25/2020,12/24/2020,12/
 
 Display a month and highlight specific dates in color.
 
-### EXAMPLE 4
+### Example 4
 
 ```powershell
 PS C:\> Get-Calendar august -firstday Monday -highlight 1/8/2021,15,8,2021
@@ -96,13 +96,31 @@ PS C:\> Get-Calendar august -firstday Monday -highlight 1/8/2021,15,8,2021
 
 In Windows PowerShell, all of the commands appear to respect culture settings. However, when running in PowerShell 7 there appears to be a bug in .NET Core and how it returns culture information for some cultures, specifically the first day of the week. If you run `Get-Calendar` or `Show-Calendar` and the week begins on the wrong day, use the `FirstDay` parameter to override the detected .NET values with the correct one. If you are running under the en-AU culture in PowerShell 7, you would need to run this command.
 
-### EXAMPLE 5
+### Example 5
 
 ```powershell
 PS C:\> Get-Calendar -NoANSI -Start 7/1/2021 -end 9/1/2021  | Out-File c:\work\Q3.txt
 ```
 
 Get the calendars for a month of ranges with no ANSI formatting and save the output to a text file.
+
+### Example 6
+
+```powershell
+PS C:\> Get-Calendar -Month January -Year 2022 -NoANSI -MonthOnly
+
+               January 2022
+
+ Sun   Mon   Tue   Wed   Thu   Fri   Sat
+                                       1
+   2     3     4     5     6     7     8
+   9    10    11    12    13    14    15
+  16    17    18    19    20    21    22
+  23    24    25    26    27    28    29
+  30    31
+```
+
+Suppress leading and trailing days from other months with the MonthOnly parameter.
 
 ## PARAMETERS
 
@@ -210,7 +228,7 @@ Accept wildcard characters: False
 
 ### -NoANSI
 
-Do not use any ANSI formatting. The output will be plain-text. This also means that the current day and highlight dates will not be reflected in the output.
+Do not use any ANSI formatting. The output will be plain-text. This also means that the current day and highlight dates will not be reflected in the output. This parameter has no affect when running the command in the PowerShell ISE. There is no color formatting when using this host.
 
 ```yaml
 Type: SwitchParameter
@@ -224,7 +242,23 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### CommonParameters
+### -MonthOnly
+
+Do not show any leading or trailing days from other months.
+
+```yaml
+Type: SwitchParameter
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### CommonParameters.
 
 This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable. For more information, see [about_CommonParameters](http://go.microsoft.com/fwlink/?LinkID=113216).
 

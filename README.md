@@ -236,6 +236,16 @@ You need to include the escape character but you do not need to include the clos
 
 This change lasts for the duration of your PowerShell session. If you want to make it more permanent, you will need to add the commands to your PowerShell profile script.
 
+## ANSI Support
+
+As you've seen, there are several commands in this module that rely on ANSI for formatting. The hosting application needs to be able to recognize and use ANSI escape sequences. These commands should work in both Windows PowerShell and PowerShell 7 in the traditional PowerShell consoles or in Windows Terminal. They will not work in the PowerShell ISE. ANSI-related output will be automatically disabled if the PowerShell ISE is detected.
+
+If you aren't sure if your host supports ANSI, run `Get-PSReadlineOption`. You should see something like this:
+
+![PSReadlineOptions](images/psreadlineoptions.png)
+
+If you don't see color formatting, the hosting application doesn't support ANSI.
+
 ## A Note on Culture
 
 I've tried very hard to make the commands respect culture. Most commands now that string values to represent dates which are then treated as dates internally. For this reason, it is important that you follow the culture-specific short date format that you get from running this command:

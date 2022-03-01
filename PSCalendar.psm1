@@ -22,14 +22,6 @@ $PSCalendarConfiguration = @{
     Highlight = "$esc[92m"
 }
 
-#define a function to open the doeumentation pdf file
-Function Show-PSCalendarHelp {
-    [cmdletbinding()]
-    param()
-
-    Start-process $PSScriptRoot\PSCalendarManual.pdf
-}
-
 #define an auto completer for the Month parameter
 Register-ArgumentCompleter -CommandName Get-Calendar, Show-Calendar,Get-NCalendar -ParameterName Month -ScriptBlock {
     param($commandName, $parameterName, $wordToComplete, $commandAst, $fakeBoundParameter)
@@ -84,4 +76,4 @@ else {
 }
 
 #use this version in verbose output to reflect module version
-$modver = (Test-ModuleManifest $PSScriptRoot\PSCalendar.psd1).Version
+$modver = (Test-ModuleManifest $PSScriptroot\PSCalendar.psd1).Version

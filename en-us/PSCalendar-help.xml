@@ -69,7 +69,18 @@
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>NoANSI</maml:name>
           <maml:description>
-            <maml:para>Do not use any ANSI formatting. The output will be plain-text. This also means that the current day and highlight dates will not be reflected in the output.</maml:para>
+            <maml:para>Do not use any ANSI formatting. The output will be plain-text. This also means that the current day and highlight dates will not be reflected in the output. This parameter has no affect when running the command in the PowerShell ISE. There is no color formatting when using this host.</maml:para>
+          </maml:description>
+          <dev:type>
+            <maml:name>SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>MonthOnly</maml:name>
+          <maml:description>
+            <maml:para>Do not show any leading or trailing days from other months.</maml:para>
           </maml:description>
           <dev:type>
             <maml:name>SwitchParameter</maml:name>
@@ -134,7 +145,18 @@
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>NoANSI</maml:name>
           <maml:description>
-            <maml:para>Do not use any ANSI formatting. The output will be plain-text. This also means that the current day and highlight dates will not be reflected in the output.</maml:para>
+            <maml:para>Do not use any ANSI formatting. The output will be plain-text. This also means that the current day and highlight dates will not be reflected in the output. This parameter has no affect when running the command in the PowerShell ISE. There is no color formatting when using this host.</maml:para>
+          </maml:description>
+          <dev:type>
+            <maml:name>SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>MonthOnly</maml:name>
+          <maml:description>
+            <maml:para>Do not show any leading or trailing days from other months.</maml:para>
           </maml:description>
           <dev:type>
             <maml:name>SwitchParameter</maml:name>
@@ -223,7 +245,7 @@
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>NoANSI</maml:name>
         <maml:description>
-          <maml:para>Do not use any ANSI formatting. The output will be plain-text. This also means that the current day and highlight dates will not be reflected in the output.</maml:para>
+          <maml:para>Do not use any ANSI formatting. The output will be plain-text. This also means that the current day and highlight dates will not be reflected in the output. This parameter has no affect when running the command in the PowerShell ISE. There is no color formatting when using this host.</maml:para>
         </maml:description>
         <command:parameterValue required="false" variableLength="false">SwitchParameter</command:parameterValue>
         <dev:type>
@@ -231,6 +253,30 @@
           <maml:uri />
         </dev:type>
         <dev:defaultValue>False</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>MonthOnly</maml:name>
+        <maml:description>
+          <maml:para>Do not show any leading or trailing days from other months.</maml:para>
+        </maml:description>
+        <command:parameterValue required="false" variableLength="false">SwitchParameter</command:parameterValue>
+        <dev:type>
+          <maml:name>SwitchParameter</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>False</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="false" position="named" aliases="none">
+        <maml:name>CommonParameters.</maml:name>
+        <maml:description>
+          <maml:para>This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable. For more information, see about_CommonParameters (http://go.microsoft.com/fwlink/?LinkID=113216).</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false"></command:parameterValue>
+        <dev:type>
+          <maml:name></maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
       </command:parameter>
     </command:parameters>
     <command:inputTypes />
@@ -252,7 +298,7 @@
     </maml:alertSet>
     <command:examples>
       <command:example>
-        <maml:title>-------------------------- EXAMPLE 1 --------------------------</maml:title>
+        <maml:title>-------------------------- Example 1 --------------------------</maml:title>
         <dev:code>PS C:\&gt; Get-Calendar
 
                   July 2021
@@ -268,14 +314,14 @@
         </dev:remarks>
       </command:example>
       <command:example>
-        <maml:title>-------------------------- EXAMPLE 2 --------------------------</maml:title>
+        <maml:title>-------------------------- Example 2 --------------------------</maml:title>
         <dev:code>PS C:\&gt;  Get-Calendar -start "3/1/2021" -end "5/1/2021"</dev:code>
         <dev:remarks>
           <maml:para>Display monthly calendars from March to May, 2021.</maml:para>
         </dev:remarks>
       </command:example>
       <command:example>
-        <maml:title>-------------------------- EXAMPLE 3 --------------------------</maml:title>
+        <maml:title>-------------------------- Example 3 --------------------------</maml:title>
         <dev:code>PS C:\&gt; Get-Calendar December -HighlightDate 12/4/2020,12/25/2020,12/24/2020,12/31/2020
 
 
@@ -292,7 +338,7 @@
         </dev:remarks>
       </command:example>
       <command:example>
-        <maml:title>-------------------------- EXAMPLE 4 --------------------------</maml:title>
+        <maml:title>-------------------------- Example 4 --------------------------</maml:title>
         <dev:code>PS C:\&gt; Get-Calendar august -firstday Monday -highlight 1/8/2021,15,8,2021
 
                 August 2021
@@ -309,10 +355,27 @@
         </dev:remarks>
       </command:example>
       <command:example>
-        <maml:title>-------------------------- EXAMPLE 5 --------------------------</maml:title>
+        <maml:title>-------------------------- Example 5 --------------------------</maml:title>
         <dev:code>PS C:\&gt; Get-Calendar -NoANSI -Start 7/1/2021 -end 9/1/2021  | Out-File c:\work\Q3.txt</dev:code>
         <dev:remarks>
           <maml:para>Get the calendars for a month of ranges with no ANSI formatting and save the output to a text file.</maml:para>
+        </dev:remarks>
+      </command:example>
+      <command:example>
+        <maml:title>-------------------------- Example 6 --------------------------</maml:title>
+        <dev:code>PS C:\&gt; Get-Calendar -Month January -Year 2022 -NoANSI -MonthOnly
+
+               January 2022
+
+ Sun   Mon   Tue   Wed   Thu   Fri   Sat
+                                       1
+   2     3     4     5     6     7     8
+   9    10    11    12    13    14    15
+  16    17    18    19    20    21    22
+  23    24    25    26    27    28    29
+  30    31</dev:code>
+        <dev:remarks>
+          <maml:para>Suppress leading and trailing days from other months with the MonthOnly parameter.</maml:para>
         </dev:remarks>
       </command:example>
     </command:examples>
@@ -472,6 +535,7 @@ Dec</dev:code>
     </command:details>
     <maml:description>
       <maml:para>This command generates equivalent output to the ncal Linux command. This is not a 100% port of that command but it should provide similar results for the same month and year. You should enter the complete month name. There should be tab-completion for the month and year values. This command has an alias of ncal on Windows platforms.</maml:para>
+      <maml:para>If you run this command in the PowerShell ISE, there will be no highlighting or ANSI formatting.</maml:para>
     </maml:description>
     <command:syntax>
       <command:syntaxItem>
@@ -503,7 +567,7 @@ Dec</dev:code>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>HideHighlight</maml:name>
           <maml:description>
-            <maml:para>Don't highlight the current date.</maml:para>
+            <maml:para>Don't highlight the current date. This parameter is automatically set to true when running in the PowerShell ISE.</maml:para>
           </maml:description>
           <dev:type>
             <maml:name>SwitchParameter</maml:name>
@@ -552,7 +616,7 @@ Dec</dev:code>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>HideHighlight</maml:name>
         <maml:description>
-          <maml:para>Don't highlight the current date.</maml:para>
+          <maml:para>Don't highlight the current date. This parameter is automatically set to true when running in the PowerShell ISE.</maml:para>
         </maml:description>
         <command:parameterValue required="false" variableLength="false">SwitchParameter</command:parameterValue>
         <dev:type>
@@ -1029,6 +1093,17 @@ Highlight : `e[92m</dev:code>
           </dev:type>
           <dev:defaultValue>([System.Globalization.CultureInfo]::CurrentCulture).DateTimeFormat.FirstDayOfWeek</dev:defaultValue>
         </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>MonthOnly</maml:name>
+          <maml:description>
+            <maml:para>Do not show any leading or trailing days.</maml:para>
+          </maml:description>
+          <dev:type>
+            <maml:name>SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
+        </command:parameter>
       </command:syntaxItem>
     </command:syntax>
     <command:parameters>
@@ -1092,6 +1167,18 @@ Highlight : `e[92m</dev:code>
         </dev:type>
         <dev:defaultValue>([System.Globalization.CultureInfo]::CurrentCulture).DateTimeFormat.FirstDayOfWeek</dev:defaultValue>
       </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>MonthOnly</maml:name>
+        <maml:description>
+          <maml:para>Do not show any leading or trailing days.</maml:para>
+        </maml:description>
+        <command:parameterValue required="false" variableLength="false">SwitchParameter</command:parameterValue>
+        <dev:type>
+          <maml:name>SwitchParameter</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>False</dev:defaultValue>
+      </command:parameter>
     </command:parameters>
     <command:inputTypes>
       <command:inputType>
@@ -1121,14 +1208,14 @@ Highlight : `e[92m</dev:code>
     </maml:alertSet>
     <command:examples>
       <command:example>
-        <maml:title>-------------------------- EXAMPLE 1 --------------------------</maml:title>
+        <maml:title>-------------------------- Example 1 --------------------------</maml:title>
         <dev:code>PS C:\&gt; Show-Calendar</dev:code>
         <dev:remarks>
           <maml:para>Display a colorized version of the current month.</maml:para>
         </dev:remarks>
       </command:example>
       <command:example>
-        <maml:title>-------------------------- EXAMPLE 2 --------------------------</maml:title>
+        <maml:title>-------------------------- Example 2 --------------------------</maml:title>
         <dev:code>PS C:\&gt; Show-Calendar -Month February -Year 2021 -HighlightDate 2/22/21</dev:code>
         <dev:remarks>
           <maml:para>Display February 2021 and highlight the 22nd using the default highlight color.</maml:para>
@@ -1139,6 +1226,23 @@ Highlight : `e[92m</dev:code>
         <dev:code>PS C:\&gt; Show-Calendar  -Position ([system.management.automation.host.coordinates]::new(75,1))</dev:code>
         <dev:remarks>
           <maml:para>Display the calendar at a specified X,Y position in the console. This parameter will probably not work in the PowerShell ISE.</maml:para>
+        </dev:remarks>
+      </command:example>
+      <command:example>
+        <maml:title>-------------------------- Example 4 --------------------------</maml:title>
+        <dev:code>PS C:\&gt; Show-Calendar -Month January -Year 2022 -MonthOnly
+
+               January 2022
+
+ Sun   Mon   Tue   Wed   Thu   Fri   Sat
+                                       1
+   2     3     4     5     6     7     8
+   9    10    11    12    13    14    15
+  16    17    18    19    20    21    22
+  23    24    25    26    27    28    29
+  30    31</dev:code>
+        <dev:remarks>
+          <maml:para>Suppress leading and trailing days from other months with the MonthOnly parameter.</maml:para>
         </dev:remarks>
       </command:example>
     </command:examples>

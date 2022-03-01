@@ -7,15 +7,15 @@ Function Get-Calendar {
         [Parameter(Position = 1, ParameterSetName = "month")]
         [ValidateNotNullorEmpty()]
         [ValidateScript({
-            $names = _getMonthsByCulture
-            if ($names -contains $_) {
-                $True
-            }
-            else {
-                Throw "You entered an invalid month. Valid choices are $($names -join ',')"
-                $False
-            }
-        })]
+                $names = _getMonthsByCulture
+                if ($names -contains $_) {
+                    $True
+                }
+                else {
+                    Throw "You entered an invalid month. Valid choices are $($names -join ',')"
+                    $False
+                }
+            })]
         [string]$Month = (Get-Date -Format MMMM),
 
         [Parameter(Position = 2, ParameterSetName = "month")]
@@ -39,7 +39,10 @@ Function Get-Calendar {
         [System.DayOfWeek]$FirstDay = ([System.Globalization.CultureInfo]::CurrentCulture).DateTimeFormat.FirstDayOfWeek,
 
         [Parameter(HelpMessage = "Do not use any ANSI formatting.")]
-        [switch]$NoANSI
+        [switch]$NoANSI,
+
+        [Parameter(HelpMessage = "Do not show any leading or trailing days.")]
+        [switch]$MonthOnly
     )
 
     Begin {
@@ -72,7 +75,6 @@ Function Get-Calendar {
             $monthint = [datetime]::parse("1 $month $year").month
             Write-Verbose "Returned month number $monthint"
             $startd = [datetime]::new($year, $monthint, 1)
-
             $endd = $startd.date
         }
         else {
@@ -96,7 +98,19 @@ Function Get-Calendar {
         Write-Verbose "Go through the requested months."
         while ($startd -le $endd) {
             Write-Verbose "Looping from $($startd.DateTime)"
-            _getCalendar -start $Startd -highlightDates $highlightDate -firstday $FirstDay -noAnsi:$NoANSI
+            $paramHash = @{
+                start          = $Startd
+                highlightDates = $highlightDate
+                firstday       = $FirstDay
+                noAnsi         = $NoANSI
+                monthOnly      = $monthOnly
+            }
+
+            #enforce NoAnsi if running in the PowerShell ISE [Issue #30]
+            if ($host.name -Match "ISE Host") {
+                $paramHash.NoAnsi = $True
+            }
+            _getCalendar @paramHash
 
             #And now move onto the next month
             $startd = $startd.AddMonths(1)

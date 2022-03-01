@@ -4,7 +4,8 @@ function _getCalendar {
         [datetime]$start = (Get-Date),
         [System.DayOfWeek]$FirstDay = "Sunday",
         [string[]]$highlightDates,
-        [switch]$NoANSI
+        [switch]$NoANSI,
+        [switch]$MonthOnly
     )
 
     # https://fmoralesdev.com/2019/03/21/c-datetime-examples/
@@ -161,9 +162,17 @@ function _getCalendar {
         $wk = for ($k = 0; $k -lt $dow.count; $k++) {
 
             $theDay = ($mo.$($dow[$k])[$i]) -as [datetime]
+
             #Write-Verbose "Adding $theDay"
             if ($theDay) {
-                $d = $theDay.day
+
+                if (($start.month -ne $theDay.month) -AND $MonthOnly) {
+                    $theDay = $null
+                    $d = ' '
+                }
+                else {
+                    $d = $theDay.day
+                }
                 $value = $d.tostring().padleft(4, ' ')
                 if ( ($theDay.date -eq (Get-Date).date) -AND (-Not $NoANSI)) {
                     "{0}{1}{2}" -f $PScalendarConfiguration.Today, $value, "$esc[0m"
