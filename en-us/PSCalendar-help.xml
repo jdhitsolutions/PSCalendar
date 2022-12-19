@@ -12,7 +12,7 @@
     <maml:description>
       <maml:para>This command displays a visual representation of a calendar. It supports multiple months, as well as the ability to highlight a specific date or dates. The default display uses ANSI escape sequences. You can adjust the color scheme using Set-PSCalendarConfiguration.</maml:para>
       <maml:para>When you enter Highlight, Start, or End dates, be sure to use the format that is culturally appropriate. It should match the pattern you get from running this command:</maml:para>
-      <maml:para>(Get-Culture).datetimeformat.ShortDatePattern</maml:para>
+      <maml:para>(Get-Culture).DateTimeFormat.ShortDatePattern</maml:para>
     </maml:description>
     <command:syntax>
       <command:syntaxItem>
@@ -45,7 +45,7 @@
           <maml:name>HighlightDate</maml:name>
           <maml:description>
             <maml:para>Specific days (named) to highlight. These dates are color formatted using ANSI escape sequences. You must format the dates to match your culture. It should match the pattern you get from running this command:</maml:para>
-            <maml:para>(Get-Culture).datetimeformat.ShortDatePattern</maml:para>
+            <maml:para>(Get-Culture).DateTimeFormat.ShortDatePattern</maml:para>
           </maml:description>
           <command:parameterValue required="true" variableLength="false">String[]</command:parameterValue>
           <dev:type>
@@ -95,7 +95,7 @@
           <maml:name>Start</maml:name>
           <maml:description>
             <maml:para>The first month to display. You must format the dates to match your culture. It should match the pattern you get from running this command:</maml:para>
-            <maml:para>(Get-Culture).datetimeformat.ShortDatePattern</maml:para>
+            <maml:para>(Get-Culture).DateTimeFormat.ShortDatePattern</maml:para>
           </maml:description>
           <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
           <dev:type>
@@ -108,7 +108,7 @@
           <maml:name>End</maml:name>
           <maml:description>
             <maml:para>The last month to display. You must format the dates to match your culture. It should match the pattern you get from running this command:</maml:para>
-            <maml:para>(Get-Culture).datetimeformat.ShortDatePattern</maml:para>
+            <maml:para>(Get-Culture).DateTimeFormat.ShortDatePattern</maml:para>
           </maml:description>
           <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
           <dev:type>
@@ -121,7 +121,7 @@
           <maml:name>HighlightDate</maml:name>
           <maml:description>
             <maml:para>Specific days (named) to highlight. These dates are color formatted using ANSI escape sequences. You must format the dates to match your culture. It should match the pattern you get from running this command:</maml:para>
-            <maml:para>(Get-Culture).datetimeformat.ShortDatePattern</maml:para>
+            <maml:para>(Get-Culture).DateTimeFormat.ShortDatePattern</maml:para>
           </maml:description>
           <command:parameterValue required="true" variableLength="false">String[]</command:parameterValue>
           <dev:type>
@@ -165,6 +165,68 @@
           <dev:defaultValue>False</dev:defaultValue>
         </command:parameter>
       </command:syntaxItem>
+      <command:syntaxItem>
+        <maml:name>Get-Calendar</maml:name>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>HighlightDate</maml:name>
+          <maml:description>
+            <maml:para>Specific days (named) to highlight. These dates are color formatted using ANSI escape sequences. You must format the dates to match your culture. It should match the pattern you get from running this command:</maml:para>
+            <maml:para>(Get-Culture).DateTimeFormat.ShortDatePattern</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">String[]</command:parameterValue>
+          <dev:type>
+            <maml:name>String[]</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>(Get-Date).date.toString()</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>FirstDay</maml:name>
+          <maml:description>
+            <maml:para>Specify the first day of the week. There is a potential bug in .NET Core where the detected first day of the week is incorrect. If that is true for your culture, use this parameter to manually specify the correct first day of the week.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">DayOfWeek</command:parameterValue>
+          <dev:type>
+            <maml:name>DayOfWeek</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>([System.Globalization.CultureInfo]::CurrentCulture).DateTimeFormat.FirstDayOfWeek</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>NoANSI</maml:name>
+          <maml:description>
+            <maml:para>Do not use any ANSI formatting. The output will be plain-text. This also means that the current day and highlight dates will not be reflected in the output. This parameter has no affect when running the command in the PowerShell ISE. There is no color formatting when using this host.</maml:para>
+          </maml:description>
+          <dev:type>
+            <maml:name>SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>MonthOnly</maml:name>
+          <maml:description>
+            <maml:para>Do not show any leading or trailing days from other months.</maml:para>
+          </maml:description>
+          <dev:type>
+            <maml:name>SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>CalendarYear</maml:name>
+          <maml:description>
+            <maml:para>Enter a year between 1000 and 3000 to display in calendar view.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">Int32</command:parameterValue>
+          <dev:type>
+            <maml:name>Int32</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+      </command:syntaxItem>
     </command:syntax>
     <command:parameters>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="none">
@@ -195,7 +257,7 @@
         <maml:name>Start</maml:name>
         <maml:description>
           <maml:para>The first month to display. You must format the dates to match your culture. It should match the pattern you get from running this command:</maml:para>
-          <maml:para>(Get-Culture).datetimeformat.ShortDatePattern</maml:para>
+          <maml:para>(Get-Culture).DateTimeFormat.ShortDatePattern</maml:para>
         </maml:description>
         <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
         <dev:type>
@@ -208,7 +270,7 @@
         <maml:name>End</maml:name>
         <maml:description>
           <maml:para>The last month to display. You must format the dates to match your culture. It should match the pattern you get from running this command:</maml:para>
-          <maml:para>(Get-Culture).datetimeformat.ShortDatePattern</maml:para>
+          <maml:para>(Get-Culture).DateTimeFormat.ShortDatePattern</maml:para>
         </maml:description>
         <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
         <dev:type>
@@ -221,7 +283,7 @@
         <maml:name>HighlightDate</maml:name>
         <maml:description>
           <maml:para>Specific days (named) to highlight. These dates are color formatted using ANSI escape sequences. You must format the dates to match your culture. It should match the pattern you get from running this command:</maml:para>
-          <maml:para>(Get-Culture).datetimeformat.ShortDatePattern</maml:para>
+          <maml:para>(Get-Culture).DateTimeFormat.ShortDatePattern</maml:para>
         </maml:description>
         <command:parameterValue required="true" variableLength="false">String[]</command:parameterValue>
         <dev:type>
@@ -266,14 +328,14 @@
         </dev:type>
         <dev:defaultValue>False</dev:defaultValue>
       </command:parameter>
-      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="false" position="named" aliases="none">
-        <maml:name>CommonParameters.</maml:name>
+      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>CalendarYear</maml:name>
         <maml:description>
-          <maml:para>This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable. For more information, see about_CommonParameters (http://go.microsoft.com/fwlink/?LinkID=113216).</maml:para>
+          <maml:para>Enter a year between 1000 and 3000 to display in calendar view.</maml:para>
         </maml:description>
-        <command:parameterValue required="true" variableLength="false"></command:parameterValue>
+        <command:parameterValue required="true" variableLength="false">Int32</command:parameterValue>
         <dev:type>
-          <maml:name></maml:name>
+          <maml:name>Int32</maml:name>
           <maml:uri />
         </dev:type>
         <dev:defaultValue>None</dev:defaultValue>
@@ -376,6 +438,13 @@
   30    31</dev:code>
         <dev:remarks>
           <maml:para>Suppress leading and trailing days from other months with the MonthOnly parameter.</maml:para>
+        </dev:remarks>
+      </command:example>
+      <command:example>
+        <maml:title>-------------------------- Example 7 --------------------------</maml:title>
+        <dev:code>PS C:\&gt; Get-Calendar -CalendarYear 2022 -NoANSI | Out-File c:\work\2022.txt</dev:code>
+        <dev:remarks>
+          <maml:para>Create a yearly calendar for 2022 and save the output to a text file.</maml:para>
         </dev:remarks>
       </command:example>
     </command:examples>
@@ -1060,7 +1129,7 @@ Highlight : `e[92m</dev:code>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>HighlightDate</maml:name>
           <maml:description>
-            <maml:para>Specify days to highlight. These dates are colored by ANSI escape sequences. You can modify them with Set-PSCalendarConfiguration. You must format the dates tpo match your culture. It should match the pattern you get from running this command: (Get-Culture).datetimeformat.ShortDatePattern</maml:para>
+            <maml:para>Specify days to highlight. These dates are colored by ANSI escape sequences. You can modify them with Set-PSCalendarConfiguration. You must format the dates tpo match your culture. It should match the pattern you get from running this command: (Get-Culture).DateTimeFormat.ShortDatePattern</maml:para>
           </maml:description>
           <command:parameterValue required="true" variableLength="false">String[]</command:parameterValue>
           <dev:type>
@@ -1105,6 +1174,56 @@ Highlight : `e[92m</dev:code>
           <dev:defaultValue>False</dev:defaultValue>
         </command:parameter>
       </command:syntaxItem>
+      <command:syntaxItem>
+        <maml:name>Show-Calendar</maml:name>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>HighlightDate</maml:name>
+          <maml:description>
+            <maml:para>Specify days to highlight. These dates are colored by ANSI escape sequences. You can modify them with Set-PSCalendarConfiguration. You must format the dates tpo match your culture. It should match the pattern you get from running this command: (Get-Culture).DateTimeFormat.ShortDatePattern</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">String[]</command:parameterValue>
+          <dev:type>
+            <maml:name>String[]</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>FirstDay</maml:name>
+          <maml:description>
+            <maml:para>Specify the first day of the week. There is a potential bug in .NET Core where the detected first day of the week is incorrect. If that is true for your culture, use this parameter to manually specify the correct first day of the week.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">DayOfWeek</command:parameterValue>
+          <dev:type>
+            <maml:name>DayOfWeek</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>([System.Globalization.CultureInfo]::CurrentCulture).DateTimeFormat.FirstDayOfWeek</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>MonthOnly</maml:name>
+          <maml:description>
+            <maml:para>Do not show any leading or trailing days.</maml:para>
+          </maml:description>
+          <dev:type>
+            <maml:name>SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>CalendarYear</maml:name>
+          <maml:description>
+            <maml:para>Enter a year between 1000 and 3000 to display in calendar view.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">Int32</command:parameterValue>
+          <dev:type>
+            <maml:name>Int32</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+      </command:syntaxItem>
     </command:syntax>
     <command:parameters>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="none">
@@ -1134,7 +1253,7 @@ Highlight : `e[92m</dev:code>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>HighlightDate</maml:name>
         <maml:description>
-          <maml:para>Specify days to highlight. These dates are colored by ANSI escape sequences. You can modify them with Set-PSCalendarConfiguration. You must format the dates tpo match your culture. It should match the pattern you get from running this command: (Get-Culture).datetimeformat.ShortDatePattern</maml:para>
+          <maml:para>Specify days to highlight. These dates are colored by ANSI escape sequences. You can modify them with Set-PSCalendarConfiguration. You must format the dates tpo match your culture. It should match the pattern you get from running this command: (Get-Culture).DateTimeFormat.ShortDatePattern</maml:para>
         </maml:description>
         <command:parameterValue required="true" variableLength="false">String[]</command:parameterValue>
         <dev:type>
@@ -1178,6 +1297,18 @@ Highlight : `e[92m</dev:code>
           <maml:uri />
         </dev:type>
         <dev:defaultValue>False</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>CalendarYear</maml:name>
+        <maml:description>
+          <maml:para>Enter a year between 1000 and 3000 to display in calendar view.</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">Int32</command:parameterValue>
+        <dev:type>
+          <maml:name>Int32</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
       </command:parameter>
     </command:parameters>
     <command:inputTypes>

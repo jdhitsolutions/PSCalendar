@@ -7,6 +7,7 @@ function _getCalendar {
         [switch]$NoANSI,
         [switch]$MonthOnly
     )
+    $global:mm=@()
 
     # https://fmoralesdev.com/2019/03/21/c-datetime-examples/
 
@@ -81,6 +82,11 @@ function _getCalendar {
         $Currentday = $currentDay.AddDays(1)
     }
 
+    #fix for issue #32
+    if ($fd) {
+        $day0 += [datetime]$currentDay
+    }
+
     if ($fd -eq 0) {
         $mo = [pscustomobject]@{
             PSTypeName = "PSCalendarMonth"
@@ -114,17 +120,30 @@ function _getCalendar {
 
     #Build an array of short day names
     $abbreviated = $currCulture.DateTimeFormat.AbbreviatedDayNames
+    #code suggestion from @scriptingstudio Issue #32
+    $days = [System.Collections.Generic.list[string]]::new()
 
-    $days = @()
-
+    $underline = 4
+    $addday = {
+        $d = $abbreviated[$args[0]].padleft($underline, " ")
+        if ($NoANSI) {
+            $days.add($d)
+        } else {
+            $days.add(("{0}{1}{2}" -f $PScalendarConfiguration.DayofWeek, $d, "$esc[0m"))
+        }
+    }
+    $n = if ($fd -eq 0) {0} else {1}
+    for ($n; $n -lt $abbreviated.count; $n++) {. $addday $n}
+    if ($fd) {. $addday 0}
+    <#
     if ($fd -eq 0 ) {
         for ($n = 0; $n -lt $abbreviated.count; $n++) {
             $d = $abbreviated[$n].padleft(4, " ")
             if ($NoANSI) {
-                $days += $d
+                $days.Add($d)
             }
             else {
-                $days += "{0}{1}{2}" -f $PScalendarConfiguration.DayofWeek, $d, "$esc[0m"
+                $days.Add($("{0}{1}{2}" -f $PScalendarConfiguration.DayofWeek, $d, "$esc[0m"))
             }
         }
     }
@@ -132,22 +151,22 @@ function _getCalendar {
         for ($n = 1; $n -lt $abbreviated.count; $n++) {
             $d = $abbreviated[$n].padleft(4, " ")
             if ($NoANSI) {
-                $days += $d
+                $days.Add($d)
             }
             else {
-                $days += "{0}{1}{2}" -f $PScalendarConfiguration.DayofWeek, $d, "$esc[0m"
+                $days.Add($("{0}{1}{2}" -f $PScalendarConfiguration.DayofWeek, $d, "$esc[0m"))
             }
 
         }
         $d = $abbreviated[0].padleft(4, " ")
         if ($NoANSI) {
-            $days += $d
+            $days.Add($d)
         }
         else {
-            $days += "{0}{1}{2}" -f $PScalendarConfiguration.DayofWeek, $d, "$esc[0m"
+            $days.Add($("{0}{1}{2}" -f $PScalendarConfiguration.DayofWeek, $d, "$esc[0m"))
         }
     }
-
+#>
     $plainHead = "$($mo.Month) $($mo.Year)"
     if ($NoANSI) {
         $head = $plainHead
@@ -173,8 +192,10 @@ function _getCalendar {
                 else {
                     $d = $theDay.day
                 }
-                $value = $d.tostring().padleft(4, ' ')
-                if ( ($theDay.date -eq (Get-Date).date) -AND (-Not $NoANSI)) {
+
+                $value = $d.tostring().padleft($underline, ' ')
+                #$value = $d.tostring().padleft(4, ' ')
+                if (($theDay.date -eq (Get-Date).date) -AND (-Not $NoANSI)) {
                     "{0}{1}{2}" -f $PScalendarConfiguration.Today, $value, "$esc[0m"
 
                 }
@@ -194,7 +215,9 @@ function _getCalendar {
     Function makemonth {
         #this is a hack function to write all the strings to the pipeline
         #separately
-        [int]$pad = (40 - $plainhead.Length) / 2 + 1
+        #code suggestion from @scriptingstudio Issue #32
+        [int]$pad = (10*$underline - $plainhead.Length) / 2 + 1
+        #[int]$pad = (40 - $plainhead.Length) / 2 + 1
         $p = " " * $pad
         "`n$p$head`n"
         $dayhead
@@ -203,7 +226,7 @@ function _getCalendar {
 
     #join all the strings into a single string
     makemonth #| Out-String
-
+    $global:mm += makemonth
 } #_getCalendar
 function _getMonthsByCulture {
     [cmdletbinding()]

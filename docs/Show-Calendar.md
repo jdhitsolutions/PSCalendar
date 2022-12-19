@@ -13,8 +13,16 @@ Display a colorized calendar month in the console.
 
 ## SYNTAX
 
+### month
+
 ```yaml
 Show-Calendar [[-Month] <String>] [[-Year] <Int32>] [-HighlightDate <String[]>] [-FirstDay <DayOfWeek>] [-Position <Coordinates>] [-MonthOnly] [<CommonParameters>]
+```
+
+### calyear
+
+```yaml
+Show-Calendar [-HighlightDate <String[]>] [-FirstDay <DayOfWeek>] [-MonthOnly] -CalendarYear <Int32>  [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -73,7 +81,7 @@ Select a month to display. The command will default to the current year unless o
 
 ```yaml
 Type: String
-Parameter Sets: (All)
+Parameter Sets: month
 Aliases:
 
 Required: False
@@ -89,7 +97,7 @@ Select a year for the specified month.
 
 ```yaml
 Type: Int32
-Parameter Sets: (All)
+Parameter Sets: month
 Aliases:
 
 Required: False
@@ -101,7 +109,7 @@ Accept wildcard characters: False
 
 ### -HighlightDate
 
-Specify days to highlight. These dates are colored by ANSI escape sequences. You can modify them with Set-PSCalendarConfiguration. You must format the dates tpo match your culture. It should match the pattern you get from running this command: (Get-Culture).datetimeformat.ShortDatePattern
+Specify days to highlight. These dates are colored by ANSI escape sequences. You can modify them with Set-PSCalendarConfiguration. You must format the dates tpo match your culture. It should match the pattern you get from running this command: (Get-Culture).DateTimeFormat.ShortDatePattern
 
 ```yaml
 Type: String[]
@@ -121,7 +129,7 @@ Enter a System.Management.Automation.Host.Coordinates object to specify a locati
 
 ```yaml
 Type: Coordinates
-Parameter Sets: (All)
+Parameter Sets: month
 Aliases:
 
 Required: False
@@ -157,6 +165,22 @@ Parameter Sets: (All)
 Aliases:
 
 Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -CalendarYear
+
+Enter a year between 1000 and 3000 to display in calendar view.
+
+```yaml
+Type: Int32
+Parameter Sets: calyear
+Aliases:
+
+Required: True
 Position: Named
 Default value: None
 Accept pipeline input: False

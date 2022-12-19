@@ -1,5 +1,12 @@
 # Change Log for PSCalendar
 
+## v2.9.0
+
++ Updated `Get-Calendar` and `Show-Calendar` to fix empty trailing day when specifying a different first day of the week. [Issue #32](https://github.com/jdhitsolutions/PSCalendar/issues/32). Thanks again to [Matthew Gray](https://github.com/scriptingstudio) for code suggestion.
++ Updated `_getCalendar` to use a generic list for the days instead of an array. This provides a slight performance benefit.
++ Added a parameter called `CalendarYear` to display a full year calendar for `Get-Calendar` and `Show-Calendar`. [Issue #31](https://github.com/jdhitsolutions/PSCalendar/issues/31)
++ Help updates.
+
 ## v2.8.0
 
 + Updated `Get-Calendar` and `Show-Calendar` with a new parameter `MonthOnly` to only show days from the specified month. This will remove leading and trailing days from other months. [Issue #29](https://github.com/jdhitsolutions/PSCalendar/issues/29). Much thanks to [Matthew Gray](https://github.com/scriptingstudio) for the suggestions and code snippet.

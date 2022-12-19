@@ -1,7 +1,7 @@
 Function Get-NCalendar {
     [cmdletbinding()]
     [alias("ncal")]
-    [Outputtype("String")]
+    [OutputType("String")]
 
     Param(
         [Parameter(
@@ -13,7 +13,7 @@ Function Get-NCalendar {
         [ValidateNotNullOrEmpty()]
         [ValidateScript( {
             #sometimes this returns an extra and blank entry
-            $m = [system.globalization.cultureinfo]::CurrentCulture.DateTimeFormat.MonthNames | Where-Object { $_ }
+            $m = [System.Globalization.CultureInfo]::CurrentCulture.DateTimeFormat.MonthNames | Where-Object { $_ }
             if ( $m -contains $_) {
                 $True
             }
@@ -39,10 +39,10 @@ Function Get-NCalendar {
 
     Begin {
         #display the module version defined in the psm1 file
-        Write-Verbose "Starting $($myinvocation.MyCommand) [v$modver]"
-        Write-Verbose "Using PowerShell version $($psversiontable.PSVersion)"
+        Write-Verbose "Starting $($MyInvocation.MyCommand) [v$modver]"
+        Write-Verbose "Using PowerShell version $($PSVersionTable.PSVersion)"
         #Call .NET for better results when testing this command in different cultures
-        $currCulture = [system.globalization.cultureinfo]::CurrentCulture
+        $CurrentCulture = [System.Globalization.CultureInfo]::CurrentCulture
 
         #enforce NoAnsi if running in the PowerShell ISE [Issue #30]
         if ($host.name -Match "ISE Host") {
@@ -65,10 +65,10 @@ Function Get-NCalendar {
         }
         $startd = [datetime]::new($year, $monthint, 1)
 
-        $max = $currCulture.DateTimeFormat.Calendar.GetDaysInMonth($year, $monthint)
+        $max = $CurrentCulture.DateTimeFormat.Calendar.GetDaysInMonth($year, $monthint)
         Write-Verbose "Max days in month is $max."
 
-        $daynames = $currCulture.DateTimeFormat.AbbreviatedDayNames
+        $daynames = $CurrentCulture.DateTimeFormat.AbbreviatedDayNames
         $daylist = [System.Collections.Generic.list[string]]::new()
 
         if ($Monday) {
@@ -96,7 +96,7 @@ Function Get-NCalendar {
 
         $dayhash | Out-String | Write-Verbose
         #make sure month is in title case
-        $head = "$($currculture.TextInfo.toTitleCase($Month)) $Year"
+        $head = "$($CurrentCulture.TextInfo.toTitleCase($Month)) $Year"
         $maxDayLength = $dayhash.keys.length | Sort-Object | Select-Object -Last 1
         Write-Verbose "Building day hashtable"
         $out = $dayhash.GetEnumerator() |

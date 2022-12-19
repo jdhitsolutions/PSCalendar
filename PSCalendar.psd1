@@ -4,7 +4,7 @@
 
 
     RootModule           = 'PSCalendar.psm1'
-    ModuleVersion        = '2.8.0'
+    ModuleVersion        = '2.9.0'
     CompatiblePSEditions = @("Desktop", "Core")
     GUID                 = '222beda0-cdb5-464d-bf49-7ab701da86c9'
     Author               = 'Jeff Hicks'

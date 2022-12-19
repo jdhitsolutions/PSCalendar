@@ -42,7 +42,11 @@ Function Get-Calendar {
         [switch]$NoANSI,
 
         [Parameter(HelpMessage = "Do not show any leading or trailing days.")]
-        [switch]$MonthOnly
+        [switch]$MonthOnly,
+
+        [Parameter(Mandatory, HelpMessage = "Enter a year between 1000 and 3000 to display in calendar view.", ParameterSetName = "calyear")]
+        [ValidateRange(1000,3000)]
+        [int]$CalendarYear
     )
 
     Begin {
@@ -67,26 +71,38 @@ Function Get-Calendar {
         Write-Verbose ($PSBoundParameters | Out-String).trim()
         Write-Verbose "Getting start date using pattern $($currCulture.DateTimeFormat.ShortDatePattern)"
 
-        if ($pscmdlet.ParameterSetName -eq "month") {
-            Write-Verbose "Using month $month and year $year"
+        Switch ($pscmdlet.ParameterSetName) {
+            "month" {
+                Write-Verbose "Using month $month and year $year"
 
-            #get month number
-            Write-Verbose "Parsing $month to number"
-            $monthint = [datetime]::parse("1 $month $year").month
-            Write-Verbose "Returned month number $monthint"
-            $startd = [datetime]::new($year, $monthint, 1)
-            $endd = $startd.date
-        }
-        else {
-            #Figure out the first day of the start and end months
-            # Write-Verbose "Calculating start from month $($start.month) year $($start.year)"
-            # $start = [datetime]::new($start.year, $start.Month, 1)
-            Write-Verbose "Treating $start as [datetime]"
-            $startd = $start -as [datetime]
-            # Write-Verbose "Calculating end from month $($end.month) year $($end.year)"
-            # $end = [datetime]::new($end.year, $end.month, 1)
-            Write-Verbose "Treating $end as [datetime]"
-            $endd = $end -as [datetime]
+                #get month number
+                Write-Verbose "Parsing $month to number"
+                $monthint = [datetime]::parse("1 $month $year").month
+                Write-Verbose "Returned month number $monthint"
+                $startd = [datetime]::new($year, $monthint, 1)
+                $endd = $startd.date
+            }
+            "span"  {
+                #Figure out the first day of the start and end months
+                # Write-Verbose "Calculating start from month $($start.month) year $($start.year)"
+                # $start = [datetime]::new($start.year, $start.Month, 1)
+                Write-Verbose "Treating $start as [datetime]"
+                $startd = $start -as [datetime]
+                # Write-Verbose "Calculating end from month $($end.month) year $($end.year)"
+                # $end = [datetime]::new($end.year, $end.month, 1)
+                Write-Verbose "Treating $end as [datetime]"
+                $endd = $end -as [datetime]
+            }
+            "calyear" {
+                Write-Verbose "getting calendar for $CalendarYear"
+                $startd = [datetime]::new($year, 1, 1)
+                $endd = [datetime]::new($year, 12, 1)
+
+            }
+            default {
+                #this should never get called, but if it does, something is coded wrong
+                Write-Warning "Detected parameter set $($pscmdlet.ParameterSetName) and I don't know what to do!"
+            }
         }
 
         Write-Verbose "Starting at $($startd.toString())"

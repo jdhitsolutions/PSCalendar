@@ -25,13 +25,19 @@ Get-Calendar [[-Month] <String>] [[-Year] <Int32>] [-HighlightDate <String[]>] [
 Get-Calendar -Start <String> -End <String> [-HighlightDate <String[]>] [-FirstDay <DayOfWeek>] [-NoANSI] [-MonthOnly] [<CommonParameters>]
 ```
 
+### calyear
+
+```yaml
+Get-Calendar [-HighlightDate <String[]>] [-FirstDay <DayOfWeek>] [-NoANSI] [-MonthOnly] -CalendarYear <Int32> [<CommonParameters>]
+```
+
 ## DESCRIPTION
 
 This command displays a visual representation of a calendar. It supports multiple months, as well as the ability to highlight a specific date or dates. The default display uses ANSI escape sequences. You can adjust the color scheme using Set-PSCalendarConfiguration.
 
 When you enter Highlight, Start, or End dates, be sure to use the format that is culturally appropriate. It should match the pattern you get from running this command:
 
-(Get-Culture).datetimeformat.ShortDatePattern
+(Get-Culture).DateTimeFormat.ShortDatePattern
 
 ## EXAMPLES
 
@@ -122,6 +128,14 @@ PS C:\> Get-Calendar -Month January -Year 2022 -NoANSI -MonthOnly
 
 Suppress leading and trailing days from other months with the MonthOnly parameter.
 
+### Example 7
+
+```powershell
+PS C:\> Get-Calendar -CalendarYear 2022 -NoANSI | Out-File c:\work\2022.txt
+```
+
+Create a yearly calendar for 2022 and save the output to a text file.
+
 ## PARAMETERS
 
 ### -Month
@@ -160,7 +174,7 @@ Accept wildcard characters: False
 
 The first month to display. You must format the dates to match your culture. It should match the pattern you get from running this command:
 
-(Get-Culture).datetimeformat.ShortDatePattern
+(Get-Culture).DateTimeFormat.ShortDatePattern
 
 ```yaml
 Type: String
@@ -178,7 +192,7 @@ Accept wildcard characters: False
 
 The last month to display. You must format the dates to match your culture. It should match the pattern you get from running this command:
 
-(Get-Culture).datetimeformat.ShortDatePattern
+(Get-Culture).DateTimeFormat.ShortDatePattern
 
 ```yaml
 Type: String
@@ -196,7 +210,7 @@ Accept wildcard characters: False
 
 Specific days (named) to highlight. These dates are color formatted using ANSI escape sequences. You must format the dates to match your culture. It should match the pattern you get from running this command:
 
-(Get-Culture).datetimeformat.ShortDatePattern
+(Get-Culture).DateTimeFormat.ShortDatePattern
 
 ```yaml
 Type: String[]
@@ -258,7 +272,23 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### CommonParameters.
+### -CalendarYear
+
+Enter a year between 1000 and 3000 to display in calendar view.
+
+```yaml
+Type: Int32
+Parameter Sets: calyear
+Aliases:
+
+Required: True
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### CommonParameters
 
 This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable. For more information, see [about_CommonParameters](http://go.microsoft.com/fwlink/?LinkID=113216).
 
