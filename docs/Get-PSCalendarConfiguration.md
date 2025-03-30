@@ -1,7 +1,7 @@
 ---
 external help file: PSCalendar-help.xml
 Module Name: PSCalendar
-online version: https://bit.ly/3htAFNM
+online version: https://jdhitsolutions.com/yourls/c47ec2
 schema: 2.0.0
 ---
 
@@ -55,3 +55,5 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 ## RELATED LINKS
 
 [Set-PSCalendarConfiguration](Set-PSCalendarConfiguration.md)
+
+[Export-PSCalendarConfiguration](Export-PSCalendarConfiguration.md)

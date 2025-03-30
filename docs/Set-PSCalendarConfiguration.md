@@ -1,7 +1,7 @@
 ---
 external help file: PSCalendar-help.xml
 Module Name: PSCalendar
-online version: https://bit.ly/2Vli4uJ
+online version: https://jdhitsolutions.com/yourls/c31c0c
 schema: 2.0.0
 ---
 
@@ -14,8 +14,7 @@ Modify the PSCalendar ANSI configuration.
 ## SYNTAX
 
 ```yaml
-Set-PSCalendarConfiguration [[-Title] <String>] [[-DayOfWeek] <String>]
-[[-Today] <String>] [[-Highlight] <String>] [-WhatIf] [-Confirm] [<CommonParameters>]
+Set-PSCalendarConfiguration [[-Title] <String>] [[-DayOfWeek] <String>] [[-Today] <String>] [[-Highlight] <String>] [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -29,10 +28,10 @@ Any configuration changes you make are only for the duration of your PowerShell 
 ### Example 1
 
 ```powershell
-PS C:\>  Set-PSCalendarConfiguration -title "$([char]27)[48;5;57m"
+PS C:\>  Set-PSCalendarConfiguration -Title "$([char]27)[48;5;57m"
 ```
 
-Change the title color scheme on Windows 5.1. Although, this would also work in PowerShell 7.
+Change the title color scheme on Windows 5.1. This syntax would also work in PowerShell 7.
 
 ### Example 2
 
@@ -40,7 +39,7 @@ Change the title color scheme on Windows 5.1. Although, this would also work in 
 PS C:\>  Set-PSCalendarConfiguration -DayOfWeek "`e[48;5;57m"
 ```
 
-Change the week day headings color scheme on PowerShell 7.x.
+Change the week day headings color scheme on PowerShell 7.
 
 ## PARAMETERS
 
@@ -158,3 +157,5 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 ## RELATED LINKS
 
 [Get-PSCalendarConfiguration](Get-PSCalendarConfiguration.md)
+
+[Export-PSCalendarConfiguration](Export-PSCalendarConfiguration.md)

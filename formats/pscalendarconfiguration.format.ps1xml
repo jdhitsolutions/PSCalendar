@@ -23,8 +23,8 @@ format type data generated 09/02/2020 11:51:35 by BOVINE320\Jeff
                 <PropertyName>Title</PropertyName>
               </ListItem>
               <ListItem>
-                <Label>DayofWeek</Label>
-                <PropertyName>DayofWeek</PropertyName>
+                <Label>DayOfWeek</Label>
+                <PropertyName>DayOfWeek</PropertyName>
               </ListItem>
               <ListItem>
                 <Label>Today</Label>

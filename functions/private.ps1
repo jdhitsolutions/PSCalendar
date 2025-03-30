@@ -1,43 +1,43 @@
 function _getCalendar {
     [cmdletbinding()]
     Param(
-        [datetime]$start = (Get-Date),
+        [DateTime]$start = (Get-Date),
         [System.DayOfWeek]$FirstDay = "Sunday",
-        [string[]]$highlightDates,
+        [string[]]$HighLightDates,
         [switch]$NoANSI,
         [switch]$MonthOnly
     )
     $global:mm=@()
 
-    # https://fmoralesdev.com/2019/03/21/c-datetime-examples/
+    # https://fmoralesdev.com/2019/03/21/c-DateTime-examples/
 
-    $currCulture = [system.globalization.cultureinfo]::CurrentCulture
-    Write-Verbose "Building calendar for $($currCulture.Name)"
+    $currCulture = [System.Globalization.CultureInfo]::CurrentCulture
+    Write-Debug "Building calendar for $($currCulture.Name)"
 
-    #Need to rebuild HighlightDate to respect culture?
-    if ($HighlightDates) {
-        $highlightdates = foreach ($item in $HighlightDates) {
-            Write-Verbose "Casting $item as [datetime]"
-            $item -as [datetime]
+    #Need to rebuild HighLightDate to respect culture?
+    if ($HighLightDates) {
+        $HighLightDates = foreach ($item in $HighLightDates) {
+            Write-Debug "Casting $item as [DateTime]"
+            $item -as [DateTime]
         }
-        write-Verbose "Detected $($highlightdates.count) highlight dates"
-        $highlightDates | ForEach-Object { Write-Verbose $_.ToString()}
+        Write-Debug "Detected $($HighLightDates.count) highlight dates"
+        $HighLightDates | ForEach-Object { Write-Debug $_.toString()}
     }
 
     $mo = $start.month
     $yr = $start.year
     $max = $currCulture.DateTimeFormat.Calendar.GetDaysInMonth($yr, $mo)
-    Write-Verbose "Totals days in $mo/$yr is $max"
+    Write-Debug "Totals days in $mo/$yr is $max"
     $end = Get-Date -Year $yr -Month $mo -Day $max
-    Write-Verbose "Ending $end"
+    Write-Debug "Ending $end"
 
-    #$dateTimeFormat = $currCulture.DateTimeFormat
+    #$DateTimeFormat = $currCulture.DateTimeFormat
 
     $fd = $FirstDay.value__
-    #$dateTimeFormat.FirstDayOfWeek.value__
+    #$DateTimeFormat.FirstDayOfWeek.value__
 
-    Write-Verbose "First day of the week is $FirstDay [$fd]"
-    $currentDay = $start
+    Write-Debug "First day of the week is $FirstDay [$fd]"
+   $CurrentDay = $start
 
     $day0 = @()
     $day1 = @()
@@ -49,46 +49,46 @@ function _getCalendar {
 
     #adjust for the beginning of the month
     while ($currentDay.DayOfWeek.value__ -ne $fd) {
-        $currentDay = $currentDay.AddDays(-1)
+       $CurrentDay =$CurrentDay.AddDays(-1)
     }
 
     While ($currentDay.date -le $end.date) {
-        [datetime]$aDay = $currentDay
+        [DateTime]$aDay =$CurrentDay
         Switch ($aDay.DayOfWeek.value__) {
-            0 { $day0 += $aday }
-            1 { $day1 += $aday }
-            2 { $day2 += $aday }
-            3 { $day3 += $aday }
-            4 { $day4 += $aday }
-            5 { $day5 += $aday }
-            6 { $day6 += $aday }
+            0 { $day0 += $aDay }
+            1 { $day1 += $aDay }
+            2 { $day2 += $aDay }
+            3 { $day3 += $aDay }
+            4 { $day4 += $aDay }
+            5 { $day5 += $aDay }
+            6 { $day6 += $aDay }
         }
-        $currentDay = $currentDay.AddDays(1)
+       $CurrentDay =$CurrentDay.AddDays(1)
     }
 
     #add enough days to finish the week
     While ($currentDay.DayOfWeek.value__ -ne 0) {
-        [datetime]$aDay = $currentDay
-        #Write-Verbose "adding $aDay"
+        [DateTime]$aDay =$CurrentDay
+        #Write-Debug "adding $aDay"
         Switch ($aDay.DayOfWeek.value__) {
-            0 { $day0 += $aday }
-            1 { $day1 += $aday }
-            2 { $day2 += $aday }
-            3 { $day3 += $aday }
-            4 { $day4 += $aday }
-            5 { $day5 += $aday }
-            6 { $day6 += $aday }
+            0 { $day0 += $aDay }
+            1 { $day1 += $aDay }
+            2 { $day2 += $aDay }
+            3 { $day3 += $aDay }
+            4 { $day4 += $aDay }
+            5 { $day5 += $aDay }
+            6 { $day6 += $aDay }
         }
-        $Currentday = $currentDay.AddDays(1)
+       $CurrentDay =$CurrentDay.AddDays(1)
     }
 
     #fix for issue #32
     if ($fd) {
-        $day0 += [datetime]$currentDay
+        $day0 += [DateTime]$currentDay
     }
 
     if ($fd -eq 0) {
-        $mo = [pscustomobject]@{
+        $mo = [PSCustomObject]@{
             PSTypeName = "PSCalendarMonth"
             Month      = "{0:MMMM}" -f $start
             Year       = $start.year
@@ -102,7 +102,7 @@ function _getCalendar {
         }
     }
     else {
-        $mo = [pscustomobject]@{
+        $mo = [PSCustomObject]@{
             PSTypeName = "PSCalendarMonth"
             Month      = "{0:MMMM}" -f $start
             Year       = $start.year
@@ -116,7 +116,7 @@ function _getCalendar {
         }
     }
 
-    $dow = $mo.psobject.Properties.name | Where-Object { $_ -notmatch "Month|Year" }
+    $dow = $mo.PSObject.Properties.name | Where-Object { $_ -notmatch "Month|Year" }
 
     #Build an array of short day names
     $abbreviated = $currCulture.DateTimeFormat.AbbreviatedDayNames
@@ -124,65 +124,34 @@ function _getCalendar {
     $days = [System.Collections.Generic.list[string]]::new()
 
     $underline = 4
-    $addday = {
-        $d = $abbreviated[$args[0]].padleft($underline, " ")
+    $addDay = {
+        $d = $abbreviated[$args[0]].PadLeft($underline, " ")
         if ($NoANSI) {
             $days.add($d)
         } else {
-            $days.add(("{0}{1}{2}" -f $PScalendarConfiguration.DayofWeek, $d, "$esc[0m"))
+            $days.add(("{0}{1}{2}" -f $PScalendarConfiguration.DayOfWeek, $d, "$esc[0m"))
         }
     }
     $n = if ($fd -eq 0) {0} else {1}
-    for ($n; $n -lt $abbreviated.count; $n++) {. $addday $n}
-    if ($fd) {. $addday 0}
-    <#
-    if ($fd -eq 0 ) {
-        for ($n = 0; $n -lt $abbreviated.count; $n++) {
-            $d = $abbreviated[$n].padleft(4, " ")
-            if ($NoANSI) {
-                $days.Add($d)
-            }
-            else {
-                $days.Add($("{0}{1}{2}" -f $PScalendarConfiguration.DayofWeek, $d, "$esc[0m"))
-            }
-        }
-    }
-    else {
-        for ($n = 1; $n -lt $abbreviated.count; $n++) {
-            $d = $abbreviated[$n].padleft(4, " ")
-            if ($NoANSI) {
-                $days.Add($d)
-            }
-            else {
-                $days.Add($("{0}{1}{2}" -f $PScalendarConfiguration.DayofWeek, $d, "$esc[0m"))
-            }
+    for ($n; $n -lt $abbreviated.count; $n++) {. $addDay $n}
+    if ($fd) {. $addDay 0}
 
-        }
-        $d = $abbreviated[0].padleft(4, " ")
-        if ($NoANSI) {
-            $days.Add($d)
-        }
-        else {
-            $days.Add($("{0}{1}{2}" -f $PScalendarConfiguration.DayofWeek, $d, "$esc[0m"))
-        }
-    }
-#>
     $plainHead = "$($mo.Month) $($mo.Year)"
     if ($NoANSI) {
         $head = $plainHead
     }
     else {
-        $head = "{0}{1}{2}" -f $pscalendarConfiguration.title, $plainhead, "$esc[0m"
+        $head = "{0}{1}{2}" -f $pscalendarConfiguration.title, $plainHead, "$esc[0m"
     }
 
-    $dayhead = $days -join '  '
-    Write-Verbose "Using day heading $dayhead"
+    $dayHead = $days -join '  '
+    Write-Debug "Using day heading $dayHead"
     $month = for ($i = 0; $i -lt 6; $i++) {
         $wk = for ($k = 0; $k -lt $dow.count; $k++) {
 
-            $theDay = ($mo.$($dow[$k])[$i]) -as [datetime]
+            $theDay = ($mo.$($dow[$k])[$i]) -as [DateTime]
 
-            #Write-Verbose "Adding $theDay"
+            #Write-Debug "Adding $theDay"
             if ($theDay) {
 
                 if (($start.month -ne $theDay.month) -AND $MonthOnly) {
@@ -193,13 +162,13 @@ function _getCalendar {
                     $d = $theDay.day
                 }
 
-                $value = $d.tostring().padleft($underline, ' ')
-                #$value = $d.tostring().padleft(4, ' ')
+                $value = $d.toString().PadLeft($underline, ' ')
+                #$value = $d.toString().PadLeft(4, ' ')
                 if (($theDay.date -eq (Get-Date).date) -AND (-Not $NoANSI)) {
                     "{0}{1}{2}" -f $PScalendarConfiguration.Today, $value, "$esc[0m"
 
                 }
-                elseif ( ($highlightDates -contains $theDay.date) -AND (-Not $NoANSI)) {
+                elseif ( ($HighLightDates -contains $theDay.date) -AND (-Not $NoANSI)) {
                     "{0}{1}{2}" -f $PScalendarConfiguration.Highlight, $value, "$esc[0m"
                 }
                 else {
@@ -207,7 +176,7 @@ function _getCalendar {
                 }
             }
         }
-        Write-Verbose "Adding week $wk"
+        Write-Debug "Adding week $wk"
         $wk -join '  '
     }
 
@@ -216,11 +185,11 @@ function _getCalendar {
         #this is a hack function to write all the strings to the pipeline
         #separately
         #code suggestion from @scriptingstudio Issue #32
-        [int]$pad = (10*$underline - $plainhead.Length) / 2 + 1
-        #[int]$pad = (40 - $plainhead.Length) / 2 + 1
+        [int]$pad = (10*$underline - $plainHead.Length) / 2 + 1
+        #[int]$pad = (40 - $plainHead.Length) / 2 + 1
         $p = " " * $pad
         "`n$p$head`n"
-        $dayhead
+        $dayHead
         $month
     }
 
@@ -231,8 +200,8 @@ function _getCalendar {
 function _getMonthsByCulture {
     [cmdletbinding()]
     Param([string]$Culture = ([system.threading.thread]::currentThread).CurrentCulture)
-    Write-Verbose "Getting months for culture $Culture"
-    [cultureinfo]::GetCultureInfo($culture).DateTimeFormat.Monthnames
+    Write-Debug "Getting months for culture $Culture"
+    [CultureInfo]::GetCultureInfo($culture).DateTimeFormat.MonthNames
 }
 
 function _getMonthNumber {
@@ -259,10 +228,10 @@ Function New-RunspaceCleanupJob {
     [OutputType("None", "ThreadJob")]
     Param(
         [Parameter(Mandatory, HelpMessage = "This should be the System.Management.Automation.Runspaces.AsyncResult object from the BeginInvoke() method.")]
-        [ValidateNotNullorEmpty()]
+        [ValidateNotNullOrEmpty()]
         [object]$Handle,
         [Parameter(Mandatory)]
-        [ValidateNotNullorEmpty()]
+        [ValidateNotNullOrEmpty()]
         [System.Management.Automation.PowerShell]$PowerShell,
         [Parameter(HelpMessage = "Specify a sleep interval in seconds")]
         [ValidateRange(5, 600)]

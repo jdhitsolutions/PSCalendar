@@ -1,7 +1,7 @@
 ---
 external help file: PSCalendar-help.xml
 Module Name: PSCalendar
-online version: https://bit.ly/3CMRX0A
+online version: https://jdhitsolutions.com/yourls/5f63d1
 schema: 2.0.0
 ---
 
@@ -14,12 +14,12 @@ Display a help PDF file for the PSCalendar module.
 ## SYNTAX
 
 ```yaml
-Show-PSCalendarHelp [<CommonParameters>]
+Show-PSCalendarHelp [-Online] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
 
-This command will open a local PDF copy of the module's README file. The file will contain additional information and screenshots. The command will open the file using whatever application you have associated with the .PDF file extension.
+This command will open a local PDF copy of the module's README file. The file will contain additional information and screenshots. The command will open the file using whatever application you have associated with the .PDF file extension. Alternatively, you can use the -Online switch to open the README file in the modules Github repository using your default web browser.
 
 ## EXAMPLES
 
@@ -30,6 +30,22 @@ PS C:\> Show-PSCalendarHelp
 ```
 
 ## PARAMETERS
+
+### -Online
+
+Opens the PSCalendar README file in the Github repository.
+
+```yaml
+Type: SwitchParameter
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
 
 ### CommonParameters
 
@@ -45,8 +61,7 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## NOTES
 
-Learn more about PowerShell:
-http://jdhitsolutions.com/blog/essential-powershell-resources/
+Learn more about PowerShell: https://jdhitsolutions.com/yourls/newsletter
 
 ## RELATED LINKS
 

@@ -1,7 +1,7 @@
 ---
 external help file: PSCalendar-help.xml
 Module Name: PSCalendar
-online version: http://bit.ly/2KLup3R
+online version: https://jdhitsolutions.com/yourls/508736
 schema: 2.0.0
 ---
 
@@ -16,38 +16,30 @@ Display a WPF-based calendar.
 ### basic (Default)
 
 ```yaml
-Show-GuiCalendar [[-Start] <String>] [[-End] <String>]
-[-HighlightDate <Object[]>] [-Font <String>] [-FontStyle <String>]
-[-FontWeight <String>] [-FirstDay <DayOfWeek>] [<CommonParameters>]
+Show-GuiCalendar [[-Start] <String>] [[-End] <String>] [-HighLightDate <Object[]>] [-Font <String>] [-FontStyle <String>] [-FontWeight <String>] [-FirstDay <DayOfWeek>] [<CommonParameters>]
 ```
 
 ### bgimage
 
 ```yaml
-Show-GuiCalendar [[-Start] <String>] [[-End] <String>]
-[-HighlightDate <Object[]>] [-Font <String>] [-FontStyle <String>]
-[-FontWeight <String>] [-BackgroundImage <String>] [-Stretch <String>]
-[-FirstDay <DayOfWeek>] [<CommonParameters>]
+Show-GuiCalendar [[-Start] <String>] [[-End] <String>] [-HighLightDate <Object[]>] [-Font <String>] [-FontStyle <String>] [-FontWeight <String>] [-BackgroundImage <String>] [-Stretch <String>][-FirstDay <DayOfWeek>] [<CommonParameters>]
 ```
 
 ### bgcolor
 
 ```yaml
-Show-GuiCalendar [[-Start] <String>] [[-End] <String>]
-[-HighlightDate <Object[]>] [-Font <String>] [-FontStyle <String>]
-[-FontWeight <String>] [-BackgroundColor <String>] [-FirstDay <DayOfWeek>]
-[<CommonParameters>]
+Show-GuiCalendar [[-Start] <String>] [[-End] <String>] [-HighLightDate <Object[]>] [-Font <String>] [-FontStyle <String>] [-FontWeight <String>] [-BackgroundColor <String>] [-FirstDay <DayOfWeek>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
 
-If you are running Windows PowerShell or a version of PowerShell that supports the [System.Windows.Media] .NET class, which does NOT include PowerShell 7, you can display a graphical calendar. You can specify up to 3 months. There are also parameters to fine-tune the calendar style. The calendar form itself is transparent, but you should be able to click on it to drag it around your screen. You can also use the + and - keys to increase or decrease the calendar's opacity. You may have to click on a calendar before making any adjustments.
+If you are running Windows PowerShell or a version of PowerShell that supports the [System.Windows.Media] .NET class, you can display a graphical calendar. You can specify up to 3 months. There are also parameters to fine-tune the calendar style. The calendar form itself is transparent, but you should be able to click on it to drag it around your screen. You can also use the + and - keys to increase or decrease the calendar's opacity. You may have to click on a calendar before making any adjustments.
 
-This command launches the calendar in a separate runspace so that it doesn't block your prompt. However, if you close the PowerShell session that launched the calendar, the calendar will also automatically close.
+This command launches the calendar in a separate runspace so that it doesn't block your prompt. However, if you close the PowerShell session that launched the calendar, the calendar will also automatically close. You can display as many different calendars as you want at the same time.
 
 You must format the dates to match your culture. It should match the pattern you get from running this command:
 
-(Get-Culture).datetimeformat.ShortDatePattern
+(Get-Culture).DateTimeFormat.ShortDatePattern
 
 ## EXAMPLES
 
@@ -62,7 +54,7 @@ Display the current month as a graphical calendar.
 ### Example 2
 
 ```powershell
-PS C:\> Show-GuiCalendar -start 12/2020 -end 2/2021 -highlight 12/24/19,12/25/19,12/31/19,1/1/20,2/14/20 -font 'Century Gothic' -FontStyle italic
+PS C:\> Show-GuiCalendar -start 12/2024 -end 2/2025 -highlight 12/24/24,12/25/24,12/31/24,1/1/25,2/14/25 -font 'Century Gothic' -FontStyle italic
 ```
 
 Display 3 months with selected dates highlighted and style the calendar to font settings.
@@ -78,17 +70,17 @@ Display the current month with a bold font and the specified background color.
 ### Example 4
 
 ```powershell
-PS C:\> $h = @{"7/4/2021"="4th of July";"7/14/2021"="Bastille Day";"7/22/2021"="Family Visit"}
-PS C:\> Show-GuiCalendar -start 7/1/2021 -backgroundimage c:\scripts\zazu.gif -highlightDate $h
+PS C:\> $h = @{"7/4/2025"="4th of July";"7/14/2025"="Bastille Day";"7/22/2025"="Family Visit"}
+PS C:\> Show-GuiCalendar -start 7/1/2025 -BackgroundImage c:\scripts\zazu.gif -HighLightDate $h
 ```
 
-Display July 2021 with a background image and use the hashtable of highlight dates. A highlight summary will be displayed as a tool tip for the month.
+Display July 2025 with a background image and use the hashtable of highlight dates. A highlight summary will be displayed as a tool tip for the month.
 
 ## PARAMETERS
 
 ### -End
 
-Enter the last month to display by date, like 3/1/2020. You cannot display more than 3 months.
+Enter the last month to display by date, like 3/1/2024. You cannot display more than 3 months.
 
 ```yaml
 Type: String
@@ -153,9 +145,9 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -HighlightDate
+### -HighLightDate
 
-Enter an array of dates to highlight like 12/25/202,12/31/2020 or a hashtable where the key is the date and the value is a description. This data will be displayed as a tooltip for each month.
+Enter an array of dates to highlight like 12/25/2024,12/31/2024 or a hashtable where the key is the date and the value is a description. This data will be displayed as a tooltip for each month.
 
 ```yaml
 Type: Object[]
@@ -171,7 +163,7 @@ Accept wildcard characters: False
 
 ### -Start
 
-Enter the first month to display by date, like 1/1/2020.
+Enter the first month to display by date, like 1/1/2025.
 
 ```yaml
 Type: String
@@ -265,9 +257,9 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 This function requires the WPF-related assemblies. It should work in Windows PowerShell and PowerShell 7 on Windows. You will receive a warning if any incompatibility is detected.
 
-This command should have an alias of gcal.
+This command has an alias of gcal.
 
-Learn more about PowerShell: http://jdhitsolutions.com/blog/essential-powershell-resources/
+Learn more about PowerShell: https://jdhitsolutions.com/yourls/newsletter
 
 ## RELATED LINKS
 

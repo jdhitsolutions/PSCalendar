@@ -1,48 +1,71 @@
 Function Show-Calendar {
     [cmdletbinding()]
     [Alias("scal")]
-    [OutputType("None")]
+    [OutputType("System.String")]
 
     Param(
-        [Parameter(Position = 1, ParameterSetName = "month")]
-        [ValidateNotNullorEmpty()]
+        [Parameter(Position = 0, ParameterSetName = "month")]
+        [ValidateNotNullOrEmpty()]
         [ValidateScript( {
-                $names = _getMonthsByCulture
-                if ($names -contains $_) {
-                    $True
-                }
-                else {
-                    Throw "You entered an invalid month. Valid choices are $($names -join ',')"
-                    $False
-                }
-            })]
+            $names = _getMonthsByCulture
+            if ($names -contains $_) {
+                $True
+            }
+            else {
+                Throw "You entered an invalid month. Valid choices are $($names -join ',')"
+                $False
+            }
+        })]
         [string]$Month = (Get-Date -Format MMMM),
 
-        [Parameter(Position = 2, ParameterSetName = "month")]
+        [Parameter(
+            Mandatory,
+            Position = 0,
+            ParameterSetName = "quarter",
+            HelpMessage = "Specify a calendar year quarter to display."
+        )]
+        [ValidateRange(1,4)]
+        [int]$Quarter,
+
+        [Parameter(Position = 1,ParameterSetName = "month")]
+        [Parameter(Position = 1,ParameterSetName = "quarter")]
         [ValidatePattern('^\d{4}$')]
         [int]$Year = (Get-Date).Year,
 
-        [string[]]$HighlightDate,
+        [string[]]$HighLightDate,
 
         [Parameter(HelpMessage = "Specify the first day of the week.")]
         [ValidateNotNullOrEmpty()]
         [System.DayOfWeek]$FirstDay = ([System.Globalization.CultureInfo]::CurrentCulture).DateTimeFormat.FirstDayOfWeek,
 
-        [Parameter(HelpMessage = "Specify a host position. This only works with a single month.",ParameterSetName = "month")]
+        [Parameter(
+            HelpMessage = "Specify a host position. This only works with a single month.",
+            ParameterSetName = "month"
+        )]
         [System.Management.Automation.Host.Coordinates]$Position,
 
         [Parameter(HelpMessage = "Do not show any leading or trailing days.")]
         [switch]$MonthOnly,
 
-        [Parameter(Mandatory, HelpMessage = "Enter a year between 1000 and 3000 to display in calendar view.", ParameterSetName = "calyear")]
+        [Parameter(
+            Mandatory,
+            HelpMessage = "Enter a year between 1000 and 3000 to display in calendar view.",
+            ParameterSetName = "calyear"
+            )]
         [ValidateRange(1000,3000)]
         [int]$CalendarYear
     )
 
-    Write-Verbose "Starting $($myinvocation.MyCommand) [v$modver]"
-    Write-Verbose "Detected parameter set $($pscmdlet.ParameterSetName)"
+    Write-Verbose "Starting: $($MyInvocation.MyCommand) [v$modVer]"
+    Write-Verbose "Using PowerShell version: $($PSVersionTable.PSVersion)"
+    Write-Verbose "Running in PowerShell host: $($host.name)"
+    #Call .NET for better results when testing this command in different cultures
+    $currCulture = [System.Globalization.CultureInfo]::CurrentCulture
+    Write-Verbose "Using culture: $($currCulture.DisplayName) [$($currCulture.name)]"
+
+    Write-Verbose "Detected parameter set $($PSCmdlet.ParameterSetName)"
     #get culture to see how long the first day of week is
-    #$currCulture = [system.globalization.cultureinfo]::CurrentCulture
+    #$currCulture = [System.Globalization.CultureInfo]::CurrentCulture
     if ($position) {
         Write-Verbose "Using position $position"
         $here = $host.ui.RawUI.CursorPosition
@@ -50,7 +73,7 @@ Function Show-Calendar {
         [void]$PSBoundParameters.remove("Position")
     }
 
-    if ($pscmdlet.ParameterSetName -ne "calyear") {
+    if ($PSCmdlet.ParameterSetName -notMatch "calyear|quarter") {
         #add default values if not bound
         $params = "Month", "Year", "FirstDay"
         foreach ($param in $params) {
@@ -84,6 +107,6 @@ Function Show-Calendar {
         $cal
     }
 
-    Write-Verbose "Ending $($myinvocation.mycommand)"
+    Write-Verbose "Ending: $($MyInvocation.MyCommand)"
 
 }

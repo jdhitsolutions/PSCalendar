@@ -4,25 +4,25 @@ Function Show-GuiCalendar {
     [Alias("gcal")]
 
     Param(
-        [Parameter(Position = 1, HelpMessage = "Enter the first month to display by date, like 1/1/2019.")]
+        [Parameter(Position = 1, HelpMessage = "Enter the first month to display by date, like 1/1/2025.")]
         [ValidateNotNullOrEmpty()]
-        [string]$Start = (Get-Date -Year $([datetime]::now.year) -Month $([datetime]::now.month) -Day 1).ToShortDateString(),
+        [string]$Start = (Get-Date -Year $([DateTime]::now.year) -Month $([DateTime]::now.month) -Day 1).ToShortDateString(),
 
-        [Parameter(Position = 2, HelpMessage = "Enter the last month to display by date, like 3/1/2021. You cannot display more than 3 months.")]
+        [Parameter(Position = 2, HelpMessage = "Enter the last month to display by date, like 3/1/2025. You cannot display more than 3 months.")]
         [ValidateNotNullOrEmpty()]
         [ValidateScript( {
-                if ( ($_ -as [datetime]) -ge ($Start -as [datetime])) {
-                    $True
-                }
-                else {
-                    Throw "The end date ($_) must be later than the start date ($start)"
-                    $False
-                }
-            })]
-        [string]$End = (Get-Date -Year $([datetime]::now.year) -Month $([datetime]::now.month) -Day 1).ToShortDateString(),
+            if ( ($_ -as [DateTime]) -ge ($Start -as [DateTime])) {
+                $True
+            }
+            else {
+                Throw "The end date ($_) must be later than the start date ($start)"
+                $False
+            }
+        })]
+        [string]$End = (Get-Date -Year $([DateTime]::now.year) -Month $([DateTime]::now.month) -Day 1).ToShortDateString(),
 
-        [Parameter(HelpMessage = "Enter an array of dates to highlight like 12/25/2021. Or a hashtable with the date as the key and a description for the value.")]
-        [object[]]$HighlightDate,
+        [Parameter(HelpMessage = "Enter an array of dates to highlight like 12/25/2025. Or a hashtable with the date as the key and a description for the value.")]
+        [object[]]$HighLightDate,
 
         [Parameter(HelpMessage = "Select a font family for your calendar" )]
         [ValidateSet("Segoi UI", "QuickType", "Tahoma", "Lucida Console", "Century Gothic")]
@@ -52,35 +52,39 @@ Function Show-GuiCalendar {
         [System.DayOfWeek]$FirstDay = ([System.Globalization.CultureInfo]::CurrentCulture).DateTimeFormat.FirstDayOfWeek
     )
 
-    Write-Verbose "Starting $($myinvocation.MyCommand) [v$modver]"
-    #PowerShell 7 doesn't support the .NET classes necessary for this function
-    #https://github.com/jdhitsolutions/PSCalendar/issues/27
-    if ($PSEdition -eq 'Core') {
-        Write-Warning "This command is not supported in this version of PowerShell."
+    Write-Verbose "Starting: $($MyInvocation.MyCommand) [v$modVer]"
+    Write-Verbose "Using PowerShell version: $($PSVersionTable.PSVersion)"
+    Write-Verbose "Running in PowerShell host: $($host.name)"
+    #Call .NET for better results when testing this command in different cultures
+    $currCulture = [System.Globalization.CultureInfo]::CurrentCulture
+    Write-Verbose "Using culture: $($currCulture.DisplayName) [$($currCulture.name)]"
+
+    if ($IsLinux -OR $IsMacOS) {
+        Write-Warning "This command is not supported on this platform."
         Return
     }
     else {
         Write-Verbose "Running in a supported version of PowerShell."
     }
-    $currCulture = [system.globalization.cultureinfo]::CurrentCulture
-    Write-Verbose "Using culture: $($currculture.displayname) [$($currCulture.name)]"
-    Write-Verbose "Using PSBoundParameters:"
+    $currCulture = [System.Globalization.CultureInfo]::CurrentCulture
+    Write-Verbose "Using culture: $($currCulture.DisplayName) [$($currCulture.name)]"
+    Write-Debug "Using PSBoundParameters:"
     Write-Verbose ($PSBoundParameters | Out-String).trim()
     Write-Verbose "Getting start date using pattern $($currCulture.DateTimeFormat.ShortDatePattern)"
 
     #add the necessary type library and bail out if there are errors which means the
     #platform lacks support for WPF
 
-    Write-Verbose "Treating $start as a datetime"
-    $startd = $start -as [datetime]
-    Write-Verbose "Treating $end as a datetime"
-    $endd = $end -as [datetime]
-    Write-Verbose "Using Start: $($startd.ToLongDateString())"
-    Write-Verbose "Using End: $($endd.ToLongDateString())"
+    Write-Verbose "Treating $start as a DateTime"
+    $startD = $start -as [DateTime]
+    Write-Verbose "Treating $end as a DateTime"
+    $endD = $end -as [DateTime]
+    Write-Verbose "Using Start: $($startD.ToLongDateString())"
+    Write-Verbose "Using End: $($endD.ToLongDateString())"
     $months = do {
-        $startd
-        $startd = $startd.AddMonths(1)
-    } while ($startd -le $endd)
+        $startD
+        $startD = $startD.AddMonths(1)
+    } while ($startD -le $endD)
 
     Write-Verbose "Displaying $($months.count) months"
     if ($months.count -gt 3) {
@@ -104,23 +108,23 @@ Function Show-GuiCalendar {
         Months        = $months
         Height        = (200 * $months.count)
         Title         = "My Calendar"
-        HighlightDate = $highlightDate
+        HighLightDate = $HighLightDate
         Font          = $Font
         FontStyle     = $FontStyle
         FontWeight    = $FontWeight
         FirstDay      = $FirstDay
     }
 
-    if ($PSCmdlet.ParameterSetName -eq 'bgImage') {
+    if ($psCmdlet.ParameterSetName -eq 'bgImage') {
         $myParams.add("BackgroundImage", $BackgroundImage)
         $myParams.Add("Stretch", $Stretch)
     }
-    elseif ($pscmdlet.ParameterSetName -eq 'bgColor') {
+    elseif ($psCmdlet.ParameterSetName -eq 'bgColor') {
         $myParams.Add("BackgroundColor", $BackgroundColor)
     }
 
     Write-Verbose "Using these parameters"
-    $myparams | Out-String | Write-Verbose
+    $myParams | Out-String | Write-Verbose
 
     $newRunspace = [RunspaceFactory]::CreateRunspace()
     if ($newRunspace.ApartmentState) {
@@ -141,190 +145,189 @@ Function Show-GuiCalendar {
     Write-Verbose "Defining runspace script"
 
     $psCmd = [PowerShell]::Create().AddScript( {
+        Param (
+            [object[]]$HighLightDate,
+            [string]$Font,
+            [string]$FontStyle,
+            [string]$FontWeight,
+            [int]$Height,
+            [string]$Title,
+            [DateTime[]]$Months,
+            [string]$BackgroundImage,
+            [string]$Stretch,
+            [string]$BackgroundColor,
+            [string]$FirstDay
+        )
 
-            Param (
-                [object[]]$HighlightDate,
-                [string]$Font,
-                [string]$FontStyle,
-                [string]$FontWeight,
-                [int]$Height,
-                [string]$Title,
-                [datetime[]]$Months,
-                [string]$BackgroundImage,
-                [string]$Stretch,
-                [string]$BackgroundColor,
-                [string]$FirstDay
-            )
+        #create a window form.
+        $form = New-Object System.Windows.Window
 
-            #create a window form.
-            $form = New-Object System.Windows.Window
+        $form.AllowsTransparency = $True
+        $form.WindowStyle = "none"
+        #the title won't be shown when window style is set to none
+        $form.Title = $Title
+        $form.Height = $height
+        $form.Width = 200
 
-            $form.AllowsTransparency = $True
-            $form.WindowStyle = "none"
-            #the title won't be shown when window style is set to none
-            $form.Title = $Title
-            $form.Height = $height
-            $form.Width = 200
+        $bg = New-Object System.Windows.Media.SolidColorBrush
 
-            $bg = New-Object System.Windows.Media.SolidColorBrush
+        $form.Background = $bg
 
-            $form.Background = $bg
+        #color is set for development purposes. It won't be seen normally.
+        #  $form.Background.Color = "green"
+        # $form.background.Opacity = 50
+        $form.ShowInTaskbar = $False
+        $form.Add_Loaded( {
+                $form.Topmost = $True
+                $form.Activate()
+            })
 
-            #color is set for development purposes. It won't be seen normally.
-            #  $form.Background.Color = "green"
-            # $form.background.Opacity = 50
-            $form.ShowInTaskbar = $False
-            $form.Add_Loaded( {
-                    $form.Topmost = $True
-                    $form.Activate()
-                })
+        $form.Add_MouseLeftButtonDown( { $form.DragMove() })
 
-            $form.Add_MouseLeftButtonDown( { $form.DragMove() })
-
-            #add event handlers to adjust opacity by using the +/- keys
-            $form.add_KeyDown( {
-                    switch ($_.key) {
-                        { 'Add', 'OemPlus' -contains $_ } {
-                            foreach ($cal in $myCals) {
-                                If ($cal.Opacity -lt 1) {
-                                    $cal.Opacity = $cal.opacity + .1
-                                    $cal.UpdateLayout()
-                                }
-                            }
-                        }
-                        { 'Subtract', 'OemMinus' -contains $_ } {
-                            foreach ($cal in $myCals) {
-                                If ($cal.Opacity -gt .2) {
-                                    $cal.Opacity = $cal.Opacity - .1
-                                    $cal.UpdateLayout()
-                                }
+        #add event handlers to adjust opacity by using the +/- keys
+        $form.add_KeyDown( {
+                switch ($_.key) {
+                    { 'Add', 'OemPlus' -contains $_ } {
+                        foreach ($cal in $myCals) {
+                            If ($cal.Opacity -lt 1) {
+                                $cal.Opacity = $cal.opacity + .1
+                                $cal.UpdateLayout()
                             }
                         }
                     }
-                })
-
-            $stack = New-Object System.Windows.Controls.StackPanel
-            $stack.Width = $form.Width
-            $stack.Height = $form.Height
-            $stack.HorizontalAlignment = "center"
-            $stack.VerticalAlignment = "top"
-
-            #create an array to store calendars so that opacity can be
-            #set for multiple calendars in unison
-            $myCals = @()
-            foreach ($month in $months) {
-
-                $cal = New-Object System.Windows.Controls.Calendar
-
-                If ($HighlightDate[0] -is [hashtable]) {
-                    [array]$hl = Foreach ($item in $HighlightDate[0].Keys) {
-                        Write-Verbose "Treating $item as a datetime"
-                        $item -as [datetime] | Where-Object { $_.month -eq $month.month }
+                    { 'Subtract', 'OemMinus' -contains $_ } {
+                        foreach ($cal in $myCals) {
+                            If ($cal.Opacity -gt .2) {
+                                $cal.Opacity = $cal.Opacity - .1
+                                $cal.UpdateLayout()
+                            }
+                        }
                     }
-                    if ($hl.count -gt 0) {
-                        $thismonth = $highlightdate[0].GetEnumerator() | Where-Object { ($_.name -as [datetime]).month -eq $month.month }
-                        $hltip = ($thismonth.GetEnumerator() | Sort-Object { $_.name -as [datetime] } | Format-Table -HideTableHeaders -AutoSize | Out-String).Trim()
-                        if ($hltip -match "\w+") {
-                            $cal.ToolTip = $hltip
-                        }
-                        else {
-                            #do this when there is only one matching item
-                            $cal.Tooltip = ($thismonth | Format-Table -HideTableHeaders -AutoSize | Out-String).Trim()
-                        }
+                }
+            })
+
+        $stack = New-Object System.Windows.Controls.StackPanel
+        $stack.Width = $form.Width
+        $stack.Height = $form.Height
+        $stack.HorizontalAlignment = "center"
+        $stack.VerticalAlignment = "top"
+
+        #create an array to store calendars so that opacity can be
+        #set for multiple calendars in unison
+        $myCals = @()
+        foreach ($month in $months) {
+
+            $cal = New-Object System.Windows.Controls.Calendar
+
+            If ($HighLightDate[0] -is [hashtable]) {
+                [array]$hl = Foreach ($item in $HighLightDate[0].Keys) {
+                    Write-Verbose "Treating $item as a DateTime"
+                    $item -as [DateTime] | Where-Object { $_.month -eq $month.month }
+                }
+                if ($hl.count -gt 0) {
+                    $thisMonth = $HighLightDate[0].GetEnumerator() | Where-Object { ($_.name -as [DateTime]).month -eq $month.month }
+                    $hltip = ($thisMonth.GetEnumerator() | Sort-Object { $_.name -as [DateTime] } | Format-Table -HideTableHeaders -AutoSize | Out-String).Trim()
+                    if ($hltip -match "\w+") {
+                        $cal.ToolTip = $hltip
                     }
                     else {
-                        #uncomment for dev and debugging
-                        #$cal.tooltip = "no dates found for $($month.month)"
+                        #do this when there is only one matching item
+                        $cal.Tooltip = ($thisMonth | Format-Table -HideTableHeaders -AutoSize | Out-String).Trim()
                     }
                 }
                 else {
-                    [array]$hl = Foreach ($item in $HighlightDate) {
-                        Write-Verbose "Treating $item as a datetime"
-                        $item -as [datetime] | Where-Object { $_.month -eq $month.month }
-                    }
                     #uncomment for dev and debugging
-                    # $cal.tooltip = "array"
+                    #$cal.tooltip = "no dates found for $($month.month)"
                 }
-
-                $cal.DisplayMode = "Month"
-                $cal.FirstDayOfWeek = $FirstDay
-
-                if ($BackgroundImage) {
-                    $calbg = New-Object System.Windows.Media.ImageBrush -ArgumentList $BackgroundImage
-                    $calbg.Stretch = $Stretch
-                    $cal.Background = $calbg
+            }
+            else {
+                [array]$hl = Foreach ($item in $HighLightDate) {
+                    Write-Verbose "Treating $item as a DateTime"
+                    $item -as [DateTime] | Where-Object { $_.month -eq $month.month }
                 }
-                elseif ($BackgroundColor) {
-                    $cal.Background = $BackgroundColor
-                }
+                #uncomment for dev and debugging
+                # $cal.tooltip = "array"
+            }
 
-                $cal.Opacity = 1.0
-                $cal.FontFamily = $font
-                $cal.FontSize = 24
-                $cal.FontWeight = $FontWeight
-                $cal.FontStyle = $fontStyle
+            $cal.DisplayMode = "Month"
+            $cal.FirstDayOfWeek = $FirstDay
 
-                $cal.DisplayDateStart = $month
-                #added to allow display of past months
-                $totaldays = [datetime]::DaysInMonth($month.year, $month.Month)
-                $cal.DisplayDateEnd = $month.AddDays($totaldays - 1)
+            if ($BackgroundImage) {
+                $calBg = New-Object System.Windows.Media.ImageBrush -ArgumentList $BackgroundImage
+                $calBg.Stretch = $Stretch
+                $cal.Background = $calBg
+            }
+            elseif ($BackgroundColor) {
+                $cal.Background = $BackgroundColor
+            }
 
-                $cal.HorizontalAlignment = "center"
-                $cal.VerticalAlignment = "top"
+            $cal.Opacity = 1.0
+            $cal.FontFamily = $font
+            $cal.FontSize = 24
+            $cal.FontWeight = $FontWeight
+            $cal.FontStyle = $fontStyle
 
-                $cal.SelectionMode = "multipleRange"
-                if ($hl) {
-                    foreach ($d in $hl) {
-                        if ($d.month -eq $month.Month) {
-                            $cal.SelectedDates.add($d)
-                        }
+            $cal.DisplayDateStart = $month
+            #added to allow display of past months
+            $totalDays = [DateTime]::DaysInMonth($month.year, $month.Month)
+            $cal.DisplayDateEnd = $month.AddDays($totalDays - 1)
+
+            $cal.HorizontalAlignment = "center"
+            $cal.VerticalAlignment = "top"
+
+            $cal.SelectionMode = "multipleRange"
+            if ($hl) {
+                foreach ($d in $hl) {
+                    if ($d.month -eq $month.Month) {
+                        $cal.SelectedDates.add($d)
                     }
                 }
+            }
 
-                $cal.add_DisplayDateChanged( {
-                        # add the selected days for the currently displayed month
-                        [datetime]$month = $cal.Displaydate
-                        if ($hl) {
-                            foreach ($d in $hl) {
-                                if ($d.month -eq $month.Month) {
-                                    $cal.SelectedDates.add($d)
-                                }
+            $cal.add_DisplayDateChanged( {
+                    # add the selected days for the currently displayed month
+                    [DateTime]$month = $cal.DisplayDate
+                    if ($hl) {
+                        foreach ($d in $hl) {
+                            if ($d.month -eq $month.Month) {
+                                $cal.SelectedDates.add($d)
                             }
                         }
-                        $cal.UpdateLayout()
-                    })
-
-                $stack.addchild($cal)
-                $myCals += $cal
-                Remove-Variable hl, hltip -Force
-            } #foreach month
-
-            $btn = New-Object System.Windows.Controls.Button
-            $btn.Content = "_Close"
-            $btn.Width = 75
-            $btn.VerticalAlignment = "Bottom"
-            $btn.HorizontalAlignment = "Center"
-            $btn.Opacity = 1
-            $btn.Add_click( {
-                    $form.close()
+                    }
+                    $cal.UpdateLayout()
                 })
 
-            $stack.AddChild($btn)
+            $stack.AddChild($cal)
+            $myCals += $cal
+            Remove-Variable hl, hltip -Force
+        } #foreach month
 
-            $form.AddChild($stack)
-            [void]$form.ShowDialog()
+        $btn = New-Object System.Windows.Controls.Button
+        $btn.Content = "_Close"
+        $btn.Width = 75
+        $btn.VerticalAlignment = "Bottom"
+        $btn.HorizontalAlignment = "Center"
+        $btn.Opacity = 1
+        $btn.Add_click( {
+                $form.close()
+            })
+
+        $stack.AddChild($btn)
+
+        $form.AddChild($stack)
+        [void]$form.ShowDialog()
 
         }) #addScript
 
-    [void]$psCmd.AddParameters($myparams)
+    [void]$psCmd.AddParameters($myParams)
     $psCmd.Runspace = $newRunspace
     Write-Verbose "Invoking calendar runspace"
     $handle = $psCmd.BeginInvoke()
 
     Write-Verbose "Creating ThreadJob"
     #calling a private, helper function which will clean up the runspace after the calendar is closed.
-    $job = New-RunspaceCleanupJob -Handle $handle -PowerShell $pscmd -SleepInterval 30 -Passthru
+    $job = New-RunspaceCleanupJob -Handle $handle -PowerShell $psCmd -SleepInterval 30 -Passthru
     Write-Verbose "...Job Id $($job.id)"
-    Write-Verbose "Ending $($myinvocation.mycommand)"
+    Write-Verbose "Ending: $($MyInvocation.MyCommand)"
 
 }

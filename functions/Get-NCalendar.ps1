@@ -39,10 +39,12 @@ Function Get-NCalendar {
 
     Begin {
         #display the module version defined in the psm1 file
-        Write-Verbose "Starting $($MyInvocation.MyCommand) [v$modver]"
-        Write-Verbose "Using PowerShell version $($PSVersionTable.PSVersion)"
+        Write-Verbose "Starting: $($MyInvocation.MyCommand) [v$modVer]"
+        Write-Verbose "Using PowerShell version: $($PSVersionTable.PSVersion)"
+        Write-Verbose "Running in PowerShell host: $($host.name)"
         #Call .NET for better results when testing this command in different cultures
-        $CurrentCulture = [System.Globalization.CultureInfo]::CurrentCulture
+        $currentCulture = [System.Globalization.CultureInfo]::CurrentCulture
+        Write-Verbose "Using culture: $($currCulture.DisplayName) [$($currCulture.name)]"
 
         #enforce NoAnsi if running in the PowerShell ISE [Issue #30]
         if ($host.name -Match "ISE Host") {
@@ -57,57 +59,56 @@ Function Get-NCalendar {
         Write-Verbose "Today is $today"
         #get month number
         Write-Verbose "Parsing $month to number"
-        [int]$monthint = [datetime]::parse("1 $month $year").month
-        Write-Verbose "Returned month number $monthint"
-        if ( ($monthint -eq $today.month) -AND ($year -eq $today.year)) {
+        [int]$monthInt = [DateTime]::parse("1 $month $year").month
+        Write-Verbose "Returned month number $monthInt"
+        if ( ($monthInt -eq $today.month) -AND ($year -eq $today.year)) {
             Write-Verbose "In the current month"
             $IsCurrentMonth = $True
         }
-        $startd = [datetime]::new($year, $monthint, 1)
+        $startD = [DateTime]::new($year, $monthInt, 1)
 
-        $max = $CurrentCulture.DateTimeFormat.Calendar.GetDaysInMonth($year, $monthint)
+        $max = $CurrentCulture.DateTimeFormat.Calendar.GetDaysInMonth($year, $monthInt)
         Write-Verbose "Max days in month is $max."
 
-        $daynames = $CurrentCulture.DateTimeFormat.AbbreviatedDayNames
-        $daylist = [System.Collections.Generic.list[string]]::new()
+        $dayNames = $CurrentCulture.DateTimeFormat.AbbreviatedDayNames
+        $dayList = [System.Collections.Generic.list[string]]::new()
 
         if ($Monday) {
             Write-Verbose "Using a Monday-based week"
-            ($daynames[1..6]).Foreach( { $daylist.add($_) })
-            $daylist.Add($daynames[0])
+            ($dayNames[1..6]).Foreach( { $dayList.add($_) })
+            $dayList.Add($dayNames[0])
         }
         else {
-            $daylist.AddRange($daynames)
+            $dayList.AddRange($dayNames)
         }
 
-        $daylist | ForEach-Object -Begin {
+        $dayList | ForEach-Object -Begin {
             $dayHash = [ordered]@{}
         } -Process {
             $dayHash.Add($_, @())
         }
 
-
         for ($i = 0; $i -lt $max; $i++) {
-            $day = $startd.AddDays($i).date
-            $dayname = "{0:ddd}" -f $day
+            $day = $startD.AddDays($i).date
+            $dayName = "{0:ddd}" -f $day
             $dom = $day.day
-            $dayhash[$dayname] += $dom
+            $dayHash[$dayName] += $dom
         }
 
-        $dayhash | Out-String | Write-Verbose
+        $dayHash | Out-String | Write-Verbose
         #make sure month is in title case
         $head = "$($CurrentCulture.TextInfo.toTitleCase($Month)) $Year"
-        $maxDayLength = $dayhash.keys.length | Sort-Object | Select-Object -Last 1
+        $maxDayLength = $dayHash.keys.length | Sort-Object | Select-Object -Last 1
         Write-Verbose "Building day hashtable"
-        $out = $dayhash.GetEnumerator() |
+        $out = $dayHash.GetEnumerator() |
         ForEach-Object {
             Write-Verbose $_.name
             #build a value string
-            $vstring = $_.value.Foreach({ "{0,2}" -f $_.toString()})
+            $vString = $_.value.Foreach({ "{0,2}" -f $_.toString()})
 
-            Write-Verbose "Using days $($vstring -join ' ')"
+            Write-Verbose "Using days $($vString -join ' ')"
 
-            $row = "{0}{1}" -f $_.name.Padright(4), $($vstring -join " ").padleft(14)
+            $row = "{0}{1}" -f $_.name.PadRight(4), $($vString -join " ").PadLeft(14)
             if ($isCurrentMonth -AND ($row -match "\b$($Today.day)\b") -AND (-Not $HideHighlight)) {
                 Write-Verbose "Highlighting current day in $row"
                 $row = $row -replace "\b$($Today.day)\b","$($PSCalendarConfiguration.Today)$($today.day)$([char]27)[0m"
@@ -121,16 +122,16 @@ Function Get-NCalendar {
         $pad = (($out[0].length - $head.length) / 2) + $head.length + 1
         #Write-Verbose "padding $pad"
         if ($HideHighlight) {
-            $head.padleft($pad)
+            $head.PadLeft($pad)
         }
         else {
-            "$($pscalendarConfiguration.Title)$($head.padleft($pad))$([char]27)[0m"
+            "$($pscalendarConfiguration.Title)$($head.PadLeft($pad))$([char]27)[0m"
         }
         $out
         #insert a blank line
         "`r"
     }
     End {
-        Write-Verbose "Ending $($myinvocation.MyCommand)"
+        Write-Verbose "Ending: $($MyInvocation.MyCommand)"
     }
 }
