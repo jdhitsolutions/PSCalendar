@@ -12,7 +12,7 @@ You can install this module from the PowerShell Gallery.
 Install-PSResource PSCalendar
 ```
 
-> Installing this module will also install the `Microsoft.PowerShell.ThreadJob` module from the PowerShell Gallery, as that is module dependency if you want to use `Show-GuiCalendar`.
+> Installing this module will also install the `Microsoft.PowerShell.ThreadJob` module from the PowerShell Gallery, as that is module dependency if you want to use `Show-GuiCalendar`. If you have the legacy `ThreadJob` module installed, you might get a warning if you install this module with `Install-Module`. If you do, run `Install-Module PSCalendar -AllowClobber`. You shouldn't see this error if you install using `Install-PSResource`.
 
 The commands in this module have been tested on PowerShell 7 both under Windows and Linux and there is no reason these commands should not work. Commands and aliases that are incompatible with non-Windows platforms will be handled on a per command basis.
 
