@@ -2,6 +2,12 @@
 
 ## [Unreleased]
 
+## [2.10.1] - 2025-03-30
+
+### Fixed
+
+- Fixed bug in root module detecting the module name.
+
 ## [2.10.0] - 2025-03-30
 
 ### Added
@@ -216,7 +222,8 @@ This is a major update of the module with many __breaking changes__
 
 - Initial module code
 
-[Unreleased]: https://github.com/jdhitsolutions/PSCalendar/compare/v2.10.0..HEAD
+[Unreleased]: https://github.com/jdhitsolutions/PSCalendar/compare/v2.10.1..HEAD
+[2.10.1]: https://github.com/jdhitsolutions/PSCalendar/compare/v2.10.0..v2.10.1
 [2.10.0]: https://github.com/jdhitsolutions/PSCalendar/compare/vv2.9.0..v2.10.0
 [v2.9.0]: https://github.com/jdhitsolutions/PSCalendar/compare/v2.8.0..v2.9.0
 [v2.8.0]: https://github.com/jdhitsolutions/PSCalendar/compare/v2.7.0..v2.8.0

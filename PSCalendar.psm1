@@ -83,5 +83,5 @@ If ($IsWindows -OR ($PSEdition -eq 'Desktop')) {
 
 
 #use the version value in module functions' verbose output
-$modName = Split-Path -Leaf $PSScriptRoot
+$modName = ($MyInvocation.MyCommand).name.split(".")[0]
 $modVer = (Test-ModuleManifest $PSScriptRoot\$modName.psd1).Version
